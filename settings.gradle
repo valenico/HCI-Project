@@ -1,0 +1,2 @@
+rootProject.name='HUC-Project'
+include ':app'
