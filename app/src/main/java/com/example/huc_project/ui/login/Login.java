@@ -3,6 +3,8 @@ package  com.example.huc_project.ui.login;
 import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.huc_project.R;
+import com.example.huc_project.Start;
+import com.example.huc_project.homepage.Homepage;
 
 public class Login extends AppCompatActivity {
 
@@ -109,6 +113,8 @@ public class Login extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+                Intent intent = new Intent(Login.this, Homepage.class);
+                startActivity(intent);
             }
         });
     }

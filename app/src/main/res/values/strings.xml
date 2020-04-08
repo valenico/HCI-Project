@@ -11,4 +11,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot password?</string>
+    <string name="title_activity_homepage">Homepage</string>
+    <string name="action_settings">Settings</string>
 </resources>

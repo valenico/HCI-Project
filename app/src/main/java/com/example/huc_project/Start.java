@@ -18,7 +18,6 @@ public class Start extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         final Button loginButton = findViewById(R.id.to_login);
-        //Log.d("AIUTO", String.valueOf(loginButton));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
