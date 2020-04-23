@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Signup">
+
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="163dp"
+        android:layout_marginLeft="163dp"
+        android:layout_marginRight="163dp"
+        android:layout_marginStart="163dp"
+        android:layout_marginTop="25dp"
+        android:text="Sign up"
+        android:enabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/age_check" />
+
+    <Button
+        android:id="@+id/googlesignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="117dp"
+        android:layout_marginLeft="117dp"
+        android:layout_marginRight="117dp"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="25dp"
+        android:text="Sign up using Google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup" />
+
+    <CheckBox
+        android:id="@+id/age_check"
+        android:layout_width="202dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginLeft="106dp"
+        android:layout_marginRight="106dp"
+        android:layout_marginStart="106dp"
+        android:layout_marginTop="24dp"
+        android:text="I am at least 18 years old"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password" />
+
+    <EditText
+        android:id="@+id/confirm_password"
+        android:layout_width="307dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginRight="53dp"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_signup" />
+
+    <EditText
+        android:id="@+id/password_signup"
+        android:layout_width="308dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginRight="53dp"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_signup" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/username_signup"
+        android:layout_width="307dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="20dp"
+        android:hint="Username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/email"
+        android:layout_width="307dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginRight="53dp"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="150dp"
+        android:hint="E-mail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

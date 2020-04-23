@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <AutoCompleteTextView
+        android:id="@+id/autocomplete_city"
+        android:layout_width="309dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginLeft="51dp"
+        android:layout_marginRight="51dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="25dp"
+        android:hint="City"
+        android:textColor="#707070"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autocomplete_country" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autocomplete_country"
+        android:layout_width="309dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginLeft="51dp"
+        android:layout_marginRight="51dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="75dp"
+        android:hint="Country"
+        android:textColor="#707070"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/info_p1" />
+
+    <EditText
+        android:id="@+id/phonenumber"
+        android:layout_width="308dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="51dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autocomplete_city" />
+
+    <TextView
+        android:id="@+id/title_p1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="114dp"
+        android:layout_marginLeft="114dp"
+        android:layout_marginRight="114dp"
+        android:layout_marginStart="114dp"
+        android:layout_marginTop="119dp"
+        android:text="Complete your profile "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/info_p1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="63dp"
+        android:layout_marginLeft="63dp"
+        android:layout_marginRight="63dp"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="10dp"
+        android:text="Your information will be visible in your profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_p1" />
+
+    <CheckBox
+        android:id="@+id/hidemail"
+        android:layout_width="308dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="51dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="15dp"
+        android:text="Hide my e-mail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phonenumber" />
+
+    <Button
+        android:id="@+id/next1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="162dp"
+        android:layout_marginLeft="162dp"
+        android:layout_marginRight="162dp"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="60dp"
+        android:text="Next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hidemail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

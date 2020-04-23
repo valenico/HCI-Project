@@ -13,4 +13,62 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="title_activity_homepage">Homepage</string>
     <string name="action_settings">Settings</string>
+    <string-array name="countries_array">
+        <item>Australia</item>
+        <item>Belgium</item>
+        <item>Canada</item>
+        <item>China</item>
+        <item>Denmark</item>
+        <item>Egypt</item>
+        <item>Ethiopia</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>India</item>
+        <item>Italy</item>
+        <item>Japan</item>
+        <item>Mexico</item>
+        <item>New Zealand</item>
+        <item>Norway</item>
+        <item>Philipphines</item>
+        <item>Poland</item>
+        <item>Portugal</item>
+        <item>Russia</item>
+        <item>South Africa</item>
+        <item>Switzerland</item>
+        <item>Thailand</item>
+        <item>Turkey</item>
+        <item>United Arab Emirates</item>
+        <item>United Kingdom</item>
+        <item>United States of America</item>
+        <item>Venezuela</item>
+    </string-array>
+    <string-array name="cities_array">
+        <item>Canberra</item>
+        <item>Brussels</item>
+        <item>Ottawa</item>
+        <item>Beijing</item>
+        <item>Copenaghen</item>
+        <item>Cairo</item>
+        <item>Addis Ababa</item>
+        <item>Paris</item>
+        <item>Berlin</item>
+        <item>New Delhi</item>
+        <item>Rome</item>
+        <item>Tokyo</item>
+        <item>Mexico City</item>
+        <item>Wellington</item>
+        <item>Oslo</item>
+        <item>Manila</item>
+        <item>Warsaw</item>
+        <item>Lisbon</item>
+        <item>Moscow</item>
+        <item>Cape Town</item>
+        <item>Bern</item>
+        <item>Bangkok</item>
+        <item>Ankara</item>
+        <item>Abu Dhabi</item>
+        <item>London</item>
+        <item>Washington D.C.</item>
+        <item>Caracas</item>
+    </string-array>
 </resources>
