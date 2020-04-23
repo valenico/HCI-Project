@@ -17,7 +17,9 @@ public class Start extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
         final Button loginButton = findViewById(R.id.to_login);
+        final Button signupButton = findViewById(R.id.to_signup);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -25,6 +27,14 @@ public class Start extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(Start.this , Signup.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }
