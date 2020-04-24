@@ -16,6 +16,7 @@
         android:layout_marginStart="163dp"
         android:layout_marginTop="25dp"
         android:text="Sign up"
+        android:onClick="complete_profile1"
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

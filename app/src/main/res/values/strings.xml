@@ -13,6 +13,8 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="title_activity_homepage">Homepage</string>
     <string name="action_settings">Settings</string>
+    <string name="complete_your_profile">Complete your profile</string>
+    <string name="info_profile">Your information will be visible in your profile</string>
     <string-array name="countries_array">
         <item>Australia</item>
         <item>Belgium</item>
