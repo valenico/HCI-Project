@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -17,10 +19,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
-
 import com.example.huc_project.ui.login.CircularItemAdapter;
+import com.example.huc_project.ui.login.PaintText;
 import com.jh.circularlist.CircularListView;
 import com.jh.circularlist.CircularTouchListener;
+
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,21 +89,56 @@ public class Signup extends AppCompatActivity {
 
     }
 
-    public void complete_profile3(View v) {
+    public void complete_profile3(View vi) {
         setContentView(R.layout.activity_signup3);
+        final Context c = this.getBaseContext();
         SCREEN = 4;
+        final int[] children = new int[]{ 6,6,6,6,6,6,6 };
         ArrayList<Integer> interests = new ArrayList<>(Arrays.asList(R.drawable.ic_sport , R.drawable.ic_fashion, R.drawable.ic_food, R.drawable.ic_movie, R.drawable.ic_music, R.drawable.ic_technology, R.drawable.ic_nature));
-        CircularListView circularListView = findViewById(R.id.circle_interests);
-        circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
-            @Override
-            public void onItemClick(View view, int index){
-
-            }
-        });
+        final CircularListView circularListView = findViewById(R.id.circle_interests);
         circularListView.setRadius(80);
         CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), interests);
         circularListView.setAdapter(adapter);
 
+        circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
+            @Override
+            public void onItemClick(View view, int index){
+                float curr_size = view.getScaleX();
+                if(curr_size == (float) 1) {
+                    view.setScaleX((float) 1.5);
+                    view.setScaleY((float) 1.5);
+                    circularListView.addView(new PaintText( c, index,
+                            view.getLeft()-60, view.getTop()-60,view.getRight()+50, view.getBottom()+50,
+                            -180,200) );
+                    int max = getMaxValue(children);
+                    children[index] = max + 1;
+                } else {
+                    view.setScaleX((float) 1);
+                    view.setScaleY((float) 1);
+                    circularListView.removeViewAt(children[index]);
+                    for(int elem = 0; elem < children.length; elem++){
+                        if (children[elem] > children[index]){
+                            children[elem] -= 1;
+                        }
+                    }
+                    children[index] = 6;
+
+                }
+
+            }
+        });
+
+
+    }
+
+    public static int getMaxValue(int[] numbers){
+        int maxValue = numbers[0];
+        for(int i=1;i < numbers.length;i++){
+            if(numbers[i] > maxValue){
+                maxValue = numbers[i];
+            }
+        }
+        return maxValue;
     }
 
     @Override
