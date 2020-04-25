@@ -7,27 +7,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 
+
+import com.example.huc_project.ui.login.CircularItemAdapter;
+import com.jh.circularlist.CircularListView;
+import com.jh.circularlist.CircularTouchListener;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Signup extends AppCompatActivity {
 
     private static final int GET_FROM_GALLERY = 1;
     public static int SCREEN = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +87,18 @@ public class Signup extends AppCompatActivity {
 
     public void complete_profile3(View v) {
         setContentView(R.layout.activity_signup3);
-        String interests[] = {"Sport" , "Nature" , "Food" , "Technology" , "Fashion" };
         SCREEN = 4;
+        ArrayList<Integer> interests = new ArrayList<>(Arrays.asList(R.drawable.ic_sport , R.drawable.ic_fashion, R.drawable.ic_food, R.drawable.ic_movie, R.drawable.ic_music, R.drawable.ic_technology, R.drawable.ic_nature));
+        CircularListView circularListView = findViewById(R.id.circle_interests);
+        circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
+            @Override
+            public void onItemClick(View view, int index){
+
+            }
+        });
+        circularListView.setRadius(80);
+        CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), interests);
+        circularListView.setAdapter(adapter);
 
     }
 
@@ -158,3 +170,4 @@ public class Signup extends AppCompatActivity {
         }
     }
 }
+
