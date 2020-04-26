@@ -12,8 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -27,8 +25,6 @@ import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.jh.circularlist.CircularListView;
-import com.jh.circularlist.CircularTouchListener;
-
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -45,8 +41,6 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SCREEN = 1;
         setContentView(R.layout.activity_signup);
-
-        final Context now = getBaseContext();
         final CheckBox age_check = findViewById(R.id.age_check);
         final Button sign_up_button = findViewById(R.id.signup);
 
@@ -66,14 +60,14 @@ public class Signup extends AppCompatActivity {
     public void complete_profile1(View v) {
         setContentView(R.layout.activity_signup1);
         SCREEN = 2;
-        AutoCompleteTextView countries = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+        AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
         String[] countries_array = getResources().getStringArray(R.array.countries_array);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries_array);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries_array);
         countries.setAdapter(adapter);
 
-        AutoCompleteTextView cities = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);
+        AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
         String[] cities_array = getResources().getStringArray(R.array.cities_array);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cities_array);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities_array);
         cities.setAdapter(adapter2);
 
     }
@@ -108,15 +102,10 @@ public class Signup extends AppCompatActivity {
         circularListView.setOnTouchListener(new CircularListView.OnTouchListener() {
             private float init_x = 0;
             private float init_y = 0;
-            private float pre_x = 0;
-            private float pre_y = 0;
             private float cur_x = 0;
             private float cur_y = 0;
             private float move_x = 0;
             private float move_y = 0;
-            private float minClickDistance = 30.0f;
-            private float minMoveDistance = 30.0f;
-            private float mMovingSpeed = 2000.0f;  // default is 2000, larger > faster
             private boolean can_rotate = true;
             private boolean isCircularMoving = false; // ensure that item click only triggered when it's not moving
             @Override
@@ -125,7 +114,9 @@ public class Signup extends AppCompatActivity {
                  if(max == 6){
                      can_rotate = true;
                  }
-                 switch (event.getAction()) {
+                float minClickDistance = 30.0f;
+                float minMoveDistance = 30.0f;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         cur_x = event.getX();
                         cur_y = event.getY();
@@ -133,8 +124,8 @@ public class Signup extends AppCompatActivity {
                         init_y = event.getY();
 
                     case MotionEvent.ACTION_MOVE:
-                        pre_x = cur_x;
-                        pre_y = cur_y;
+                        float pre_x = cur_x;
+                        float pre_y = cur_y;
                         cur_x = event.getX();
                         cur_y = event.getY();
 
@@ -151,6 +142,8 @@ public class Signup extends AppCompatActivity {
                         // should rotate the layout
                         if (moveDistance > minMoveDistance && can_rotate) {
                             isCircularMoving = true;
+                            // default is 2000, larger > faster
+                            float mMovingSpeed = 2000.0f;
                             CircularListView.MoveAccumulator += (diff_x + diff_y) / mMovingSpeed;
 
                             // calculate new position around circle
@@ -248,8 +241,7 @@ public class Signup extends AppCompatActivity {
         // Result code is RESULT_OK only if the user selects an Image
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK)
-            switch (requestCode) {
-                case GET_FROM_GALLERY:
+            if( requestCode == GET_FROM_GALLERY) {
                     //data.getData returns the content URI for the selected Image
                     Uri selectedImage = data.getData();
                     final ImageButton add_pic = findViewById(R.id.profile_pic);
@@ -261,9 +253,7 @@ public class Signup extends AppCompatActivity {
                     }
 
                     add_pic.setImageBitmap(image);
-                   break;
             }
-
 
     }
 
@@ -275,9 +265,7 @@ public class Signup extends AppCompatActivity {
         int width_tmp = o.outWidth , height_tmp = o.outHeight;
         int scale = 1;
 
-        while(true) {
-            if(width_tmp / 2 < requiredSize || height_tmp / 2 < requiredSize)
-                break;
+        while(width_tmp / 2 > requiredSize && height_tmp / 2 > requiredSize) {
             width_tmp /= 2;
             height_tmp /= 2;
             scale *= 2;
@@ -290,7 +278,7 @@ public class Signup extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = null;
+        Intent i;
         switch(SCREEN){
             case 1:
                 i = new Intent(this , Start.class);
