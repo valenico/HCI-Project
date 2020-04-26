@@ -30,7 +30,7 @@ public class PaintText extends View {
         //set color
         mPaintText.setColor(Color.BLACK);
         //set text Size
-        mPaintText.setTextSize(40f);
+        mPaintText.setTextSize(45f);
 
     }
 

@@ -2,23 +2,28 @@ package com.example.huc_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.jh.circularlist.CircularListView;
@@ -89,6 +94,7 @@ public class Signup extends AppCompatActivity {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void complete_profile3(View vi) {
         setContentView(R.layout.activity_signup3);
         final Context c = this.getBaseContext();
@@ -99,33 +105,129 @@ public class Signup extends AppCompatActivity {
         circularListView.setRadius(80);
         CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), interests);
         circularListView.setAdapter(adapter);
-
-        circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
+        circularListView.setOnTouchListener(new CircularListView.OnTouchListener() {
+            private float init_x = 0;
+            private float init_y = 0;
+            private float pre_x = 0;
+            private float pre_y = 0;
+            private float cur_x = 0;
+            private float cur_y = 0;
+            private float move_x = 0;
+            private float move_y = 0;
+            private float minClickDistance = 30.0f;
+            private float minMoveDistance = 30.0f;
+            private float mMovingSpeed = 2000.0f;  // default is 2000, larger > faster
+            private boolean can_rotate = true;
+            private boolean isCircularMoving = false; // ensure that item click only triggered when it's not moving
             @Override
-            public void onItemClick(View view, int index){
-                float curr_size = view.getScaleX();
-                if(curr_size == (float) 1) {
-                    view.setScaleX((float) 1.5);
-                    view.setScaleY((float) 1.5);
-                    circularListView.addView(new PaintText( c, index,
-                            view.getLeft()-60, view.getTop()-60,view.getRight()+50, view.getBottom()+50,
-                            -180,200) );
-                    int max = getMaxValue(children);
-                    children[index] = max + 1;
-                } else {
-                    view.setScaleX((float) 1);
-                    view.setScaleY((float) 1);
-                    circularListView.removeViewAt(children[index]);
-                    for(int elem = 0; elem < children.length; elem++){
-                        if (children[elem] > children[index]){
-                            children[elem] -= 1;
+            public boolean onTouch(final View v, MotionEvent event) {
+                 int max = getMaxValue(children);
+                 if(max == 6){
+                     can_rotate = true;
+                 }
+                 switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        cur_x = event.getX();
+                        cur_y = event.getY();
+                        init_x = event.getX();
+                        init_y = event.getY();
+
+                    case MotionEvent.ACTION_MOVE:
+                        pre_x = cur_x;
+                        pre_y = cur_y;
+                        cur_x = event.getX();
+                        cur_y = event.getY();
+
+                        float diff_x = cur_x - pre_x;
+                        float diff_y = cur_y - pre_y;
+                        move_x = init_x - cur_x;
+                        move_y = init_y - cur_y;
+                        float moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
+
+
+                        if (cur_y >= ((CircularListView) v).layoutCenter_y) diff_x = -diff_x;
+                        if (cur_x <= ((CircularListView) v).layoutCenter_x) diff_y = -diff_y;
+
+                        // should rotate the layout
+                        if (moveDistance > minMoveDistance && can_rotate) {
+                            isCircularMoving = true;
+                            CircularListView.MoveAccumulator += (diff_x + diff_y) / mMovingSpeed;
+
+                            // calculate new position around circle
+                            for (int i = 0; i < ((CircularListView) v).itemViewList.size(); i++) {
+                                final int idx = i;
+                                final View itemView = ((CircularListView) v).itemViewList.get(i);
+                                itemView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
+                                                itemView.getLayoutParams();
+                                        params.setMargins(
+                                                (int) (((CircularListView) v).layoutCenter_x - (((CircularListView) v).itemWith / 2) +
+                                                        (((CircularListView) v).radius * Math.cos(idx * ((CircularListView) v).getIntervalAngle() +
+                                                                CircularListView.MoveAccumulator * Math.PI * 2))),
+                                                (int) (((CircularListView) v).layoutCenter_y - (((CircularListView) v).itemHeight / 2) +
+                                                        (((CircularListView) v).radius * Math.sin(idx * ((CircularListView) v).getIntervalAngle() +
+                                                                CircularListView.MoveAccumulator * Math.PI * 2))),
+                                                0,
+                                                0);
+                                        itemView.setLayoutParams(params);
+                                        itemView.requestLayout();
+                                    }
+                                });
+                            }
                         }
-                    }
-                    children[index] = 6;
 
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+
+                        // it is an click action if move distance < min distance
+                        moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
+                        if (moveDistance < minClickDistance && !isCircularMoving) {
+                            for (int i = 0; i < ((CircularListView) v).itemViewList.size(); i++) {
+                                View view = ((CircularListView) v).itemViewList.get(i);
+                                if (isTouchInsideView(cur_x, cur_y, view)) {
+                                    can_rotate = false;
+                                    float curr_size = view.getScaleX();
+                                    max = getMaxValue(children);
+                                    if(curr_size == (float) 1) {
+                                        view.setScaleX((float) 1.5);
+                                        view.setScaleY((float) 1.5);
+                                        circularListView.addView(new PaintText( c, i,
+                                                view.getLeft()-60, view.getTop()-60,view.getRight()+60, view.getBottom()+60,
+                                                -145,135) );
+                                        children[i] = max + 1;
+                                    } else {
+                                        view.setScaleX((float) 1);
+                                        view.setScaleY((float) 1);
+                                        circularListView.removeViewAt(children[i]);
+                                        for (int elem = 0; elem < children.length; elem++) {
+                                            if (children[elem] > children[i]) {
+                                                children[elem] -= 1;
+                                            }
+                                        }
+                                        children[i] = 6;
+
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        isCircularMoving = false; // reset moving state when event ACTION_UP
+                        return true;
                 }
-
+                return false;
             }
+
+            private boolean isTouchInsideView(float x, float y, View view){
+                float left = view.getX();
+                float top  = view.getY();
+                float wid = view.getWidth();
+                float h = view.getHeight();
+                return (x > left && x < left + wid && y > top && y < top+h);
+            }
+
         });
 
 
@@ -208,5 +310,12 @@ public class Signup extends AppCompatActivity {
                 break;
         }
     }
+
+    public void end_signup(View v){
+        Intent i = new Intent(this , Homepage.class);
+        Toast.makeText(getApplicationContext(),"Registered successfully.",Toast.LENGTH_SHORT).show();
+        startActivity(i);
+    }
+
 }
 

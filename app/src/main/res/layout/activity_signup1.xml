@@ -59,7 +59,7 @@
         android:layout_marginLeft="114dp"
         android:layout_marginRight="114dp"
         android:layout_marginStart="114dp"
-        android:layout_marginTop="119dp"
+        android:layout_marginTop="95dp"
         android:text="@string/complete_your_profile"
         android:textSize="18sp"
         android:textStyle="bold"
