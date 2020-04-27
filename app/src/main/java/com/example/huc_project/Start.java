@@ -1,20 +1,19 @@
 package com.example.huc_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.huc_project.homepage.Homepage;
+import com.example.huc_project.dialog.GuestModeDialog;
 import com.example.huc_project.ui.login.Login;
 
 public class Start extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
@@ -39,12 +38,12 @@ public class Start extends AppCompatActivity {
 
         guestModeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Start.this, Homepage.class);
-                intent.putExtra("guest", "true");
-                startActivity(intent);
+                DialogFragment dialog = new GuestModeDialog();
+                dialog.show(getSupportFragmentManager(), "guestmode");
             }
         });
 
 
     }
+
 }
