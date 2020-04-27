@@ -2,11 +2,15 @@ package com.example.huc_project.homepage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.huc_project.R;
 
@@ -25,9 +29,8 @@ public class Homepage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        recyclerView = findViewById(R.id.recyclerView);
         populateData();
-        initAdapter();
+        setUpRecyclerView();
         initScrollListener();
 
     }
@@ -40,9 +43,12 @@ public class Homepage extends AppCompatActivity {
         }
     }
 
-    private void initAdapter() {
-
+    private void setUpRecyclerView() {
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 
@@ -62,8 +68,8 @@ public class Homepage extends AppCompatActivity {
                 if (!isLoading) {
                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == rowsArrayList.size() - 1) {
                         //bottom of list!
-                        loadMore();
-                        isLoading = true;
+                        //loadMore();
+                        //isLoading = true;
                     }
                 }
             }
@@ -98,5 +104,31 @@ public class Homepage extends AppCompatActivity {
         }, 2000);
 
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                recyclerViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return true;
     }
 }

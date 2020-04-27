@@ -1,8 +1,11 @@
 package com.example.huc_project.homepage;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -11,16 +14,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.huc_project.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
 
-    public List<String> mItemList;
+    public List<String> itemsList;
+    public List<String> itemsListFull;
 
     public RecyclerViewAdapter(List<String> itemList) {
-        mItemList = itemList;
+        this.itemsList = itemList;
+        itemsListFull = new ArrayList<>(itemList);
     }
 
     @NonNull
@@ -49,18 +56,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return mItemList == null ? 0 : mItemList.size();
+
+        return itemsList == null ? 0 : itemsList.size();
     }
 
-    /**
-     * The following method decides the type of ViewHolder to display in the RecyclerView
-     *
-     * @param position
-     * @return
-     */
     @Override
     public int getItemViewType(int position) {
-        return mItemList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return itemsList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
 
@@ -92,10 +94,46 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void populateItemRows(ItemViewHolder viewHolder, int position) {
 
-        String item = mItemList.get(position);
+        String item = itemsList.get(position);
         viewHolder.tvItem.setText(item);
 
     }
+
+
+    @Override
+    public Filter getFilter() {
+        return filtered_results;
+    }
+
+    private Filter filtered_results = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<String> filteredList = new ArrayList<>();
+
+            if(constraint.toString().isEmpty()){
+                filteredList.addAll(itemsListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (String s : itemsListFull){
+                    if(s.toLowerCase().contains(filterPattern)){
+                        filteredList.add(s);
+                    }
+                }
+            }
+            FilterResults res = new FilterResults();
+            res.values=filteredList;
+            Log.d("filter",""+res.values);
+
+            return res;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            itemsList.clear();
+            itemsList.addAll((Collection<? extends String>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
 
