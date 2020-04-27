@@ -11,15 +11,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Signup"></activity>
         <activity android:name=".homepage.Homepage">
+        </activity>
+        <activity android:name=".homepage.RecyclerViewAdapter"></activity>
+        <activity android:name=".Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".homepage.RecyclerViewAdapter"></activity>
-        <activity android:name=".Start">
-
         </activity>
         <activity
             android:name=".ui.login.Login"

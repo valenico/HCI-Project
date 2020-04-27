@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -22,12 +23,19 @@ public class Homepage extends AppCompatActivity {
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<String> rowsArrayList = new ArrayList<>();
 
+    boolean guest_mode = false;
     boolean isLoading = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        Intent i = getIntent();
+        String guest = i.getStringExtra("guest");
+        if(guest != null && guest == "true"){
+            guest_mode = true;
+        }
 
         populateData();
         setUpRecyclerView();
