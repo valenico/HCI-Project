@@ -8,7 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -36,7 +37,7 @@ public class Signup extends AppCompatActivity {
 
     private static final int GET_FROM_GALLERY = 1;
     public static int SCREEN = 1;
-
+    private boolean error_free = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +57,73 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
+        EditText mail_view = findViewById(R.id.email);
+        EditText username = findViewById(R.id.username_signup);
+        EditText pass = findViewById(R.id.password_signup);
+        EditText pass_confirm = findViewById(R.id.confirm_password);
+
+        mail_view.addTextChangedListener(new InputValidator(mail_view , this.getResources()));
+        pass.addTextChangedListener(new InputValidator(pass, this.getResources()));
+        pass_confirm.addTextChangedListener(new InputValidator(pass_confirm, this.getResources()));
+
+        // Called when an action is performed on the EditText
+        mail_view.setOnEditorActionListener(new EmptyTextListener(mail_view , this.getResources()));
+        pass.setOnEditorActionListener(new EmptyTextListener(pass, this.getResources()));
+        pass_confirm.setOnEditorActionListener(new EmptyTextListener(pass_confirm, this.getResources()));
+
 
     }
 
     public void complete_profile1(View v) {
-
         EditText mail_view = findViewById(R.id.email);
+        EditText username = findViewById(R.id.username_signup);
         EditText pass = findViewById(R.id.password_signup);
         EditText pass_confirm = findViewById(R.id.confirm_password);
-
-        boolean email_valid =  android.util.Patterns.EMAIL_ADDRESS.matcher(mail_view.getText().toString()).matches();
+        Drawable error_indicator = this.getResources().getDrawable(R.drawable.error);
         boolean same_pass = pass.getText().toString().matches(pass_confirm.getText().toString());
+        boolean stop = false;
 
-        if(email_valid && same_pass) {
+        if(!same_pass) {
+            pass_confirm.setText("");
+            int left = pass_confirm.getLeft();
+            int top = pass_confirm.getTop();
+            int right = error_indicator.getIntrinsicHeight();
+            int bottom = error_indicator.getIntrinsicWidth();
+            error_indicator.setBounds(new Rect(left, top, right, bottom));
+            pass_confirm.setError("Passwords do not match.");
+            stop = true;
+        }
+        if( pass.getText().length() == 0){
+            pass.setText("");
+            int left = pass.getLeft();
+            int top = pass.getTop();
+            int right = error_indicator.getIntrinsicHeight();
+            int bottom = error_indicator.getIntrinsicWidth();
+            error_indicator.setBounds(new Rect(left, top, right, bottom));
+            pass.setError("Password is required.");
+            stop = true;
+        }
+
+        if(username.getText().length() < 1) {
+            int left = username.getLeft();
+            int top = username.getTop();
+            int right = error_indicator.getIntrinsicHeight();
+            int bottom = error_indicator.getIntrinsicWidth();
+            error_indicator.setBounds(new Rect(left, top, right, bottom));
+            username.setError("Username is requried.");
+            stop = true;
+        }
+        if(mail_view.getText().length() < 1) {
+            int left = mail_view.getLeft();
+            int top = mail_view.getTop();
+            int right = error_indicator.getIntrinsicHeight();
+            int bottom = error_indicator.getIntrinsicWidth();
+            error_indicator.setBounds(new Rect(left, top, right, bottom));
+            mail_view.setError("E-mail is required.");
+            stop = true;
+        }
+
+        if(!stop){
             SCREEN = 2;
             setContentView(R.layout.activity_signup1);
             AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
@@ -80,20 +135,10 @@ public class Signup extends AppCompatActivity {
             String[] cities_array = getResources().getStringArray(R.array.cities_array);
             ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities_array);
             cities.setAdapter(adapter2);
-        } else if(!email_valid) {
-            mail_view.setText("");
-            mail_view.setHint("Your e-mail was not valid.");
-            mail_view.setHintTextColor(Color.RED);
-        } else {
-            pass.setText("");
-            pass_confirm.setText("");
-            pass_confirm.setHintTextColor(Color.RED);
-            pass_confirm.setHint("Passwords didn't match.");
         }
     }
 
     public void complete_profile2(View v) {
-
         setContentView(R.layout.activity_signup2);
         SCREEN = 3;
         final ImageButton add_pic = findViewById(R.id.profile_pic);
@@ -101,7 +146,6 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-
             }
         });
 
@@ -324,6 +368,4 @@ public class Signup extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"Registered successfully.",Toast.LENGTH_SHORT).show();
         startActivity(i);
     }
-
 }
-
