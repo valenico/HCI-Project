@@ -3,17 +3,25 @@ package com.example.huc_project.homepage;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.drawable.Icon;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.huc_project.R;
+import com.example.huc_project.dialog.GuestModeDialog;
 
 import java.util.ArrayList;
 
@@ -124,6 +132,13 @@ public class Homepage extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        MenuItem addItem = menu.findItem(R.id.add_icon);
+        Button addView = (Button) addItem.getActionView();
+
+        MenuItem postsItem = menu.findItem(R.id.post_icon);
+        Button postsView = (Button) postsItem.getActionView();
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -137,6 +152,30 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
+        addView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                return;
+            }
+        });
+
+        postsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                return;
+            }
+        });
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_icon:
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }
