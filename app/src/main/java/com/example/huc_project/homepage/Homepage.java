@@ -165,17 +165,6 @@ public class Homepage extends AppCompatActivity {
                 return;
             }
         });
-
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_icon:
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
     }
 }
