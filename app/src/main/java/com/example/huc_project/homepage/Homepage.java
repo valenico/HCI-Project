@@ -155,14 +155,16 @@ public class Homepage extends AppCompatActivity {
         addView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                return;
+                Intent intent = new Intent(getApplicationContext(), DataGettingActivity.class);
+                startActivity(intent);
             }
         });
 
         postsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                return;
+                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
+                startActivity(intent);
             }
         });
         return true;

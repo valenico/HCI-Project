@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.huc_project">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,9 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".homepage.DataGettingActivity"></activity>
+        <activity android:name=".homepage.CreateNewPostActivity" />
         <activity android:name=".Signup" />
-        <activity android:name=".homepage.Homepage">
-        </activity>
+        <activity android:name=".homepage.Homepage" />
         <activity android:name=".homepage.RecyclerViewAdapter" />
         <activity android:name=".Start">
             <intent-filter>
@@ -25,6 +29,4 @@
             android:label="@string/title_activity_login" />
     </application>
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
 </manifest>
