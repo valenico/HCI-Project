@@ -1,5 +1,6 @@
 package com.example.huc_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -12,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,6 +29,13 @@ import android.widget.Toast;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.jh.circularlist.CircularListView;
 
 import java.io.FileNotFoundException;
@@ -37,6 +46,8 @@ public class Signup extends AppCompatActivity {
 
     private static final int GET_FROM_GALLERY = 1;
     public static int SCREEN = 1;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private boolean error_free = false;
 
     @Override
@@ -58,7 +69,6 @@ public class Signup extends AppCompatActivity {
             }
         });
         EditText mail_view = findViewById(R.id.email);
-        EditText username = findViewById(R.id.username_signup);
         EditText pass = findViewById(R.id.password_signup);
         EditText pass_confirm = findViewById(R.id.confirm_password);
 
@@ -71,12 +81,20 @@ public class Signup extends AppCompatActivity {
         pass.setOnEditorActionListener(new EmptyTextListener(pass, this.getResources()));
         pass_confirm.setOnEditorActionListener(new EmptyTextListener(pass_confirm, this.getResources()));
 
+        mAuth = FirebaseAuth.getInstance();
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        mUser = mAuth.getCurrentUser();
+        // updateUI(currentUser); TODO
     }
 
     public void complete_profile1(View v) {
-        EditText mail_view = findViewById(R.id.email);
-        EditText username = findViewById(R.id.username_signup);
+        final EditText mail_view = findViewById(R.id.email);
+        final EditText username = findViewById(R.id.username_signup);
         EditText pass = findViewById(R.id.password_signup);
         EditText pass_confirm = findViewById(R.id.confirm_password);
         Drawable error_indicator = this.getResources().getDrawable(R.drawable.error);
@@ -125,16 +143,28 @@ public class Signup extends AppCompatActivity {
 
         if(!stop){
             SCREEN = 2;
-            setContentView(R.layout.activity_signup1);
-            AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
-            String[] countries_array = getResources().getStringArray(R.array.countries_array);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries_array);
-            countries.setAdapter(adapter);
+            mAuth.createUserWithEmailAndPassword(mail_view.getText().toString().trim() , pass.getText().toString().trim())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-            AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
-            String[] cities_array = getResources().getStringArray(R.array.cities_array);
-            ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities_array);
-            cities.setAdapter(adapter2);
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(Signup.this, "ERROR",Toast.LENGTH_LONG).show();
+                            } else {
+                                // update name TODO
+                                // a quanto pareil displayname de firebase lo sanno solo loro e non si può vedere se lo setti o no
+                                // BELLA MERDA
+                                setContentView(R.layout.activity_signup1);
+                                AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
+                                String[] countries_array = getResources().getStringArray(R.array.countries_array);
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, countries_array);
+                                countries.setAdapter(adapter);
+                                AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
+                                String[] cities_array = getResources().getStringArray(R.array.cities_array);
+                                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, cities_array);
+                                cities.setAdapter(adapter2);
+                            }
+                        }
+                    });
         }
     }
 
