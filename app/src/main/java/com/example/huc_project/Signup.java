@@ -30,17 +30,24 @@ import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.jh.circularlist.CircularListView;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class Signup extends AppCompatActivity {
 
@@ -48,13 +55,18 @@ public class Signup extends AppCompatActivity {
     public static int SCREEN = 1;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
-    private boolean error_free = false;
+    private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
+    private List<String> interests_selected;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SCREEN = 1;
         setContentView(R.layout.activity_signup);
+
+        db = FirebaseFirestore.getInstance();
+
         final CheckBox age_check = findViewById(R.id.age_check);
         final Button sign_up_button = findViewById(R.id.signup);
 
@@ -153,15 +165,20 @@ public class Signup extends AppCompatActivity {
                                 // update name TODO
                                 // a quanto pareil displayname de firebase lo sanno solo loro e non si può vedere se lo setti o no
                                 // BELLA MERDA
-                                setContentView(R.layout.activity_signup1);
-                                AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
-                                String[] countries_array = getResources().getStringArray(R.array.countries_array);
-                                ArrayAdapter<String> adapter = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, countries_array);
-                                countries.setAdapter(adapter);
-                                AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
-                                String[] cities_array = getResources().getStringArray(R.array.cities_array);
-                                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, cities_array);
-                                cities.setAdapter(adapter2);
+                                mUser = mAuth.getCurrentUser();
+                                HashMap<String, String> upd = new HashMap<>();
+                                upd.put("Name", username.getText().toString());
+                                db.collection("UTENTI").document(mUser.getUid()).set(upd);
+
+                                 setContentView(R.layout.activity_signup1);
+                                 AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
+                                 String[] countries_array = getResources().getStringArray(R.array.countries_array);
+                                 ArrayAdapter<String> adapter = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, countries_array);
+                                 countries.setAdapter(adapter);
+                                 AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
+                                 String[] cities_array = getResources().getStringArray(R.array.cities_array);
+                                 ArrayAdapter<String> adapter2 = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, cities_array);
+                                 cities.setAdapter(adapter2);
                             }
                         }
                     });
@@ -169,6 +186,30 @@ public class Signup extends AppCompatActivity {
     }
 
     public void complete_profile2(View v) {
+
+        EditText country =  findViewById(R.id.autocomplete_country);
+        EditText city = findViewById(R.id.autocomplete_city);
+        EditText phone = findViewById(R.id.phonenumber);
+
+        HashMap<String, String> upd = new HashMap<>();
+        if(country.getText().toString().trim().length() > 0 ){
+            upd.put("Country" , country.getText().toString());
+        }
+        if(city.getText().toString().trim().length() > 0 ){
+            upd.put("City" , city.getText().toString());
+        }
+        db.collection("UTENTI").document(mUser.getUid()).set(upd);
+
+        if(phone.getText().toString().trim().length() > 0){
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Integer>().put("Phone" , Integer.parseInt(phone.getText().toString().trim())));
+        }
+
+        if(  ((CheckBox) findViewById(R.id.hidemail)).isChecked() ){
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("HideMail" , true));
+        } else {
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("HideMail" , false));
+        }
+
         setContentView(R.layout.activity_signup2);
         SCREEN = 3;
         final ImageButton add_pic = findViewById(R.id.profile_pic);
@@ -184,6 +225,12 @@ public class Signup extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     public void complete_profile3(View vi) {
+
+        EditText desc = findViewById(R.id.description);
+        if(desc.getText().toString().trim().length() > 0){
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , String>().put("Description" , desc.getText().toString().trim() ));
+        }
+
         setContentView(R.layout.activity_signup3);
         final Context c = this.getBaseContext();
         SCREEN = 4;
@@ -281,10 +328,11 @@ public class Signup extends AppCompatActivity {
                                     if(curr_size == (float) 1) {
                                         view.setScaleX((float) 1.5);
                                         view.setScaleY((float) 1.5);
-                                        circularListView.addView(new PaintText( c, i,
+                                        circularListView.addView(new PaintText( c , i,
                                                 view.getLeft()-60, view.getTop()-60,view.getRight()+60, view.getBottom()+60,
                                                 -145,135) );
                                         children[i] = max + 1;
+                                        interests_selected.add(Text[i]);
                                     } else {
                                         view.setScaleX((float) 1);
                                         view.setScaleY((float) 1);
@@ -295,7 +343,7 @@ public class Signup extends AppCompatActivity {
                                             }
                                         }
                                         children[i] = 6;
-
+                                        interests_selected.remove(Text[i]);
                                     }
                                     break;
                                 }
@@ -394,6 +442,19 @@ public class Signup extends AppCompatActivity {
     }
 
     public void end_signup(View v){
+
+        db.collection("UTENTI").document(mUser.getUid()).set( new HashMap<String, List<String>>().put("Ineterests" , interests_selected) );
+        if(  ((CheckBox) findViewById(R.id.is_sponsor)).isChecked() ){
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("Sponsor" , true));
+        } else {
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("Sponsor" , false));
+        }
+        if(  ((CheckBox) findViewById(R.id.look_sponsors)).isChecked() ){
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("LookSponsor" , true));
+        } else {
+            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("LookSponsor" , false));
+        }
+
         Intent i = new Intent(this , Homepage.class);
         Toast.makeText(getApplicationContext(),"Registered successfully.",Toast.LENGTH_SHORT).show();
         startActivity(i);
