@@ -31,18 +31,19 @@ import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jh.circularlist.CircularListView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +57,8 @@ public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
-    private List<String> interests_selected;
+    private List<String> interests_selected = new ArrayList<>();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseFirestore db;
 
     @Override
@@ -64,6 +66,7 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SCREEN = 1;
         setContentView(R.layout.activity_signup);
+        this.interests_selected = null;
 
         db = FirebaseFirestore.getInstance();
 
@@ -162,9 +165,6 @@ public class Signup extends AppCompatActivity {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(Signup.this, "ERROR",Toast.LENGTH_LONG).show();
                             } else {
-                                // update name TODO
-                                // a quanto pareil displayname de firebase lo sanno solo loro e non si può vedere se lo setti o no
-                                // BELLA MERDA
                                 mUser = mAuth.getCurrentUser();
                                 HashMap<String, String> upd = new HashMap<>();
                                 upd.put("Name", username.getText().toString());
@@ -191,24 +191,20 @@ public class Signup extends AppCompatActivity {
         EditText city = findViewById(R.id.autocomplete_city);
         EditText phone = findViewById(R.id.phonenumber);
 
-        HashMap<String, String> upd = new HashMap<>();
-        if(country.getText().toString().trim().length() > 0 ){
-            upd.put("Country" , country.getText().toString());
-        }
-        if(city.getText().toString().trim().length() > 0 ){
-            upd.put("City" , city.getText().toString());
-        }
-        db.collection("UTENTI").document(mUser.getUid()).set(upd);
+        HashMap<String, Object> upd = new HashMap<>();
 
-        if(phone.getText().toString().trim().length() > 0){
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Integer>().put("Phone" , Integer.parseInt(phone.getText().toString().trim())));
+        if (country.getText().toString().trim().length() > 0) {
+            upd.put("Country", country.getText().toString());
         }
 
-        if(  ((CheckBox) findViewById(R.id.hidemail)).isChecked() ){
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("HideMail" , true));
-        } else {
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("HideMail" , false));
+        if (city.getText().toString().trim().length() > 0) {
+            upd.put("City", city.getText().toString());
         }
+        if (phone.getText().toString().trim().length() > 0) {
+           upd.put("Phone", Integer.parseInt(phone.getText().toString()));
+        }
+        upd.put("Hidemail" , ((CheckBox) findViewById(R.id.hidemail)).isChecked() );
+        db.collection("UTENTI").document(mUser.getUid()).set(upd , SetOptions.merge());
 
         setContentView(R.layout.activity_signup2);
         SCREEN = 3;
@@ -228,7 +224,9 @@ public class Signup extends AppCompatActivity {
 
         EditText desc = findViewById(R.id.description);
         if(desc.getText().toString().trim().length() > 0){
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , String>().put("Description" , desc.getText().toString().trim() ));
+            HashMap<String,Object> upd = new HashMap<>();
+            upd.put("Description" , desc.getText().toString().trim());
+            db.collection("UTENTI").document(mUser.getUid()).set( upd , SetOptions.merge());
         }
 
         setContentView(R.layout.activity_signup3);
@@ -390,11 +388,19 @@ public class Signup extends AppCompatActivity {
                     Bitmap image = null;
                     try {
                         image = decodeUri(this,selectedImage,125);
+                        add_pic.setImageBitmap(image);
+                        StorageReference storageRef = storage.getReference();
+                        UploadTask ut = storageRef.child(mUser.getUid()).putFile(selectedImage);
+                        ut.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Signup.this, "The image was not correctly loaded.", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                        Toast.makeText(Signup.this, "The fuck is happening here bro... ", Toast.LENGTH_LONG).show();
                     }
-
-                    add_pic.setImageBitmap(image);
             }
 
     }
@@ -443,17 +449,11 @@ public class Signup extends AppCompatActivity {
 
     public void end_signup(View v){
 
-        db.collection("UTENTI").document(mUser.getUid()).set( new HashMap<String, List<String>>().put("Ineterests" , interests_selected) );
-        if(  ((CheckBox) findViewById(R.id.is_sponsor)).isChecked() ){
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("Sponsor" , true));
-        } else {
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("Sponsor" , false));
-        }
-        if(  ((CheckBox) findViewById(R.id.look_sponsors)).isChecked() ){
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("LookSponsor" , true));
-        } else {
-            db.collection("UTENTI").document(mUser.getUid()).set(new HashMap<String , Boolean>().put("LookSponsor" , false));
-        }
+        HashMap<String, Object> upd = new HashMap<>();
+        upd.put("Interests" , interests_selected);
+        upd.put("Sponsors" ,  ((CheckBox) findViewById(R.id.is_sponsor)).isChecked() );
+        upd.put("LookSponsors", ((CheckBox) findViewById(R.id.look_sponsors)).isChecked() );
+        db.collection("UTENTI").document(mUser.getUid()).set(upd, SetOptions.merge());
 
         Intent i = new Intent(this , Homepage.class);
         Toast.makeText(getApplicationContext(),"Registered successfully.",Toast.LENGTH_SHORT).show();
