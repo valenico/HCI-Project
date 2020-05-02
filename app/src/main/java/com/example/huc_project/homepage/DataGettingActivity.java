@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +38,8 @@ public class DataGettingActivity extends AppCompatActivity {
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
     private FirebaseFirestore db;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,7 @@ public class DataGettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_getting);
 
         db = FirebaseFirestore.getInstance();
-        CollectionReference collezione=db.collection("users");
+        CollectionReference collezione=db.collection("posts");
 
         collezione.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -52,8 +57,12 @@ public class DataGettingActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 TextView dataFromDatabase = (TextView) findViewById(R.id.datafromdatabase);
-                                String post=(document.getData().values().toString());
-                                dataFromDatabase.setText(dataFromDatabase.getText()+"\n"+post);
+                                //String post=(document.getData().values().toString());
+                                DocumentSnapshot documentSnapshot = document;
+                                Post post=new Post();
+                                post = documentSnapshot.toObject(Post.class);
+                                Log.d(TAG, "le velineeeeeeeeeeeeeeeeeeeeee"+post);
+                                dataFromDatabase.setText(dataFromDatabase.getText()+"\n"+post.postdesc);
                                 //dataFromDatabase.setText((CharSequence) document.getData());
 
                             }
