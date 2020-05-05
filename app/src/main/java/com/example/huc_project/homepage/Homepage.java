@@ -3,13 +3,10 @@ package com.example.huc_project.homepage;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.drawable.Icon;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -17,11 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.huc_project.R;
-import com.example.huc_project.dialog.GuestModeDialog;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 
@@ -47,6 +45,7 @@ public class Homepage extends AppCompatActivity {
 
         populateData();
         setUpRecyclerView();
+        setUpCircularMenu();
         initScrollListener();
 
     }
@@ -57,6 +56,37 @@ public class Homepage extends AppCompatActivity {
             rowsArrayList.add("Item " + i);
             i++;
         }
+    }
+
+    private void setUpCircularMenu(){
+        ImageView icon = new ImageView(this); // Create an icon
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu));
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+
+        ImageView settingsItem = new ImageView(this);
+        settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
+        SubActionButton button1 = itemBuilder.setContentView(settingsItem).build();
+
+        ImageView chatItem = new ImageView(this);
+        chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+        SubActionButton button2 = itemBuilder.setContentView(chatItem).build();
+
+        ImageView profItem = new ImageView(this);
+        profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
+        SubActionButton button3 = itemBuilder.setContentView(profItem).build();
+
+        ImageView addItem = new ImageView(this);
+        addItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
+        SubActionButton button4 = itemBuilder.setContentView(addItem).build();
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(button1)
+                .addSubActionView(button2)
+                .addSubActionView(button3)
+                .addSubActionView(button4).attachTo(actionButton).build();
     }
 
     private void setUpRecyclerView() {
