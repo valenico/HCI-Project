@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.example.huc_project.R;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -49,6 +52,9 @@ public class DataGettingActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         CollectionReference collezione=db.collection("posts");
 
+
+
+
         collezione.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -64,6 +70,18 @@ public class DataGettingActivity extends AppCompatActivity {
                                 Log.d(TAG, "le velineeeeeeeeeeeeeeeeeeeeee"+post);
                                 dataFromDatabase.setText(dataFromDatabase.getText()+"\n"+post.postdesc);
                                 //dataFromDatabase.setText((CharSequence) document.getData());
+                                // Reference to an image file in Cloud Storage
+                                StorageReference storageRef = storage.getReference();
+                                StorageReference islandRef = storageRef.child("images/" + post.storageref);
+
+                                // ImageView in your Activity
+                                ImageView imageView = findViewById(R.id.imageView2);
+
+                                // Download directly from StorageReference using Glide
+                                // (See MyAppGlideModule for Loader registration)
+                                Glide.with(DataGettingActivity.this)
+                                        .load(islandRef)
+                                        .into(imageView);
 
                             }
                         } else {

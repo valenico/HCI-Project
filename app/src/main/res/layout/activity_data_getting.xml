@@ -14,4 +14,20 @@
         tools:layout_editor_absoluteX="75dp"
         tools:layout_editor_absoluteY="189dp" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="142dp"
+        android:layout_height="143dp"
+        android:layout_marginStart="141dp"
+        android:layout_marginLeft="141dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginRight="128dp"
+        android:layout_marginBottom="59dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datafromdatabase"
+        app:srcCompat="@drawable/border" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
