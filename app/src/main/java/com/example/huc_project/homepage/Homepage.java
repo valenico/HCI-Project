@@ -10,19 +10,34 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.huc_project.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Homepage extends AppCompatActivity {
 
@@ -30,6 +45,12 @@ public class Homepage extends AppCompatActivity {
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<String> rowsArrayList = new ArrayList<>();
     final int numItems = 10;
+
+    private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference mdatabaseReference = mdatabase.getReference();
+    private FirebaseFirestore db;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    ArrayList<Post> rowsPostList = new ArrayList<>();
 
     boolean guest_mode = false;
     boolean isLoading = false;
@@ -45,19 +66,41 @@ public class Homepage extends AppCompatActivity {
             guest_mode = true;
         }
 
-        populateData();
-        setUpRecyclerView();
-        setUpCircularMenu();
-        initScrollListener();
+        setUpHomepage();
 
     }
 
     private void populateData() {
         int i = 0;
-        while (i < numItems) {
-            rowsArrayList.add("Item " + i);
+        while (i < rowsPostList.size()) {
+            rowsArrayList.add(rowsPostList.get(i).postdesc);
             i++;
         }
+    }
+
+    private void setUpHomepage(){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference collezione = db.collection("posts");
+
+        collezione.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Post post = document.toObject(Post.class);
+                                rowsPostList.add(post);
+                            }
+                            populateData();
+                            setUpRecyclerView();
+                            setUpCircularMenu();
+                            initScrollListener();
+
+                        } else {
+                            Log.w("Tag", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     private void setUpRecyclerView() {
