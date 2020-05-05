@@ -50,5 +50,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     // If you're using Kotlin (and therefore, kapt), use kapt instead of annotationProcessor
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
 
 }
