@@ -3,15 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="8dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/tvItem"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Item X" />
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/post_image"
+            android:src="@drawable/ic_no_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvItem"
+            android:layout_toRightOf="@+id/post_image"
+            android:layout_alignParentTop="true"
+            android:textSize="30sp"
+            android:text="Item X"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/person_age"
+            android:layout_toRightOf="@+id/post_image"
+            android:layout_below="@+id/tvItem"/>
+
+    </RelativeLayout>
+
 
 
 </androidx.cardview.widget.CardView>

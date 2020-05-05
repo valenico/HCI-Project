@@ -29,6 +29,7 @@ public class Homepage extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<String> rowsArrayList = new ArrayList<>();
+    final int numItems = 10;
 
     boolean guest_mode = false;
     boolean isLoading = false;
@@ -53,90 +54,10 @@ public class Homepage extends AppCompatActivity {
 
     private void populateData() {
         int i = 0;
-        while (i < 10) {
+        while (i < numItems) {
             rowsArrayList.add("Item " + i);
             i++;
         }
-    }
-
-    private void setUpCircularMenu(){
-        final ImageView icon = new ImageView(this);
-        final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
-        final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
-        icon.setImageDrawable(menu_ic_id);
-
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
-
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-        FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
-        itemBuilder.setLayoutParams(params);
-
-        //settings
-        ImageView settingsItem = new ImageView(this);
-        settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
-        SubActionButton settingsButton = itemBuilder.setContentView(settingsItem).build();
-        //chat
-        ImageView chatItem = new ImageView(this);
-        chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
-        SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
-        //profile
-        ImageView profItem = new ImageView(this);
-        profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
-        SubActionButton profButton = itemBuilder.setContentView(profItem).build();
-        //new post
-        ImageView addItem = new ImageView(this);
-        addItem.setImageDrawable(add_ic_id);
-        SubActionButton addButton = itemBuilder.setContentView(addItem).build();
-
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(settingsButton)
-                .addSubActionView(chatButton)
-                .addSubActionView(profButton)
-                .addSubActionView(addButton)
-                .setRadius(470)
-                .attachTo(actionButton)
-                .build();
-
-        actionMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
-            @Override
-            public void onMenuOpened(FloatingActionMenu menu) {
-                icon.setImageDrawable(add_ic_id);
-                icon.setRotation(45);
-            }
-
-            @Override
-            public void onMenuClosed(FloatingActionMenu menu) {
-                icon.setImageDrawable(menu_ic_id);
-                icon.setRotation(0);
-            }
-        });
-
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        profButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
     }
 
     private void setUpRecyclerView() {
@@ -237,5 +158,86 @@ public class Homepage extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+
+    private void setUpCircularMenu(){
+        final ImageView icon = new ImageView(this);
+        final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+        final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
+        icon.setImageDrawable(menu_ic_id);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
+        itemBuilder.setLayoutParams(params);
+
+        //settings
+        ImageView settingsItem = new ImageView(this);
+        settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
+        SubActionButton settingsButton = itemBuilder.setContentView(settingsItem).build();
+        //chat
+        ImageView chatItem = new ImageView(this);
+        chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+        SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
+        //profile
+        ImageView profItem = new ImageView(this);
+        profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
+        SubActionButton profButton = itemBuilder.setContentView(profItem).build();
+        //new post
+        ImageView addItem = new ImageView(this);
+        addItem.setImageDrawable(add_ic_id);
+        SubActionButton addButton = itemBuilder.setContentView(addItem).build();
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(settingsButton)
+                .addSubActionView(chatButton)
+                .addSubActionView(profButton)
+                .addSubActionView(addButton)
+                .setRadius(470)
+                .attachTo(actionButton)
+                .build();
+
+        actionMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+            @Override
+            public void onMenuOpened(FloatingActionMenu menu) {
+                icon.setImageDrawable(add_ic_id);
+                icon.setRotation(45);
+            }
+
+            @Override
+            public void onMenuClosed(FloatingActionMenu menu) {
+                icon.setImageDrawable(menu_ic_id);
+                icon.setRotation(0);
+            }
+        });
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        profButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 }
