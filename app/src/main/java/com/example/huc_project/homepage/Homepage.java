@@ -51,7 +51,7 @@ public class Homepage extends AppCompatActivity {
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     ArrayList<Post> rowsPostList = new ArrayList<>();
-    final private String pattern = "-__-";
+    final private String pattern = Integer.toString(R.string.pattern);
 
     boolean guest_mode = false;
     boolean isLoading = false;

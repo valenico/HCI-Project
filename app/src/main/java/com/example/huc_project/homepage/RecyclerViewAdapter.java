@@ -22,7 +22,7 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    final private String pattern = "-__-";
+    final private String pattern = Integer.toString(R.string.pattern);;
 
     public List<String> itemsList;
     public List<String> itemsListFull;
@@ -121,7 +121,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (String s : itemsListFull){
-                    if(s.toLowerCase().contains(filterPattern)){
+                    if(s.toLowerCase().replace(pattern, "").contains(filterPattern)){
                         filteredList.add(s);
                     }
                 }
