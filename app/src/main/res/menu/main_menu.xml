@@ -18,12 +18,4 @@
         app:actionViewClass="android.widget.Button">
 
     </item>
-    <item
-        android:id="@+id/post_icon"
-        android:title="Post"
-        android:icon="@drawable/ic_posts"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.Button">
-
-    </item>
 </menu>

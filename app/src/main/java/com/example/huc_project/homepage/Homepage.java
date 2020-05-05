@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -68,25 +69,34 @@ public class Homepage extends AppCompatActivity {
 
         ImageView settingsItem = new ImageView(this);
         settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
-        SubActionButton button1 = itemBuilder.setContentView(settingsItem).build();
+        SubActionButton settingsButton = itemBuilder.setContentView(settingsItem).build();
 
         ImageView chatItem = new ImageView(this);
         chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
-        SubActionButton button2 = itemBuilder.setContentView(chatItem).build();
+        SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
 
         ImageView profItem = new ImageView(this);
         profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
-        SubActionButton button3 = itemBuilder.setContentView(profItem).build();
+        SubActionButton profButton = itemBuilder.setContentView(profItem).build();
 
         ImageView addItem = new ImageView(this);
         addItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
-        SubActionButton button4 = itemBuilder.setContentView(addItem).build();
+        SubActionButton addButton = itemBuilder.setContentView(addItem).build();
 
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3)
-                .addSubActionView(button4).attachTo(actionButton).build();
+                .addSubActionView(settingsButton)
+                .addSubActionView(chatButton)
+                .addSubActionView(profButton)
+                .addSubActionView(addButton).attachTo(actionButton).build();
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setUpRecyclerView() {
@@ -165,9 +175,6 @@ public class Homepage extends AppCompatActivity {
         MenuItem addItem = menu.findItem(R.id.add_icon);
         Button addView = (Button) addItem.getActionView();
 
-        MenuItem postsItem = menu.findItem(R.id.post_icon);
-        Button postsView = (Button) postsItem.getActionView();
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -186,14 +193,6 @@ public class Homepage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), DataGettingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        postsView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
                 startActivity(intent);
             }
         });
