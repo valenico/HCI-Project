@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    final private String pattern = "-__-";
 
     public List<String> itemsList;
     public List<String> itemsListFull;
@@ -68,12 +70,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvItem;
+        RelativeLayout tvItem;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvItem = itemView.findViewById(R.id.tvItem);
+            tvItem = itemView.findViewById(R.id.relative);
         }
     }
 
@@ -93,9 +95,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void populateItemRows(ItemViewHolder viewHolder, int position) {
-
         String item = itemsList.get(position);
-        viewHolder.tvItem.setText(item);
+        String title = item.split(pattern)[0];
+        String desc = item.split(pattern)[1];
+        TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(1);
+        TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
+        tv1.setText(title);
+        tv2.setText(desc);
 
     }
 

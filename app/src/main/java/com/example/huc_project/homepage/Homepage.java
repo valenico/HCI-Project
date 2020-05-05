@@ -51,6 +51,7 @@ public class Homepage extends AppCompatActivity {
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     ArrayList<Post> rowsPostList = new ArrayList<>();
+    final private String pattern = "-__-";
 
     boolean guest_mode = false;
     boolean isLoading = false;
@@ -73,7 +74,7 @@ public class Homepage extends AppCompatActivity {
     private void populateData() {
         int i = 0;
         while (i < rowsPostList.size()) {
-            rowsArrayList.add(rowsPostList.get(i).postdesc);
+            rowsArrayList.add("Item " + i + pattern + rowsPostList.get(i).postdesc);
             i++;
         }
     }
