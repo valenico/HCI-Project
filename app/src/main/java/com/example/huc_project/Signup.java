@@ -57,7 +57,7 @@ public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
-    private List<String> interests_selected = new ArrayList<>();
+    private HashMap<String,Object>  interests_selected = new HashMap<>();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseFirestore db;
 
@@ -66,8 +66,6 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SCREEN = 1;
         setContentView(R.layout.activity_signup);
-        this.interests_selected = null;
-
         db = FirebaseFirestore.getInstance();
 
         final CheckBox age_check = findViewById(R.id.age_check);
@@ -330,7 +328,7 @@ public class Signup extends AppCompatActivity {
                                                 view.getLeft()-60, view.getTop()-60,view.getRight()+60, view.getBottom()+60,
                                                 -145,135) );
                                         children[i] = max + 1;
-                                        interests_selected.add(Text[i]);
+                                        interests_selected.put(Text[i], true);
                                     } else {
                                         view.setScaleX((float) 1);
                                         view.setScaleY((float) 1);
@@ -342,6 +340,7 @@ public class Signup extends AppCompatActivity {
                                         }
                                         children[i] = 6;
                                         interests_selected.remove(Text[i]);
+                                        interests_selected.put(Text[i], false);
                                     }
                                     break;
                                 }
@@ -450,7 +449,8 @@ public class Signup extends AppCompatActivity {
     public void end_signup(View v){
 
         HashMap<String, Object> upd = new HashMap<>();
-        upd.put("Interests" , interests_selected);
+        upd.put("Interests", interests_selected);
+        Log.d("LOG","Ineterst are on");
         upd.put("Sponsors" ,  ((CheckBox) findViewById(R.id.is_sponsor)).isChecked() );
         upd.put("LookSponsors", ((CheckBox) findViewById(R.id.look_sponsors)).isChecked() );
         db.collection("UTENTI").document(mUser.getUid()).set(upd, SetOptions.merge());

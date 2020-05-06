@@ -44,7 +44,7 @@ public class InputValidator extends Activity implements TextWatcher {
         if (s.length() != 0) {
             switch (et.getId()) {
                 case R.id.email: {
-                    if (!Patterns.EMAIL_ADDRESS.matcher(et.getText().toString()).matches()) {
+                    if (!Patterns.EMAIL_ADDRESS.matcher(et.getText().toString().trim()).matches()) {
                         et.setError("This does not look like a valid e-mail.");
                     }
                 }
