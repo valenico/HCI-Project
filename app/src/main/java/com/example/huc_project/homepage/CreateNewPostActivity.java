@@ -44,7 +44,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
     private FirebaseFirestore db;
-    ImageView imageView;
+    ImageButton imageView;
     Button button;
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
@@ -55,10 +55,10 @@ public class CreateNewPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_post);
         db = FirebaseFirestore.getInstance();
-        Button buttonCreateP=(Button)findViewById(R.id.createpost);
-        imageView = (ImageView)findViewById(R.id.imageView);
-        button = (Button)findViewById(R.id.buttonLoadPicture);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonCreateP=(Button)findViewById(R.id.postBtn);
+        imageView = (ImageButton) findViewById(R.id.imageBtn);
+        //button = (Button)findViewById(R.id.buttonLoadPicture);
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
@@ -70,9 +70,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Map<String, Object> post = new HashMap<>();
-                TextInputEditText text = (TextInputEditText) findViewById(R.id.textInputEditText);
+                EditText text = (EditText) findViewById(R.id.textDesc);
+                EditText texttitle = (EditText) findViewById(R.id.textTitle);
                 String postDescription = text.getText().toString();
-                imageView = (ImageView)findViewById(R.id.imageView);
+                String postTitle=texttitle.getText().toString();
+                //imageView = (ImageView)findViewById(R.id.imageView);
                 Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                 //DAVIDE I THINK YOU HAVE TO USE CLOUD STORAGE INSTEAD OF FIRESTORE e in particolare firebaseui
 
@@ -81,6 +83,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 Uri file = imageUri;
                 StorageReference storageRef = storage.getReference();
                 StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+                post.put("title", postTitle);
                 post.put("storageref", file.getLastPathSegment());
                 post.put("postdesc", postDescription);
                 UploadTask uploadTask = riversRef.putFile(file);

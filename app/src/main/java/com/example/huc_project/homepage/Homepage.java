@@ -74,7 +74,7 @@ public class Homepage extends AppCompatActivity {
     private void populateData() {
         int i = 0;
         while (i < rowsPostList.size()) {
-            rowsArrayList.add("Item " + i + pattern + rowsPostList.get(i).postdesc);
+            rowsArrayList.add(rowsPostList.get(i).title + pattern + rowsPostList.get(i).postdesc);
             i++;
         }
     }

@@ -6,10 +6,12 @@ import android.net.Uri;
 import com.google.firebase.storage.StorageReference;
 
 class Post {
+    String title;
     String storageref;
     String postdesc;
 
-    public Post(String storageref, String postdesc) {
+    public Post(String title, String storageref, String postdesc) {
+        this.title = title;
         this.storageref = storageref;
         this.postdesc = postdesc;
     }
@@ -33,5 +35,14 @@ class Post {
     public void setStorageref(String storageref) {
         this.storageref = storageref;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
 }
