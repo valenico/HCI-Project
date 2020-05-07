@@ -5,34 +5,32 @@ import android.widget.ImageView;
 import com.bumptech.glide.RequestManager;
 import com.google.firebase.storage.StorageReference;
 
-public class PostHomeRow {
-    String title;
-    String desc;
+public class PostRow {
+    Post post;
     StorageReference img_ref;
     RequestManager glide;
 
-    public PostHomeRow(String title, String desc, StorageReference img, RequestManager glide) {
-        this.title = title;
-        this.desc = desc;
+    public PostRow(Post post, StorageReference img, RequestManager glide) {
+        this.post = post;
         this.img_ref = img;
         this.glide = glide;
     }
 
 
     public String getTitle() {
-        return title;
+        return post.title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.post.title = title;
     }
 
     public String getDesc() {
-        return desc;
+        return post.postdesc;
     }
 
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.post.postdesc = desc;
     }
 
     public StorageReference getImg() {

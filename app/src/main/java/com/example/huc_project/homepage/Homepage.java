@@ -17,18 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -39,20 +36,19 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Homepage extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<PostHomeRow> rowsArrayList = new ArrayList<>();
+    ArrayList<PostRow> rowsArrayList = new ArrayList<>();
     final int numItems = 10;
 
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    ArrayList<PostHomeRow> rowsPostList = new ArrayList<>();
+    ArrayList<PostRow> rowsPostList = new ArrayList<>();
     final private String pattern = Integer.toString(R.string.pattern);
 
     boolean guest_mode = false;
@@ -94,7 +90,7 @@ public class Homepage extends AppCompatActivity {
                                 StorageReference storageRef = storage.getReference();
                                 StorageReference islandRef = storageRef.child("images/" + post.storageref);
 
-                                PostHomeRow post_row = new PostHomeRow(post.title, post.postdesc, islandRef, Glide.with(Homepage.this));
+                                PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
                                 rowsPostList.add(post_row);
                             }
                             populateData();

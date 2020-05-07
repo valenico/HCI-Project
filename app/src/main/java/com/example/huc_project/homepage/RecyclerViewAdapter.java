@@ -1,7 +1,5 @@
 package com.example.huc_project.homepage;
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.huc_project.R;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -29,10 +25,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int VIEW_TYPE_LOADING = 1;
     final private String pattern = Integer.toString(R.string.pattern);;
 
-    public List<PostHomeRow> itemsList;
-    public List<PostHomeRow> itemsListFull;
+    public List<PostRow> itemsList;
+    public List<PostRow> itemsListFull;
 
-    public RecyclerViewAdapter(List<PostHomeRow> itemList) {
+    public RecyclerViewAdapter(List<PostRow> itemList) {
         this.itemsList = itemList;
         itemsListFull = new ArrayList<>(itemList);
     }
@@ -100,9 +96,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void populateItemRows(ItemViewHolder viewHolder, int position) {
-        PostHomeRow item = itemsList.get(position);
-        String title = item.title;
-        String desc = item.desc;
+        PostRow item = itemsList.get(position);
+        String title = item.post.title;
+        String desc = item.post.postdesc;
         StorageReference img_ref = item.img_ref;
 
 
@@ -125,14 +121,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Filter filtered_results = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<PostHomeRow> filteredList = new ArrayList<>();
+            List<PostRow> filteredList = new ArrayList<>();
 
             if(constraint.toString().isEmpty()){
                 filteredList.addAll(itemsListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (PostHomeRow s : itemsListFull){
-                    if(s.title.toLowerCase().contains(filterPattern) || s.desc.toLowerCase().contains(filterPattern)){
+                for (PostRow s : itemsListFull){
+                    if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern)){
                         filteredList.add(s);
                     }
                 }
@@ -145,7 +141,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             itemsList.clear();
-            itemsList.addAll((Collection<? extends PostHomeRow>) results.values);
+            itemsList.addAll((Collection<? extends PostRow>) results.values);
             notifyDataSetChanged();
         }
     };
