@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -43,14 +45,14 @@ public class Homepage extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<String> rowsArrayList = new ArrayList<>();
+    ArrayList<PostHomeRow> rowsArrayList = new ArrayList<>();
     final int numItems = 10;
 
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    ArrayList<Post> rowsPostList = new ArrayList<>();
+    ArrayList<PostHomeRow> rowsPostList = new ArrayList<>();
     final private String pattern = Integer.toString(R.string.pattern);
 
     boolean guest_mode = false;
@@ -66,7 +68,6 @@ public class Homepage extends AppCompatActivity {
         if(guest != null && guest == "true"){
             guest_mode = true;
         }
-
         setUpHomepage();
 
     }
@@ -74,7 +75,7 @@ public class Homepage extends AppCompatActivity {
     private void populateData() {
         int i = 0;
         while (i < rowsPostList.size()) {
-            rowsArrayList.add(rowsPostList.get(i).title + pattern + rowsPostList.get(i).postdesc);
+            rowsArrayList.add(rowsPostList.get(i));
             i++;
         }
     }
@@ -90,7 +91,11 @@ public class Homepage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Post post = document.toObject(Post.class);
-                                rowsPostList.add(post);
+                                StorageReference storageRef = storage.getReference();
+                                StorageReference islandRef = storageRef.child("images/" + post.storageref);
+
+                                PostHomeRow post_row = new PostHomeRow(post.title, post.postdesc, islandRef, Glide.with(Homepage.this));
+                                rowsPostList.add(post_row);
                             }
                             populateData();
                             setUpRecyclerView();
@@ -102,6 +107,10 @@ public class Homepage extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){
+        glide.load(ref).into(view);
     }
 
     private void setUpRecyclerView() {
@@ -155,7 +164,7 @@ public class Homepage extends AppCompatActivity {
                 int nextLimit = currentSize + 10;
 
                 while (currentSize - 1 < nextLimit) {
-                    rowsArrayList.add("Item " + currentSize);
+                    //rowsArrayList.add("Item " + currentSize);
                     currentSize++;
                 }
 
