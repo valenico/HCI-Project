@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -31,24 +34,27 @@ import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.jh.circularlist.CircularListView;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.InvalidMarkException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class Signup extends AppCompatActivity {
 
@@ -56,9 +62,11 @@ public class Signup extends AppCompatActivity {
     public static int SCREEN = 1;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private Uri profile_pic_uri;
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
     private HashMap<String,Object>  interests_selected = new HashMap<>();
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference ref = storage.getReference();
     private FirebaseFirestore db;
 
     @Override
@@ -183,6 +191,10 @@ public class Signup extends AppCompatActivity {
         }
     }
 
+    private  void SelectImage(){
+        CropImage.startPickImageActivity(this);
+    }
+
     public void complete_profile2(View v) {
 
         EditText country =  findViewById(R.id.autocomplete_country);
@@ -206,11 +218,12 @@ public class Signup extends AppCompatActivity {
 
         setContentView(R.layout.activity_signup2);
         SCREEN = 3;
-        final ImageButton add_pic = findViewById(R.id.profile_pic);
+        final ImageView add_pic = findViewById(R.id.profile_pic);
         add_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+               // startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+                SelectImage();
             }
         });
 
@@ -375,53 +388,68 @@ public class Signup extends AppCompatActivity {
         return maxValue;
     }
 
+    private void startCropImageActivity(Uri imageUri) {
+        Intent intent = CropImage.activity(imageUri)
+                .setAspectRatio(1,1)
+                .getIntent(this.getBaseContext());
+        startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
+    private void uploadImage(Uri filePath){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        StorageReference r2 = ref.child("users/"+ mAuth.getCurrentUser().getUid());
+        r2.putFile(filePath)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Signup.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Signup.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                .getTotalByteCount());
+                        progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                    }
+                });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK)
-            if( requestCode == GET_FROM_GALLERY) {
-                    //data.getData returns the content URI for the selected Image
-                    Uri selectedImage = data.getData();
-                    final ImageButton add_pic = findViewById(R.id.profile_pic);
-                    Bitmap image = null;
-                    try {
-                        image = decodeUri(this,selectedImage,125);
-                        add_pic.setImageBitmap(image);
-                        StorageReference storageRef = storage.getReference();
-                        UploadTask ut = storageRef.child(mUser.getUid()).putFile(selectedImage);
-                        ut.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Signup.this, "The image was not correctly loaded.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Signup.this, "The fuck is happening here bro... ", Toast.LENGTH_LONG).show();
-                    }
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            profile_pic_uri = CropImage.getPickImageResultUri(this, data);
+            startCropImageActivity(profile_pic_uri);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            CropImage.ActivityResult ar = CropImage.getActivityResult(data);
+            Uri filePath = ar.getUri();
+            final ImageView add_pic = findViewById(R.id.profile_pic);
+            try {
+                 uploadImage(filePath);
+                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                 add_pic.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-    }
-
-    public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize)  throws FileNotFoundException {
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);
-
-        int width_tmp = o.outWidth , height_tmp = o.outHeight;
-        int scale = 1;
-
-        while(width_tmp / 2 > requiredSize && height_tmp / 2 > requiredSize) {
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
         }
 
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        return BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o2);
     }
+
 
     @Override
     public void onBackPressed() {

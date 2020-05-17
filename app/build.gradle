@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     // Find the latest Glide releases here: https://goo.gl/LpksbR
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     // If you're using Kotlin (and therefore, kapt), use kapt instead of annotationProcessor
