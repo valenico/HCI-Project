@@ -52,7 +52,13 @@ public class InputValidator extends Activity implements TextWatcher {
 
                 case R.id.password_signup: {
                     if (s.length() < 5 ) {
-                        et.setError("Password must be at least 5 characters length.");
+                        et.setError("Password must be alpha-numeric and at least 5 characters long.");
+                    }
+                }
+                break;
+                case R.id.username_signup: {
+                    if (s.length() < 5 ) {
+                        et.setError("Username can't be only numeric.");
                     }
                 }
                 break;

@@ -45,6 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.protobuf.Empty;
 import com.jh.circularlist.CircularListView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -92,15 +93,19 @@ public class Signup extends AppCompatActivity {
         EditText mail_view = findViewById(R.id.email);
         EditText pass = findViewById(R.id.password_signup);
         EditText pass_confirm = findViewById(R.id.confirm_password);
+        EditText username_view = findViewById(R.id.username_signup);
 
         mail_view.addTextChangedListener(new InputValidator(mail_view , this.getResources()));
         pass.addTextChangedListener(new InputValidator(pass, this.getResources()));
         pass_confirm.addTextChangedListener(new InputValidator(pass_confirm, this.getResources()));
+        username_view.addTextChangedListener(new InputValidator(username_view, this.getResources()));
 
         // Called when an action is performed on the EditText
         mail_view.setOnEditorActionListener(new EmptyTextListener(mail_view , this.getResources()));
         pass.setOnEditorActionListener(new EmptyTextListener(pass, this.getResources()));
         pass_confirm.setOnEditorActionListener(new EmptyTextListener(pass_confirm, this.getResources()));
+        username_view.setOnEditorActionListener(new EmptyTextListener(username_view, this.getResources()));
+
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -111,6 +116,11 @@ public class Signup extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         mUser = mAuth.getCurrentUser();
         // updateUI(currentUser); TODO
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        return str.matches("-?\\d+(.\\d+)?");
     }
 
     public void complete_profile1(View v) {
@@ -149,7 +159,16 @@ public class Signup extends AppCompatActivity {
             int right = error_indicator.getIntrinsicHeight();
             int bottom = error_indicator.getIntrinsicWidth();
             error_indicator.setBounds(new Rect(left, top, right, bottom));
-            username.setError("Username is requried.");
+            username.setError("Username is required.");
+            stop = true;
+        }
+        if( isNumeric(username.getText().toString()) ) {
+            int left = username.getLeft();
+            int top = username.getTop();
+            int right = error_indicator.getIntrinsicHeight();
+            int bottom = error_indicator.getIntrinsicWidth();
+            error_indicator.setBounds(new Rect(left, top, right, bottom));
+            username.setError("Username can't be only numeric.");
             stop = true;
         }
         if(mail_view.getText().length() < 1) {
