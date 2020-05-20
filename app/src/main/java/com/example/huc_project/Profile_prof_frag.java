@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +23,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class Profile_prof_frag extends Fragment {
 
@@ -62,8 +65,6 @@ public class Profile_prof_frag extends Fragment {
                 }
             }
         });
-
-
 
             // Inflate the layout for this fragment
         return inflater.inflate(R.layout.frag_profile, container, false);

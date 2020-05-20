@@ -42,11 +42,9 @@ public class Profile_pack_frag extends Fragment {
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
-    private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference mdatabaseReference = mdatabase.getReference();
+    ArrayList<PostRow> rowPostList = new ArrayList<>();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    ArrayList<PostRow> rowsPostList = new ArrayList<>();
 
     boolean guest_mode = false;
     boolean isLoading = false;
@@ -54,6 +52,9 @@ public class Profile_pack_frag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
+
+        rowsArrayList.clear();
+        rowPostList.clear();
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -72,7 +73,7 @@ public class Profile_pack_frag extends Fragment {
                                 StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_pack_frag.this));
-                                rowsPostList.add(post_row);
+                                rowPostList.add(post_row);
                             }
                             populateData();
                             setUpRecyclerView();
@@ -83,17 +84,14 @@ public class Profile_pack_frag extends Fragment {
                         }
                     }
                 });
-
-
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.frag_pack, container, false);
     }
 
     private void populateData() {
         int i = 0;
-        while (i < rowsPostList.size()) {
-            rowsArrayList.add(rowsPostList.get(i));
+        while (i < rowPostList.size()) {
+            rowsArrayList.add(rowPostList.get(i));
             i++;
         }
     }

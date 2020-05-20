@@ -43,11 +43,9 @@ public class Profile_post_frag extends Fragment {
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
-    private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference mdatabaseReference = mdatabase.getReference();
+    ArrayList<PostRow> rowsPostList = new ArrayList<>();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    ArrayList<PostRow> rowsPostList = new ArrayList<>();
 
     boolean guest_mode = false;
     boolean isLoading = false;
@@ -55,6 +53,9 @@ public class Profile_post_frag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
+
+        rowsArrayList.clear();
+        rowsPostList.clear();
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -84,10 +85,7 @@ public class Profile_post_frag extends Fragment {
                         }
                     }
                 });
-
-
-
-                // Inflate the layout for this fragment
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.frag_post, container, false);
     }
 

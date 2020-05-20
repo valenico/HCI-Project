@@ -79,22 +79,10 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 public class Profile_main_page extends AppCompatActivity {
 
-    private static final int GET_FROM_GALLERY = 1;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
-    private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature"};
-    private HashMap<String, Object> interests_selected = new HashMap<>();
     private FirebaseFirestore db;
-    private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     TabLayout tabLayout;
-    RecyclerView recyclerView;
-    RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<PostRow> rowArrayList = new ArrayList<>();
-    ArrayList<PostRow> rowsPostList = new ArrayList<>();
-
-    boolean isLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,72 +151,5 @@ public class Profile_main_page extends AppCompatActivity {
                 }
             }
         });
-
-        CollectionReference collezione = db.collection("posts");
-        collezione.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Post post = document.toObject(Post.class);
-                        StorageReference storageRef = storage.getReference();
-                        StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
-
-                        PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_main_page.this));
-                        rowsPostList.add(post_row);
-                    }
-                } else {
-                    Log.w("Tag", "Error getting documents.", task.getException());
-                }
-                //populateData();
-                //setUpRecyclerView();
-                //initScrollListener();
-            }
-        });
-    }
-
-        public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){
-            glide.load(ref).into(view);
-        }
-
-        private void setUpRecyclerView() {
-            recyclerView = findViewById(R.id.recView);
-            recyclerView.setHasFixedSize(true);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            recyclerViewAdapter = new RecyclerViewAdapter(rowArrayList);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(recyclerViewAdapter);
-        }
-
-        private void initScrollListener() {
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
-                    if (!isLoading) {
-                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == rowArrayList.size() - 1) {
-                            //bottom of list!
-                            //loadMore();
-                            //isLoading = true;
-                        }
-                    }
-                }
-            });
-        }
-
-    private void populateData() {
-        int i = 0;
-        while (i < rowsPostList.size()) {
-            rowArrayList.add(rowsPostList.get(i));
-            i++;
-        }
     }
 }
