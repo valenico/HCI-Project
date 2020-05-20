@@ -40,7 +40,6 @@ public class Profile_post_frag extends Fragment {
         // Required empty public constructor
     }
 
-
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
@@ -72,8 +71,6 @@ public class Profile_post_frag extends Fragment {
                                 Post post = document.toObject(Post.class);
                                 StorageReference storageRef = storage.getReference();
                                 StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
-
-                                if (post.getUser() != null) Log.d("BANANO", post.getUser());
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_post_frag.this));
                                 rowsPostList.add(post_row);

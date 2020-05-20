@@ -11,12 +11,14 @@ public class Post {
     String storageref;
     String postdesc;
     String user;
+    Boolean isPackage;
 
-    public Post(String title, String storageref, String postdesc, String user) {
+    public Post(String title, String storageref, String postdesc, String user, Boolean isPackage) {
         this.title = title;
         this.storageref = storageref;
         this.postdesc = postdesc;
         this.user = user;
+        this.isPackage = isPackage;
     }
     public Post() {}
 
@@ -48,6 +50,7 @@ public class Post {
     }
 
     public String getUser() { return user; }
+    public Boolean getIsPackage() { return isPackage; }
 
 
 }

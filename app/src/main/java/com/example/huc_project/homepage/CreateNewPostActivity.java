@@ -69,6 +69,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
+        //TODO aggiungere un modo per distinguere i post normali dai pacchetti
+        // andrà a modificare la variabile --- isPackage ---
+
+        final Boolean isPackage = true;
+
 
         buttonCreateP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +96,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 post.put("storageref", file.getLastPathSegment());
                 post.put("postdesc", postDescription);
                 post.put("user", current_user.getUid());
+                post.put("isPackage", isPackage);
                 UploadTask uploadTask = riversRef.putFile(file);
 
 
