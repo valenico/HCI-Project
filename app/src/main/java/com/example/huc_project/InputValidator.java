@@ -57,7 +57,7 @@ public class InputValidator extends Activity implements TextWatcher {
                 }
                 break;
                 case R.id.username_signup: {
-                    if (s.length() < 5 ) {
+                    if ( s.toString().matches("[0-9]+" )){
                         et.setError("Username can't be only numeric.");
                     }
                 }
