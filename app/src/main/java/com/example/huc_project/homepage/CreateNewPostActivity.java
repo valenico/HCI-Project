@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -65,6 +67,13 @@ public class CreateNewPostActivity extends AppCompatActivity {
             }
         });
 
+        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //TODO aggiungere un modo per distinguere i post normali dai pacchetti
+        // andrà a modificare la variabile --- isPackage ---
+
+        final Boolean isPackage = true;
+
 
         buttonCreateP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,8 +95,9 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 post.put("title", postTitle);
                 post.put("storageref", file.getLastPathSegment());
                 post.put("postdesc", postDescription);
+                post.put("user", current_user.getUid());
+                post.put("isPackage", isPackage);
                 UploadTask uploadTask = riversRef.putFile(file);
-
 
 
                 // Register observers to listen for when the download is done or if it fails
