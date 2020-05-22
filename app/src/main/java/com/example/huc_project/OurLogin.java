@@ -2,6 +2,8 @@ package com.example.huc_project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -29,6 +31,7 @@ public class OurLogin extends AppCompatActivity  {
         Button btn = findViewById(R.id.login);
         final EditText pwd = findViewById(R.id.password);
         final EditText usr = findViewById(R.id.username);
+        final Drawable error_indicator = this.getResources().getDrawable(R.drawable.error);
 
         if(mAuth.getCurrentUser() != null){
             // update UI to logged user
@@ -45,7 +48,30 @@ public class OurLogin extends AppCompatActivity  {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( Patterns.EMAIL_ADDRESS.matcher(usr.getText().toString().trim()).matches() ){ // using email
+
+                boolean stop = false;
+
+                if( usr.getText().toString().trim().length() < 1 ){
+                    int left = usr.getLeft();
+                    int top = usr.getTop();
+                    int right = error_indicator.getIntrinsicHeight();
+                    int bottom = error_indicator.getIntrinsicWidth();
+                    error_indicator.setBounds(new Rect(left, top, right, bottom));
+                    usr.setError("Ops! You forgot your e-mail");
+                    stop = true;
+                }
+
+                if( pwd.getText().toString().trim().length() < 1 ){
+                    int left = pwd.getLeft();
+                    int top = pwd.getTop();
+                    int right = error_indicator.getIntrinsicHeight();
+                    int bottom = error_indicator.getIntrinsicWidth();
+                    error_indicator.setBounds(new Rect(left, top, right, bottom));
+                    pwd.setError("Ops! You forgot your password");
+                    stop = true;
+                }
+
+                if( Patterns.EMAIL_ADDRESS.matcher(usr.getText().toString().trim()).matches() && !stop){ // using email
                     mAuth.signInWithEmailAndPassword(usr.getText().toString(),pwd.getText().toString())
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -57,8 +83,17 @@ public class OurLogin extends AppCompatActivity  {
                                         startActivity(i);
                                         // update UI logged user
                                     } else {
-                                        // If sign in fails, display a message to the user.
-                                        Toast.makeText(c, "Something went wrong...", Toast.LENGTH_SHORT);
+                                        int left = pwd.getLeft();
+                                        int top = pwd.getTop();
+                                        int right = error_indicator.getIntrinsicHeight();
+                                        int bottom = error_indicator.getIntrinsicWidth();
+                                        error_indicator.setBounds(new Rect(left, top, right, bottom));
+                                        left = usr.getLeft();
+                                        top = usr.getTop();
+                                        right = error_indicator.getIntrinsicHeight();
+                                        bottom = error_indicator.getIntrinsicWidth();
+                                        error_indicator.setBounds(new Rect(left, top, right, bottom));
+                                        Toast.makeText(c,"Wrong e-mail/passowrd.", Toast.LENGTH_LONG);
                                     }
                                 }
                             });
