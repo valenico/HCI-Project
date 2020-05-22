@@ -33,10 +33,6 @@ public class OurLogin extends AppCompatActivity  {
         final EditText usr = findViewById(R.id.username);
         final Drawable error_indicator = this.getResources().getDrawable(R.drawable.error);
 
-        if(mAuth.getCurrentUser() != null){
-            // update UI to logged user
-        }
-
         final Context c = this.getBaseContext();
 
         pwd.setOnEditorActionListener(new EmptyTextListener(pwd , this.getResources()));

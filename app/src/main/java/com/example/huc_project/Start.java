@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.huc_project.dialog.GuestModeDialog;
-import com.example.huc_project.ui.login.Login;
 
 public class Start extends AppCompatActivity {
     @Override
