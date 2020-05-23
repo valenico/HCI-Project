@@ -2,6 +2,7 @@ package com.example.huc_project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,11 +24,22 @@ import androidx.appcompat.app.AppCompatActivity;
 public class OurLogin extends AppCompatActivity  {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
+        pref =  getSharedPreferences("Preferences", Context.MODE_PRIVATE); // 0 - for private mode
+        editor = pref.edit();
+        boolean logged = pref.getBoolean("logged",false);
+        if(logged){
+            Intent i = new Intent(this, Homepage.class);
+            startActivity(i);
+        }
+
+        setContentView(R.layout.activity_login);
         Button btn = findViewById(R.id.login);
         final EditText pwd = findViewById(R.id.password);
         final EditText usr = findViewById(R.id.username);
@@ -36,10 +48,7 @@ public class OurLogin extends AppCompatActivity  {
         final Context c = this.getBaseContext();
 
         pwd.setOnEditorActionListener(new EmptyTextListener(pwd , this.getResources()));
-        //pwd.addTextChangedListener(new InputValidator(pwd, this.getResources()));
-
         usr.setOnEditorActionListener(new EmptyTextListener(usr , this.getResources()));
-        //usr.addTextChangedListener(new InputValidator(usr, this.getResources()));
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +84,9 @@ public class OurLogin extends AppCompatActivity  {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Toast.makeText(c, "Welcome!", Toast.LENGTH_SHORT);
+                                        editor.putBoolean("logged", true);
+                                        editor.putString("UID", mAuth.getCurrentUser().getUid());
+                                        editor.commit();
                                         Intent i = new Intent(c, Homepage.class);
                                         startActivity(i);
                                         // update UI logged user
