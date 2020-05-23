@@ -85,7 +85,6 @@ public class OurLogin extends AppCompatActivity  {
                                         // Sign in success, update UI with the signed-in user's information
                                         Toast.makeText(c, "Welcome!", Toast.LENGTH_SHORT);
                                         editor.putBoolean("logged", true);
-                                        editor.putString("UID", mAuth.getCurrentUser().getUid());
                                         editor.commit();
                                         Intent i = new Intent(c, Homepage.class);
                                         startActivity(i);

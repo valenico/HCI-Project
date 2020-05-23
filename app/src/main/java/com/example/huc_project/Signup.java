@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
@@ -59,6 +60,9 @@ import java.util.HashMap;
 
 public class Signup extends AppCompatActivity {
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     private static final int GET_FROM_GALLERY = 1;
     public static int SCREEN = 1;
     private FirebaseAuth mAuth;
@@ -74,8 +78,11 @@ public class Signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SCREEN = 1;
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        editor = pref.edit();
         setContentView(R.layout.activity_signup);
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         final CheckBox age_check = findViewById(R.id.age_check);
         final Button sign_up_button = findViewById(R.id.signup);
@@ -90,10 +97,17 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
+
         EditText mail_view = findViewById(R.id.email);
         EditText pass = findViewById(R.id.password_signup);
         EditText pass_confirm = findViewById(R.id.confirm_password);
         EditText username_view = findViewById(R.id.username_signup);
+
+        if (pref.contains("username")) {
+            username_view.setText(pref.getString("username", ""));
+            mail_view.setText(pref.getString("mail", ""));
+            mAuth.getCurrentUser().delete();
+        }
 
         mail_view.addTextChangedListener(new InputValidator(mail_view , this.getResources()));
         pass.addTextChangedListener(new InputValidator(pass, this.getResources()));
@@ -106,16 +120,12 @@ public class Signup extends AppCompatActivity {
         pass_confirm.setOnEditorActionListener(new EmptyTextListener(pass_confirm, this.getResources()));
         username_view.setOnEditorActionListener(new EmptyTextListener(username_view, this.getResources()));
 
-
-        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        mUser = mAuth.getCurrentUser();
-        // updateUI(currentUser); TODO
+        // no check for logged in, se sei qua
     }
 
     public static boolean isNumeric(String str)
@@ -124,6 +134,7 @@ public class Signup extends AppCompatActivity {
     }
 
     public void complete_profile1(View v) {
+
         final EditText mail_view = findViewById(R.id.email);
         final EditText username = findViewById(R.id.username_signup);
         EditText pass = findViewById(R.id.password_signup);
@@ -152,7 +163,6 @@ public class Signup extends AppCompatActivity {
             pass.setError("Password is required.");
             stop = true;
         }
-
         if(username.getText().length() < 1) {
             int left = username.getLeft();
             int top = username.getTop();
@@ -171,6 +181,7 @@ public class Signup extends AppCompatActivity {
             username.setError("Username can't be only numeric.");
             stop = true;
         }
+        editor.putString("username",username.getText().toString());
         if(mail_view.getText().length() < 1) {
             int left = mail_view.getLeft();
             int top = mail_view.getTop();
@@ -180,13 +191,13 @@ public class Signup extends AppCompatActivity {
             mail_view.setError("E-mail is required.");
             stop = true;
         }
-
+        editor.putString("mail",mail_view.getText().toString());
+        editor.commit();
         if(!stop){
             SCREEN = 2;
             mAuth.createUserWithEmailAndPassword(mail_view.getText().toString().trim() , pass.getText().toString().trim())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         public void onComplete(@NonNull Task<AuthResult> task) {
-
                             if (!task.isSuccessful()) {
                                 Toast.makeText(Signup.this, "ERROR",Toast.LENGTH_LONG).show();
                             } else {
@@ -194,16 +205,25 @@ public class Signup extends AppCompatActivity {
                                 HashMap<String, String> upd = new HashMap<>();
                                 upd.put("Name", username.getText().toString());
                                 db.collection("UTENTI").document(mUser.getUid()).set(upd);
-
                                  setContentView(R.layout.activity_signup1);
+
                                  AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
                                  String[] countries_array = getResources().getStringArray(R.array.countries_array);
                                  ArrayAdapter<String> adapter = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, countries_array);
                                  countries.setAdapter(adapter);
+
+                                if (pref.contains("country")) {
+                                    countries.setText(pref.getString("country", ""));
+                                }
+
                                  AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
                                  String[] cities_array = getResources().getStringArray(R.array.cities_array);
                                  ArrayAdapter<String> adapter2 = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, cities_array);
                                  cities.setAdapter(adapter2);
+
+                                if (pref.contains("city")) {
+                                    cities.setText(pref.getString("city", ""));
+                                }
                             }
                         }
                     });
@@ -224,17 +244,21 @@ public class Signup extends AppCompatActivity {
 
         if (country.getText().toString().trim().length() > 0) {
             upd.put("Country", country.getText().toString());
+            editor.putString("country",country.getText().toString());
         }
 
         if (city.getText().toString().trim().length() > 0) {
             upd.put("City", city.getText().toString());
+            editor.putString("city", city.getText().toString());
         }
         if (phone.getText().toString().trim().length() > 0) {
            upd.put("Phone", Integer.parseInt(phone.getText().toString()));
+            editor.putString("phone", phone.getText().toString());
         }
         upd.put("Hidemail" , ((CheckBox) findViewById(R.id.hidemail)).isChecked() );
+        editor.putBoolean("hidemail", ((CheckBox) findViewById(R.id.hidemail)).isChecked() );
+        editor.commit();
         db.collection("UTENTI").document(mUser.getUid()).set(upd , SetOptions.merge());
-
         setContentView(R.layout.activity_signup2);
         SCREEN = 3;
         final ImageView add_pic = findViewById(R.id.profile_pic);
@@ -258,6 +282,9 @@ public class Signup extends AppCompatActivity {
             upd.put("Description" , desc.getText().toString().trim());
             db.collection("UTENTI").document(mUser.getUid()).set( upd , SetOptions.merge());
         }
+
+        editor.putString("description",desc.getText().toString());
+        editor.commit();
 
         setContentView(R.layout.activity_signup3);
         final Context c = this.getBaseContext();
@@ -494,13 +521,15 @@ public class Signup extends AppCompatActivity {
     }
 
     public void end_signup(View v){
-
         HashMap<String, Object> upd = new HashMap<>();
         upd.put("Interests", interests_selected);
-        Log.d("LOG","Ineterst are on");
         upd.put("Sponsors" ,  ((CheckBox) findViewById(R.id.is_sponsor)).isChecked() );
         upd.put("LookSponsors", ((CheckBox) findViewById(R.id.look_sponsors)).isChecked() );
         db.collection("UTENTI").document(mUser.getUid()).set(upd, SetOptions.merge());
+
+        editor.clear();
+        editor.putBoolean("logged",true);
+        editor.commit();
 
         Intent i = new Intent(this , Homepage.class);
         Toast.makeText(getApplicationContext(),"Registered successfully.",Toast.LENGTH_SHORT).show();
