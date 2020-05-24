@@ -6,7 +6,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,9 +23,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
+import com.example.huc_project.Start;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,6 +44,9 @@ import java.util.ArrayList;
 
 public class Homepage extends AppCompatActivity {
 
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
@@ -60,6 +67,8 @@ public class Homepage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        editor = pref.edit();
         Intent i = getIntent();
         String guest = i.getStringExtra("guest");
         if(guest != null && guest == "true"){
@@ -203,8 +212,13 @@ public class Homepage extends AppCompatActivity {
         addView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DataGettingActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getApplicationContext(), DataGettingActivity.class);
+                //startActivity(intent);
+                mAuth.signOut();
+                editor.clear();
+                editor.commit();
+                Intent to_start = new Intent(getApplicationContext() , Start.class);
+                startActivity(to_start);
             }
         });
         return true;
