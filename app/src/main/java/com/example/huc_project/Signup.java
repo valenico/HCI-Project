@@ -33,13 +33,20 @@ import android.widget.Toast;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -62,8 +69,11 @@ public class Signup extends AppCompatActivity {
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    GoogleSignInOptions gso;
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount account;
 
-    private static final int GET_FROM_GALLERY = 1;
+    private static final int RC_SIGN_IN = 101;
     public static int SCREEN = 1;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -80,6 +90,15 @@ public class Signup extends AppCompatActivity {
         SCREEN = 1;
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("1060787676521-r4035k726tfjddlhuiinlok7psp7gg0k.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        // GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        // updateUI(account); secondo me non ci va, se sei qui non sei loggato bro
+
         setContentView(R.layout.activity_signup);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -475,6 +494,7 @@ public class Signup extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
+        Log.d("TAG", "a zio te prego");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             profile_pic_uri = CropImage.getPickImageResultUri(this, data);
@@ -493,9 +513,65 @@ public class Signup extends AppCompatActivity {
             }
 
         }
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            try {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+            } catch (Exception e){
+                Log.d("TAG", "Errore " + e.toString());
+            }
+
+        }
 
     }
 
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            account = completedTask.getResult(ApiException.class);
+            firebaseAuthWithGoogle(account.getIdToken());
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("TAG", "signInResult:failed code=" + e.getStatusCode());
+
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            editor.putBoolean("logged",true);
+                            editor.commit();
+
+                            String personName = account.getDisplayName();
+                            Uri personPhoto = account.getPhotoUrl();
+
+                            HashMap<String, String> upd = new HashMap<>();
+                            upd.put("Name", personName);
+                            db.collection("UTENTI").document(user.getUid()).set(upd, SetOptions.merge());
+                            // uploadImage(personPhoto);
+
+                            Intent gi = new Intent(Signup.this , Homepage.class);
+                            startActivity(gi);
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithCredential:failure", task.getException());
+
+                        }
+
+                    }
+                });
+    }
 
     @Override
     public void onBackPressed() {
@@ -518,6 +594,12 @@ public class Signup extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    public void google_signup(View v){
+        Log.d("TAG", "a zio te prego");
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     public void end_signup(View v){
