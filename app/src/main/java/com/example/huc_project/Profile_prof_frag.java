@@ -29,7 +29,6 @@ import java.util.ArrayList;
 public class Profile_prof_frag extends Fragment {
 
     private FirebaseFirestore db;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public Profile_prof_frag() {
         // Required empty public constructor
@@ -58,7 +57,6 @@ public class Profile_prof_frag extends Fragment {
                         String name = (String) document.get("Name");
                         String description = (String) document.get("Description");
                         TextView descrizione = getView().findViewById(R.id.description);
-                        StorageReference ref = storage.getReference().child("users/" + current_user.getUid());
                         if (description == null) descrizione.setText("Hi I am " + name + " and I am using this App!");
                         else descrizione.setText(description);
                     }

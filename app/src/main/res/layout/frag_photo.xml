@@ -5,5 +5,26 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profile_photo_frag"/>
+    tools:context=".Profile_photo_frag">
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="390dp"
+        android:layout_height="716dp"
+        android:layout_marginTop="15dp"
+        android:columnWidth="90dp"
+        android:gravity="center"
+        android:horizontalSpacing="10dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </GridView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 

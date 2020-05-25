@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
 import com.example.huc_project.ViewPageAdapter;
+import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostRow;
@@ -76,6 +77,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+
+import static com.example.huc_project.R.id.edit_profile;
 
 public class Profile_main_page extends AppCompatActivity {
 
@@ -138,6 +141,15 @@ public class Profile_main_page extends AppCompatActivity {
                         StorageReference ref = storage.getReference().child("users/" + current_user.getUid());
                         Glide.with(Profile_main_page.this).load(ref).into(profile_img);
                         user_name.setText(name);
+
+                        ImageButton edit_profile = findViewById(R.id.edit_profile);
+                        edit_profile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), Edit_profile.class);
+                                startActivity(intent);
+                            }
+                        });
 
                         if (country == null) user_country.setText("Unknown");
                         else {
