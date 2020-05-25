@@ -53,14 +53,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.protobuf.Empty;
 import com.jh.circularlist.CircularListView;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.InvalidMarkException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -494,7 +491,7 @@ public class Signup extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
-        Log.d("TAG", "a zio te prego");
+
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             profile_pic_uri = CropImage.getPickImageResultUri(this, data);
@@ -541,6 +538,9 @@ public class Signup extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        final ProgressDialog progressDialog = new ProgressDialog(Signup.this);
+        progressDialog.setMessage("Registering Please Wait...");
+        progressDialog.show();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -553,22 +553,19 @@ public class Signup extends AppCompatActivity {
                             editor.commit();
 
                             String personName = account.getDisplayName();
-                            Uri personPhoto = account.getPhotoUrl();
-
                             HashMap<String, String> upd = new HashMap<>();
                             upd.put("Name", personName);
                             db.collection("UTENTI").document(user.getUid()).set(upd, SetOptions.merge());
-                            // uploadImage(personPhoto);
 
                             Intent gi = new Intent(Signup.this , Homepage.class);
                             startActivity(gi);
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
+                            Log.d("TAG", "signInWithCredential:failure", task.getException());
 
                         }
-
+                        progressDialog.dismiss();
                     }
                 });
     }
