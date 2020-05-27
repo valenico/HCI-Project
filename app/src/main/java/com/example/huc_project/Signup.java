@@ -551,7 +551,8 @@ public class Signup extends AppCompatActivity {
                             editor.commit();
 
                             String personName = account.getDisplayName();
-                            HashMap<String, String> upd = new HashMap<>();
+                            HashMap<String, Object> upd = new HashMap<>();
+                            upd.put("Hidemail", false);
                             upd.put("Name", personName);
                             db.collection("UTENTI").document(user.getUid()).set(upd, SetOptions.merge());
 
