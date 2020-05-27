@@ -93,8 +93,6 @@ public class Signup extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        // updateUI(account); secondo me non ci va, se sei qui non sei loggato bro
 
         setContentView(R.layout.activity_signup);
         db = FirebaseFirestore.getInstance();
