@@ -1,4 +1,4 @@
-package com.example.huc_project;
+package com.example.huc_project.profile;
 
 import android.os.Bundle;
 

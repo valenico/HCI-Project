@@ -1,4 +1,4 @@
-package com.example.huc_project;
+package com.example.huc_project.profile;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.huc_project.R;
 import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.profile.ImageAdapter;
 import com.google.android.gms.tasks.OnFailureListener;

@@ -1,4 +1,4 @@
-package com.example.huc_project;
+package com.example.huc_project.profile;
 
 import android.os.Bundle;
 
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.huc_project.R;
 import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;

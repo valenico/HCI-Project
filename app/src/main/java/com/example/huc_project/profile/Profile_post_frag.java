@@ -1,4 +1,4 @@
-package com.example.huc_project;
+package com.example.huc_project.profile;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.huc_project.R;
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.homepage.RecyclerViewAdapter;
@@ -22,8 +24,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -33,16 +33,16 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class Profile_pack_frag extends Fragment {
+public class Profile_post_frag extends Fragment {
 
-    public Profile_pack_frag() {
+    public Profile_post_frag() {
         // Required empty public constructor
     }
 
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
-    ArrayList<PostRow> rowPostList = new ArrayList<>();
+    ArrayList<PostRow> rowsPostList = new ArrayList<>();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -54,7 +54,7 @@ public class Profile_pack_frag extends Fragment {
                              Bundle savedInstanceState) {
 
         rowsArrayList.clear();
-        rowPostList.clear();
+        rowsPostList.clear();
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -62,7 +62,7 @@ public class Profile_pack_frag extends Fragment {
 
         CollectionReference collezione = db.collection("posts");
 
-        collezione.whereEqualTo("user", current_user.getUid()).whereEqualTo("isPackage", true).get()
+        collezione.whereEqualTo("user", current_user.getUid()).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -72,8 +72,8 @@ public class Profile_pack_frag extends Fragment {
                                 StorageReference storageRef = storage.getReference();
                                 StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
 
-                                PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_pack_frag.this));
-                                rowPostList.add(post_row);
+                                PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_post_frag.this));
+                                rowsPostList.add(post_row);
                             }
                             populateData();
                             setUpRecyclerView();
@@ -85,13 +85,13 @@ public class Profile_pack_frag extends Fragment {
                     }
                 });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.frag_pack, container, false);
+        return inflater.inflate(R.layout.frag_post, container, false);
     }
 
     private void populateData() {
         int i = 0;
-        while (i < rowPostList.size()) {
-            rowsArrayList.add(rowPostList.get(i));
+        while (i < rowsPostList.size()) {
+            rowsArrayList.add(rowsPostList.get(i));
             i++;
         }
     }
@@ -101,7 +101,7 @@ public class Profile_pack_frag extends Fragment {
     }
 
     private void setUpRecyclerView() {
-        recyclerView = getView().findViewById(R.id.recycleView);
+        recyclerView = getView().findViewById(R.id.recView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList);
