@@ -1,7 +1,13 @@
 package com.example.huc_project.profile;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -9,16 +15,23 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
 import com.example.huc_project.Signup;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,13 +41,19 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Edit_profile extends AppCompatActivity {
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseAuth mAuth;
+    private Uri profile_pic_uri;
 
     TabLayout tabLayout;
 
@@ -43,6 +62,7 @@ public class Edit_profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         final Boolean guest_user;
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
@@ -78,12 +98,12 @@ public class Edit_profile extends AppCompatActivity {
                         user_city.setAdapter(adapter2);
 
                         final TextView user_mail = findViewById(R.id.mail);
-                        ImageView profile_img = findViewById(R.id.profile_image);
+                        ImageView profile_img = findViewById(R.id.profImage);
                         final CheckBox h_mail = findViewById(R.id.hidemail);
                         final EditText user_description = findViewById(R.id.description);
 
                         StorageReference ref = storage.getReference().child("users/" + current_user.getUid());
-                        Glide.with(Edit_profile.this).load(ref).into(profile_img);
+                        Glide.with(Edit_profile.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
 
                         user_name.setText(name);
                         user_description.setText(description);
@@ -137,10 +157,84 @@ public class Edit_profile extends AppCompatActivity {
                                 h_mail.setChecked(hidden_mail);
                             }
                         });
+
+                        ImageButton editImage = findViewById(R.id.editImageButton);
+                        editImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SelectImage();
+                            }
+                        });
                     }
                 }
             }
         });
+    }
+
+    private  void SelectImage(){
+        CropImage.startPickImageActivity(this);
+    }
+
+    private void uploadImage(Uri filePath){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        StorageReference r2 = storage.getReference().child("users/"+ mAuth.getCurrentUser().getUid());
+        r2.putFile(filePath)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Edit_profile.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Edit_profile.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                .getTotalByteCount());
+                        progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                    }
+                });
+    }
+
+    private void startCropImageActivity(Uri imageUri) {
+        Intent intent = CropImage.activity(imageUri)
+                .setAspectRatio(1,1)
+                .getIntent(this.getBaseContext());
+        startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Result code is RESULT_OK only if the user selects an Image
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            profile_pic_uri = CropImage.getPickImageResultUri(this, data);
+            startCropImageActivity(profile_pic_uri);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            CropImage.ActivityResult ar = CropImage.getActivityResult(data);
+            Uri filePath = ar.getUri();
+            final ImageView add_pic = findViewById(R.id.profImage);
+            try {
+                uploadImage(filePath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                add_pic.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 }
 
