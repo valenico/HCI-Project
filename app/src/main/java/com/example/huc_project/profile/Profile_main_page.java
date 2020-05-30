@@ -25,6 +25,8 @@ import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -87,7 +89,7 @@ public class Profile_main_page extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
+                    final DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         String name = (String) document.get("Name");
                         String country = (String) document.get("Country");
@@ -121,6 +123,8 @@ public class Profile_main_page extends AppCompatActivity {
 
                         if (hidden_mail) user_mail.setText("Hidden");
                         else if (!guest_user) user_mail.setText(current_user.getEmail());
+
+
                     }
                 }
             }

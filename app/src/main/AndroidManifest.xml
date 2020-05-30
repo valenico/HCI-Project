@@ -31,6 +31,8 @@
 
         <activity android:name=".profile.Profile_main_page" />
         <activity android:name=".profile.Edit_profile" />
+        <activity android:name=".profile.AddNewSocialAccount" />
+        <activity android:name=".profile.RemoveSocialAccount" />
     </application>
 
 </manifest>
