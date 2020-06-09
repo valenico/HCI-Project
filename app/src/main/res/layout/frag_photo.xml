@@ -9,21 +9,31 @@
 
     <GridView
         android:id="@+id/gridView"
-        android:layout_width="390dp"
-        android:layout_height="716dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="382dp"
+        android:layout_height="618dp"
+        android:layout_marginTop="4dp"
         android:columnWidth="90dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_photo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.238"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </GridView>
+
+    <Button
+        android:id="@+id/add_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Upload image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp"></Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
