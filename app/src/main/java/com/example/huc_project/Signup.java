@@ -258,6 +258,7 @@ public class Signup extends AppCompatActivity {
 
         if (country.getText().toString().trim().length() > 0) {
             upd.put("Country", country.getText().toString());
+            upd.put("images",new ArrayList<String>());
             editor.putString("country",country.getText().toString());
         }
 

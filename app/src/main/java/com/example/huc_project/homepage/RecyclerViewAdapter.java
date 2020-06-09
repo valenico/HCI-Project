@@ -23,7 +23,6 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    final private String pattern = Integer.toString(R.string.pattern);;
 
     public List<PostRow> itemsList;
     public List<PostRow> itemsListFull;

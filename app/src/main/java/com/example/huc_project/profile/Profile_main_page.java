@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.CreateNewPostActivity;
-import com.example.huc_project.homepage.GlideOptions;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostRow;
