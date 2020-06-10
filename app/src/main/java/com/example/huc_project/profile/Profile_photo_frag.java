@@ -133,9 +133,6 @@ public class Profile_photo_frag extends Fragment {
                 uploadImage(imageUri);
             }
         }
-        //refresh fragment
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(Profile_photo_frag.this).attach(Profile_photo_frag.this).commit();
     }
 
 
@@ -164,15 +161,22 @@ public class Profile_photo_frag extends Fragment {
 
                         db.collection("UTENTI").document(user).set(imgs, SetOptions.merge());
 
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(Profile_photo_frag.this).attach(Profile_photo_frag.this).commit();
+
                     } else {
                         Log.d(TAG, "No such document");
                     }
+
+
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
         });
     }
+
+
 
 }
 

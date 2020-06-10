@@ -61,6 +61,7 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) convertView;
 
 
+
         String uri = imgArray.get(position);
         StorageReference storageRef = storage.getReference();
         StorageReference islandRef = (StorageReference) storageRef.child("images/" + uri);
@@ -72,5 +73,9 @@ public class ImageAdapter extends BaseAdapter {
 
 
         return convertView;
+    }
+
+    public static void notifyDataChange(){
+        notifyDataChange();
     }
 }
