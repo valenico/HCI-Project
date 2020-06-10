@@ -27,6 +27,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public List<PostRow> itemsList;
     public List<PostRow> itemsListFull;
 
+    public RecyclerViewAdapter() {}
+
     public RecyclerViewAdapter(List<PostRow> itemList) {
         this.itemsList = itemList;
         itemsListFull = new ArrayList<>(itemList);
