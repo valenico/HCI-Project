@@ -4,28 +4,30 @@ package com.example.huc_project.chat;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.huc_project.R;
+import com.example.huc_project.Signup;
 import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.profile.Profile_main_page;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -36,20 +38,39 @@ public class NewMessage extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    final ArrayList<String> nomi = new ArrayList<>();
+    final ArrayList<String> uid = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
         setUpCircularMenu();
+
+        final AutoCompleteTextView av = findViewById(R.id.autoCompleteTextView);
+        db.collection("UTENTI").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            nomi.add(document.get("Name").toString());
+                            uid.add(document.getId());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, nomi );
+                        av.setAdapter(adapter);
+                    }
+                }
+        });
+
     }
 
     public void send_text(View v){
-        String who = ((EditText)findViewById(R.id.user_to_contact)).getText().toString();
+        String who = ((EditText)findViewById(R.id.autoCompleteTextView)).getText().toString();
+        String request_uid = uid.get(nomi.indexOf(who));
         String what = ((EditText)findViewById(R.id.new_text)).getText().toString();
         HashMap<String,String> to_put = new HashMap<>();
         to_put.put("User1", mAuth.getCurrentUser().getUid());
-        to_put.put("User2", who );
+        to_put.put("User2", request_uid );
         to_put.put("Messages", what);
         db.collection("Chats").document(UUID.randomUUID().toString()).set(to_put);
         Intent i = new Intent(getBaseContext(), Chat.class);
