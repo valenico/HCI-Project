@@ -17,6 +17,7 @@
         <activity android:name=".OurLogin"/>
         <activity android:name=".chat.Chat"/>
         <activity android:name=".homepage.CreateNewPostActivity" />
+        <activity android:name=".chat.NewMessage"/>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".Signup" />

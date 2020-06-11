@@ -18,6 +18,7 @@
     <string name="info_profile">Your information will be visible in your profile</string>
     <string name="guest_accept">Ok</string>
     <string name="guest_cancel">Cancel</string>
+    <string name="new_message">New Message</string>
     <string name="dialog_gues_mode">Using a guest account you will have access to limited features!</string>
     <string-array name="countries_array">
         <item>Australia</item>
