@@ -137,7 +137,7 @@ public class Edit_profile extends AppCompatActivity {
                                 if (user_city.getText().toString() != "Unknown") upd.put("City", user_city.getText().toString());
                                 upd.put("Description", user_description.getText().toString());
                                 upd2.put("Hidemail", h_mail.isChecked());
-                                db.collection("UTENTI").document(current_user.getUid()).set(upd);
+                                db.collection("UTENTI").document(current_user.getUid()).set(upd, SetOptions.merge());
                                 db.collection("UTENTI").document(current_user.getUid()).set(upd2, SetOptions.merge());
                                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
                                 startActivity(intent);
