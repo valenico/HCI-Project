@@ -108,7 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
         tv1.setText(title);
         tv2.setText(desc);
-        Homepage.glideTask(item.glide, img_ref, view);
+        if(img_ref!=null ) Homepage.glideTask(item.glide, img_ref, view);
 
     }
 

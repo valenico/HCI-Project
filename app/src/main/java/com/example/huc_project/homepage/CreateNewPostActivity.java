@@ -91,29 +91,33 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
                 Uri file = imageUri;
                 StorageReference storageRef = storage.getReference();
-                StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+                StorageReference riversRef;
+                UploadTask uploadTask;
+
                 post.put("title", postTitle);
-                post.put("storageref", file.getLastPathSegment());
                 post.put("postdesc", postDescription);
                 post.put("user", current_user.getUid());
                 post.put("isPackage", isPackage);
-                UploadTask uploadTask = riversRef.putFile(file);
 
+                if(file != null){
+                    riversRef = storageRef.child("images/"+file.getLastPathSegment());
+                    post.put("storageref", file.getLastPathSegment());
+                    uploadTask = riversRef.putFile(file);
 
-                // Register observers to listen for when the download is done or if it fails
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        // ...
-                    }
-                });
-
+                    // Register observers to listen for when the download is done or if it fails
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                            // ...
+                        }
+                    });
+                }
 
                 // Add a new document with a generated ID
                 db.collection("posts")
@@ -130,8 +134,10 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                 Log.w(TAG, "Error adding document", e);
                             }
                         });
+
                 Intent intent = new Intent(getApplicationContext(), Homepage.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -148,5 +154,12 @@ public class CreateNewPostActivity extends AppCompatActivity {
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(this, Homepage.class);
+        startActivity(i);
+        finish();
     }
 }

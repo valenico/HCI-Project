@@ -75,7 +75,4 @@ public class ImageAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public static void notifyDataChange(){
-        notifyDataChange();
-    }
 }

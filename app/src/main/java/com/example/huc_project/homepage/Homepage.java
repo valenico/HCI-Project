@@ -99,7 +99,10 @@ public class Homepage extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Post post = document.toObject(Post.class);
                                 StorageReference storageRef = storage.getReference();
-                                StorageReference islandRef = storageRef.child("images/" + post.storageref);
+                                StorageReference islandRef = null;
+                                if(post.storageref != null){
+                                    islandRef = storageRef.child("images/" + post.storageref);
+                                }
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
                                 rowsPostList.add(post_row);
@@ -284,6 +287,7 @@ public class Homepage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -309,4 +313,5 @@ public class Homepage extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -26,6 +26,7 @@ public class Start extends AppCompatActivity {
         if(logged){
             Intent i = new Intent(this, Homepage.class);
             startActivity(i);
+            finish();
         }
 
         setContentView(R.layout.activity_start);
