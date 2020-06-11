@@ -6,12 +6,12 @@ public class Conversation {
 
     private String User1;
     private String User2;
-    private ArrayList<String> Messages;
+    private String Messages;
 
     public Conversation(){
     }
 
-    public Conversation(String u1, String u2, ArrayList<String> messages){
+    public Conversation(String u1, String u2, String messages){
         this.User1 = u1;
         this.User2 = u2;
         this.Messages = messages;
@@ -34,15 +34,15 @@ public class Conversation {
         this.User2 = user2;
     }
 
-    public ArrayList<String> getMessages() {
+    public String getMessages() {
         return this.Messages;
     }
 
-    public String getLastMessage(){
+   /* public String getLastMessage(){
         return this.Messages.get(this.Messages.size()-1);
-    }
+    }*/
 
-    public void setMessages(ArrayList<String> messages) {
+    public void setMessages(String messages) {
         this.Messages = messages;
     }
 }

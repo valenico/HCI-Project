@@ -86,14 +86,14 @@ public class Chat extends AppCompatActivity {
 
                                 final Conversation convo = document.toObject(Conversation.class);
                                 if(convo.getUser1().equals(usr.getUid())){
-                                    final String last_message = convo.getLastMessage();
+                                    final String last_message = convo.getMessages();
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2());
                                     rowsChatList.add(cm);
 
 
                                 }
                                 if (convo.getUser2().equals(usr.getUid())) {
-                                    final String last_message = convo.getLastMessage();
+                                    final String last_message = convo.getMessages();
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message,convo.getUser1() );
                                     rowsChatList.add(cm);
                                 }
