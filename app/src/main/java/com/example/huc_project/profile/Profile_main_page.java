@@ -82,6 +82,8 @@ public class Profile_main_page extends AppCompatActivity {
             }
         });
 
+
+
         final DocumentReference docRef = db.collection("UTENTI").document(current_user.getUid());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -128,5 +130,13 @@ public class Profile_main_page extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(this, Homepage.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(i, 0);
+        startActivity(i);
     }
 }
