@@ -9,11 +9,13 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.huc_project.homepage.Homepage;
@@ -38,6 +40,7 @@ public class OurLogin extends AppCompatActivity  {
     private String user_to_reset;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 101;
+    private boolean see_password = true;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SharedPreferences pref;
@@ -236,5 +239,15 @@ public class OurLogin extends AppCompatActivity  {
         dialog.show();
     }
 
+    public void show_password_login(View v){
+        if(see_password){
+            ((EditText)findViewById(R.id.password)).setTransformationMethod(null);
+            ((ImageView)findViewById(R.id.password_show)).setImageResource(R.drawable.show);
+        } else {
+            ((EditText)findViewById(R.id.password)).setTransformationMethod(new PasswordTransformationMethod());
+            ((ImageView)findViewById(R.id.password_show)).setImageResource(R.drawable.noshow);
+        }
+        see_password = !see_password;
+    }
 
 }
