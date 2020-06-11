@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -73,6 +74,8 @@ public class Signup extends AppCompatActivity {
     private static final int RC_SIGN_IN = 101;
     public static int SCREEN = 1;
     private FirebaseAuth mAuth;
+    private boolean see_password = true;
+    private boolean see_cpassword = true;
     private FirebaseUser mUser;
     private Uri profile_pic_uri;
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
@@ -591,6 +594,28 @@ public class Signup extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    public void show_password(View v){
+        if(see_password){
+            ((EditText)findViewById(R.id.password_signup)).setTransformationMethod(null);
+            ((ImageView)findViewById(R.id.show_password)).setImageResource(R.drawable.show);
+        } else {
+            ((EditText)findViewById(R.id.password_signup)).setTransformationMethod(new PasswordTransformationMethod());
+            ((ImageView)findViewById(R.id.show_password)).setImageResource(R.drawable.noshow);
+        }
+        see_password = !see_password;
+    }
+
+    public void show_cpassword(View v){
+        if(see_cpassword){
+            ((EditText)findViewById(R.id.confirm_password)).setTransformationMethod(null);
+            ((ImageView)findViewById(R.id.show_cpassword)).setImageResource(R.drawable.show);
+        } else {
+            ((EditText)findViewById(R.id.confirm_password)).setTransformationMethod(new PasswordTransformationMethod());
+            ((ImageView)findViewById(R.id.show_cpassword)).setImageResource(R.drawable.noshow);
+        }
+        see_cpassword = !see_cpassword;
     }
 
     public void google_signup(View v){
