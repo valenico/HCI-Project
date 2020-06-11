@@ -1,4 +1,20 @@
-package com.example.huc_project.homepage;
+package com.example.huc_project.chat;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.huc_project.homepage.CreateNewPostActivity;
+import com.example.huc_project.profile.Profile_main_page;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,105 +22,82 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
-import com.example.huc_project.Start;
-import com.example.huc_project.chat.Chat;
-import com.example.huc_project.profile.Profile_main_page;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 
-public class Homepage extends AppCompatActivity {
+public class Chat extends AppCompatActivity {
 
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    RecyclerView recyclerView;
-    RecyclerViewAdapter recyclerViewAdapter;
-    ArrayList<PostRow> rowsArrayList = new ArrayList<>();
-    final int numItems = 10;
-
-    private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference mdatabaseReference = mdatabase.getReference();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+    private SharedPreferences pref;
     private FirebaseFirestore db;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    ArrayList<PostRow> rowsPostList = new ArrayList<>();
-    final private String pattern = Integer.toString(R.string.pattern);
+    private SharedPreferences.Editor editor;
+    private FirebaseUser usr = mAuth.getCurrentUser();
+    private RecyclerView recyclerView;
+    ArrayList<ChatMessage> rowsChatList = new ArrayList<>();
 
-    boolean guest_mode = false;
-    boolean isLoading = false;
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        setContentView(R.layout.activity_chat);
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
-        Intent i = getIntent();
-        String guest = i.getStringExtra("guest");
-        if(guest != null && guest == "true"){
-            guest_mode = true;
-        }
-        setUpHomepage();
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Chat.this, NewMessage.class);
+                startActivity(i);
+            }
+        });
+
+        setUp();
     }
 
-    private void populateData() {
-        int i = 0;
-        while (i < rowsPostList.size()) {
-            rowsArrayList.add(rowsPostList.get(i));
-            i++;
-        }
-    }
-
-    private void setUpHomepage(){
+    private void setUp(){
         db = FirebaseFirestore.getInstance();
-        CollectionReference collezione = db.collection("posts");
-
-        collezione.get()
+        CollectionReference mess = db.collection("Chats");
+        mess.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Post post = document.toObject(Post.class);
-                                StorageReference storageRef = storage.getReference();
-                                StorageReference islandRef = storageRef.child("images/" + post.storageref);
 
-                                PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
-                                rowsPostList.add(post_row);
+                                final Conversation convo = document.toObject(Conversation.class);
+                                if(convo.getUser1().equals(usr.getUid())){
+                                    final String last_message = convo.getMessages();
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2());
+                                    rowsChatList.add(cm);
+
+
+                                }
+                                if (convo.getUser2().equals(usr.getUid())) {
+                                    final String last_message = convo.getMessages();
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message,convo.getUser1() );
+                                    rowsChatList.add(cm);
+                                }
                             }
-                            populateData();
                             setUpRecyclerView();
                             setUpCircularMenu();
                             initScrollListener();
@@ -116,17 +109,17 @@ public class Homepage extends AppCompatActivity {
                 });
     }
 
-    public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){
-        glide.load(ref).into(view);
-    }
-
     private void setUpRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerViewChat);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList);
+        recyclerViewAdapter = new RecyclerViewAdapter(rowsChatList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
+    }
+
+    public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){
+        glide.load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(view);
     }
 
     private void initScrollListener() {
@@ -141,48 +134,9 @@ public class Homepage extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
 
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
-                if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == rowsArrayList.size() - 1) {
-                        //bottom of list!
-                        //loadMore();
-                        //isLoading = true;
-                    }
-                }
             }
         });
-
-
     }
-
-    private void loadMore() {
-        rowsArrayList.add(null);
-        recyclerViewAdapter.notifyItemInserted(rowsArrayList.size() - 1);
-
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rowsArrayList.remove(rowsArrayList.size() - 1);
-                int scrollPosition = rowsArrayList.size();
-                recyclerViewAdapter.notifyItemRemoved(scrollPosition);
-                int currentSize = scrollPosition;
-                int nextLimit = currentSize + 10;
-
-                while (currentSize - 1 < nextLimit) {
-                    //rowsArrayList.add("Item " + currentSize);
-                    currentSize++;
-                }
-
-                recyclerViewAdapter.notifyDataSetChanged();
-                isLoading = false;
-            }
-        }, 2000);
-
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,8 +148,6 @@ public class Homepage extends AppCompatActivity {
         SearchView searchView = (SearchView) searchItem.getActionView();
 
         MenuItem addItem = menu.findItem(R.id.add_icon);
-        Button addView = (Button) addItem.getActionView();
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -210,18 +162,6 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
-        addView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), DataGettingActivity.class);
-                //startActivity(intent);
-                mAuth.signOut();
-                editor.clear();
-                editor.commit();
-                Intent to_start = new Intent(getApplicationContext() , Start.class);
-                startActivity(to_start);
-            }
-        });
         return true;
     }
 
@@ -232,10 +172,10 @@ public class Homepage extends AppCompatActivity {
         final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
         icon.setImageDrawable(menu_ic_id);
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+        com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this).setContentView(icon).build();
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-        FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
+        com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.LayoutParams params=new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.LayoutParams(220,220);
         itemBuilder.setLayoutParams(params);
 
         //settings
@@ -298,8 +238,6 @@ public class Homepage extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Homepage.this, Chat.class);
-                startActivity(i);
             }
         });
 
