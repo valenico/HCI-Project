@@ -1,5 +1,6 @@
 package com.example.huc_project.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.homepage.RecyclerViewAdapter;
+import com.example.huc_project.posts.postView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -136,6 +139,13 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
 
     @Override
     public void onItemClick(int position) {
-
+        PostRow post_clicked = rowsArrayList.get(position);
+        Intent intent = new Intent(getContext(), postView.class);
+        intent.putExtra("title", post_clicked.getTitle());
+        intent.putExtra("desc", post_clicked.getDesc());
+        intent.putExtra("storageref", post_clicked.getPost().getStorageref());
+        intent.putExtra("user", post_clicked.getPost().getUser());
+        intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
+        startActivity(intent);
     }
 }
