@@ -17,16 +17,14 @@
 
         <ImageView
             android:id="@+id/post_image"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:adjustViewBounds="true"
-            android:maxWidth="100dp"
             android:maxHeight="70dp"
+            android:maxWidth="100dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_no_image" />
 
@@ -36,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/post_image"
+            android:layout_marginLeft="5dp"
             android:text="Item X"
             android:textSize="24sp" />
 
@@ -45,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvItem"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/post_image"
             android:textSize="16sp" />
 
@@ -57,8 +57,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="-15dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
             android:background="#00FFFFFF"
             app:srcCompat="@drawable/ic_graphic" />
 
@@ -69,12 +69,12 @@
             android:layout_below="@+id/tvItem"
             android:layout_alignTop="@+id/graph_follower"
             android:layout_marginTop="-5dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="23dp"
             android:layout_toStartOf="@+id/graph_follower"
             android:layout_toLeftOf="@+id/graph_follower"
-            android:text="TextView" />
+            android:text="TextView"
+            android:layout_marginRight="0dp" />
 
         <TextView
             android:id="@+id/lw"
@@ -82,8 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvItem"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
             android:layout_toStartOf="@+id/graph_follower"
             android:layout_toLeftOf="@+id/graph_follower"
             android:text="TextView" />

@@ -17,24 +17,24 @@
 
         <ImageView
             android:id="@+id/post_image"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
-            android:layout_marginRight="16dp"
             android:adjustViewBounds="true"
-            android:maxWidth="100dp"
             android:maxHeight="70dp"
+            android:maxWidth="100dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_no_image" />
+            android:src="@drawable/ic_no_image"
+            android:layout_marginStart="5dp" />
 
         <TextView
             android:id="@+id/tvItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/post_image"
             android:text="Item X"
             android:textSize="24sp" />
@@ -45,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvItem"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/post_image"
             android:textSize="16sp" />
 

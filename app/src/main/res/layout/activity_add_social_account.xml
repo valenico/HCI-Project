@@ -7,24 +7,20 @@
 
     <com.jh.circularlist.CircularListView
         android:id="@+id/circle_socials"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="81dp"
-        android:layout_marginRight="81dp"
         app:layout_constraintBottom_toTopOf="@+id/socialChoosen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.183"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="294dp"
-        android:layout_height="101dp"
-        android:layout_marginTop="61dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="Choose the Social Network"
         android:textSize="24sp"
@@ -37,7 +33,7 @@
         android:id="@+id/socialChoosen"
         android:layout_width="160dp"
         android:layout_height="49dp"
-        android:layout_marginTop="576dp"
+        android:layout_marginTop="508dp"
         android:gravity="center_horizontal|center_vertical"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,11 +45,11 @@
         android:id="@+id/button_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="657dp"
+        android:layout_marginTop="16dp"
         android:text="Add account"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/socialChoosen" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

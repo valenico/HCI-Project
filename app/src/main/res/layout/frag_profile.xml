@@ -10,45 +10,38 @@
     tools:context=".Profile_prof_frag">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="355dp"
-        android:layout_height="221dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/custom_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ricicla"
-        android:layout_width="410dp"
-        android:layout_height="209dp"
-        android:isScrollContainer="true"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <ImageButton
         android:id="@+id/addSocial"
         android:layout_width="46dp"
         android:layout_height="35dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
-        android:layout_marginTop="244dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
         android:background="#00FFFFFF"
         android:src="@drawable/ic_plus"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <ImageButton
         android:id="@+id/remove_account"
         android:layout_width="46dp"
         android:layout_height="35dp"
-        android:layout_marginStart="272dp"
-        android:layout_marginLeft="272dp"
-        android:layout_marginTop="244dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop="20dp"
         android:background="#00FFFFFF"
         android:src="@drawable/ic_minus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/custom_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,26 +49,38 @@
         android:id="@+id/textView6"
         android:layout_width="169dp"
         android:layout_height="30dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
         android:background="#00FFFFFF"
         android:gravity="left|center_vertical"
         android:text="Add a new social account"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/addSocial" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="169dp"
         android:layout_height="30dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginLeft="212dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
         android:gravity="right|center_vertical"
         android:text="Remove a social account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remove_account" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ricicla"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="20dp"
+        android:isScrollContainer="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
