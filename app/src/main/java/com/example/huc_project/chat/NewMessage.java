@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.huc_project.R;
-import com.example.huc_project.Signup;
 import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +27,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
@@ -68,11 +67,13 @@ public class NewMessage extends AppCompatActivity {
         String who = ((EditText)findViewById(R.id.autoCompleteTextView)).getText().toString();
         String request_uid = uid.get(nomi.indexOf(who));
         String what = ((EditText)findViewById(R.id.new_text)).getText().toString();
-        HashMap<String,String> to_put = new HashMap<>();
+        List<String> messages = new ArrayList<>();
+        messages.add("0"+what);
+        HashMap<String,Object> to_put = new HashMap<>();
         to_put.put("User1", mAuth.getCurrentUser().getUid());
         to_put.put("User2", request_uid );
-        to_put.put("Messages", what);
-        db.collection("Chats").document(UUID.randomUUID().toString()).set(to_put);
+        to_put.put("Messages", messages);
+        db.collection("Chat").document(UUID.randomUUID().toString()).set(to_put);
         Intent i = new Intent(getBaseContext(), Chat.class);
         startActivity(i);
     }
@@ -82,8 +83,6 @@ public class NewMessage extends AppCompatActivity {
         menu.clear();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-
-        MenuItem addItem = menu.findItem(R.id.add_icon);
         return true;
     }
 

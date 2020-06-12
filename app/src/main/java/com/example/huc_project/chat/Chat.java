@@ -41,8 +41,9 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Chat extends AppCompatActivity {
+public class Chat extends AppCompatActivity implements com.example.huc_project.chat.RecyclerViewAdapter.OnItemListener {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
     private SharedPreferences pref;
@@ -76,7 +77,8 @@ public class Chat extends AppCompatActivity {
 
     private void setUp(){
         db = FirebaseFirestore.getInstance();
-        CollectionReference mess = db.collection("Chats");
+        //CollectionReference mess = db.collection("Chats");
+        CollectionReference mess = db.collection("Chat");
         mess.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -86,15 +88,15 @@ public class Chat extends AppCompatActivity {
 
                                 final Conversation convo = document.toObject(Conversation.class);
                                 if(convo.getUser1().equals(usr.getUid())){
-                                    final String last_message = convo.getMessages();
-                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2());
+                                    final String last_message = convo.getLastMessage();
+                                    final List<String> all_messages = convo.getMessages();
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId());
                                     rowsChatList.add(cm);
-
-
                                 }
                                 if (convo.getUser2().equals(usr.getUid())) {
-                                    final String last_message = convo.getMessages();
-                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message,convo.getUser1() );
+                                    final String last_message = convo.getLastMessage();
+                                    final List<String> all_messages = convo.getMessages();
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser1() , all_messages ,false , document.getId() );
                                     rowsChatList.add(cm);
                                 }
                             }
@@ -113,7 +115,7 @@ public class Chat extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewChat);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsChatList);
+        recyclerViewAdapter = new RecyclerViewAdapter(rowsChatList, this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
@@ -246,5 +248,17 @@ public class Chat extends AppCompatActivity {
             public void onClick(View v) {
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        //Toast.makeText(Homepage.this, "Clicked item" + position, Toast.LENGTH_SHORT).show();
+        ChatMessage chat_clicked = rowsChatList.get(position);
+        Intent intent = new Intent(Chat.this, ChatView.class);
+        intent.putExtra("user", chat_clicked.getMessageUid());
+        intent.putStringArrayListExtra("messages", (ArrayList<String>) chat_clicked.getMessages());
+        intent.putExtra("who", chat_clicked.getI_am_0());
+        intent.putExtra("document",chat_clicked.getDocument());
+        startActivity(intent);
     }
 }

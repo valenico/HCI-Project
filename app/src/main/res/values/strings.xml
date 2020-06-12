@@ -20,6 +20,14 @@
     <string name="guest_cancel">Cancel</string>
     <string name="new_message">New Message</string>
     <string name="dialog_gues_mode">Using a guest account you will have access to limited features!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_post_view">ScrollingActivity</string>
     <string-array name="countries_array">
         <item>Australia</item>
         <item>Belgium</item>
@@ -78,12 +86,4 @@
         <item>Washington D.C.</item>
         <item>Caracas</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="title_activity_post_view">ScrollingActivity</string>
 </resources>

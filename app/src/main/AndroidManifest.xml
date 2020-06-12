@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.huc_project" >
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    package="com.example.huc_project">
 
     <application
         android:allowBackup="true"
@@ -12,12 +8,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".chat.ChatView"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".posts.postView"
             android:label="@string/title_activity_post_view"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".homepage.DataGettingActivity" />
         <activity android:name=".OurLogin" />
         <activity android:name=".chat.Chat" />
@@ -32,7 +30,7 @@
 <activity android:name=".homepage.RecyclerViewAdapter" />
             android:theme="@style/Base.Theme.AppCompat"/>
         -->
-        <activity android:name=".Start" >
+        <activity android:name=".Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,5 +42,9 @@
         <activity android:name=".profile.AddNewSocialAccount" />
         <activity android:name=".profile.RemoveSocialAccount" />
     </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

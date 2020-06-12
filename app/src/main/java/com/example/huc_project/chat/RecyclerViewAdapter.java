@@ -35,12 +35,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public List<ChatMessage> itemsList;
     public List<ChatMessage> itemsListFull;
+    private OnItemListener onItemListener;
 
     public RecyclerViewAdapter() {}
 
-    public RecyclerViewAdapter(List<ChatMessage> itemList) {
+    public RecyclerViewAdapter(List<ChatMessage> itemList, OnItemListener onItemListener) {
         this.itemsList = itemList;
-        itemsListFull = new ArrayList<>(itemList);
+        this.itemsListFull = new ArrayList<>(itemList);
+        this.onItemListener = onItemListener;
     }
 
     @NonNull
@@ -48,7 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_row, parent, false);
-            return new com.example.huc_project.chat.RecyclerViewAdapter.ItemViewHolder(view);
+            return new com.example.huc_project.chat.RecyclerViewAdapter.ItemViewHolder(view, onItemListener);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_loading, parent, false);
             return new com.example.huc_project.chat.RecyclerViewAdapter.LoadingViewHolder(view);
@@ -78,14 +80,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         RelativeLayout tvItem;
+        OnItemListener onItemListener;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
-
             tvItem = itemView.findViewById(R.id.relative);
+            this.onItemListener = onItemListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClick(getAdapterPosition());
         }
     }
 
@@ -97,6 +106,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             progressBar = itemView.findViewById(R.id.itemRow_progressBar);
         }
+
+    }
+
+    public interface OnItemListener{
+        void onItemClick(int position);
     }
 
     private void showLoadingView(com.example.huc_project.chat.RecyclerViewAdapter.LoadingViewHolder viewHolder, int position) {

@@ -1,17 +1,24 @@
 package com.example.huc_project.chat;
 
-import java.util.ArrayList;
+import android.os.Build;
+import android.util.Log;
+
+import java.util.List;
+import java.util.Map;
+
+import androidx.annotation.RequiresApi;
 
 public class Conversation {
 
     private String User1;
     private String User2;
-    private String Messages;
+    //private String Messages;
+    private List<String> Messages;
 
     public Conversation(){
     }
 
-    public Conversation(String u1, String u2, String messages){
+    public Conversation(String u1, String u2, List<String> messages){
         this.User1 = u1;
         this.User2 = u2;
         this.Messages = messages;
@@ -34,15 +41,15 @@ public class Conversation {
         this.User2 = user2;
     }
 
-    public String getMessages() {
+    public List<String> getMessages() {
         return this.Messages;
     }
 
-   /* public String getLastMessage(){
-        return this.Messages.get(this.Messages.size()-1);
-    }*/
+    public String getLastMessage(){
+        return this.Messages.get(0).substring(1);
+    }
 
-    public void setMessages(String messages) {
+    public void setMessages(List<String> messages) {
         this.Messages = messages;
     }
 }
