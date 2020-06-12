@@ -92,8 +92,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
                                     final List<String> all_messages = convo.getMessages();
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId());
                                     rowsChatList.add(cm);
-                                }
-                                if (convo.getUser2().equals(usr.getUid())) {
+                                } else if (convo.getUser2().equals(usr.getUid())) {
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser1() , all_messages ,false , document.getId() );

@@ -46,7 +46,7 @@ public class Conversation {
     }
 
     public String getLastMessage(){
-        return this.Messages.get(0).substring(1);
+        return this.Messages.get(this.Messages.size()-1).substring(1);
     }
 
     public void setMessages(List<String> messages) {
