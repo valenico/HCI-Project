@@ -72,7 +72,12 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Post post = document.toObject(Post.class);
                                 StorageReference storageRef = storage.getReference();
-                                StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
+
+
+                                StorageReference islandRef = null;
+                                if(post.getStorageref() != null){
+                                    islandRef = storageRef.child("images/" + post.getStorageref());
+                                }
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_post_frag.this));
                                 rowsPostList.add(post_row);
