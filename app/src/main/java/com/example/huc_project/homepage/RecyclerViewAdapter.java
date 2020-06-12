@@ -124,7 +124,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
         tv1.setText(title);
-        tv2.setText(desc);
+        if(desc.length()>30){
+            String long_desc = desc.substring(0, Math.min(desc.length(), 30)) + " ... ";
+            tv2.setText(long_desc);
+        } else {
+            tv2.setText(desc);
+        }
         if(img_ref!=null ) Homepage.glideTask(item.glide, img_ref, view);
 
     }
