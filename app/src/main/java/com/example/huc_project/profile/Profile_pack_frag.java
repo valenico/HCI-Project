@@ -32,7 +32,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class Profile_pack_frag extends Fragment {
+public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.OnItemListener {
 
     public Profile_pack_frag() {
         // Required empty public constructor
@@ -103,7 +103,7 @@ public class Profile_pack_frag extends Fragment {
         recyclerView = getView().findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList);
+        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
@@ -131,6 +131,11 @@ public class Profile_pack_frag extends Fragment {
             }
         });
 
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
 
     }
 }

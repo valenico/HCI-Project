@@ -16,9 +16,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -43,7 +45,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 
-public class Homepage extends AppCompatActivity {
+public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SharedPreferences pref;
@@ -127,9 +129,26 @@ public class Homepage extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList);
+        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
     }
 
     private void initScrollListener() {
@@ -314,4 +333,8 @@ public class Homepage extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(Homepage.this, "Clicked item" + position, Toast.LENGTH_SHORT).show();
+    }
 }

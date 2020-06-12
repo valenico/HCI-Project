@@ -26,20 +26,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public List<PostRow> itemsList;
     public List<PostRow> itemsListFull;
+    private OnItemListener onItemListener;
 
     public RecyclerViewAdapter() {}
 
-    public RecyclerViewAdapter(List<PostRow> itemList) {
+    public RecyclerViewAdapter(List<PostRow> itemList, OnItemListener onItemListener) {
         this.itemsList = itemList;
+        this.onItemListener = onItemListener;
         itemsListFull = new ArrayList<>(itemList);
     }
+
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_row, parent, false);
-            return new ItemViewHolder(view);
+            return new ItemViewHolder(view, onItemListener);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_loading, parent, false);
             return new LoadingViewHolder(view);
@@ -70,18 +73,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener  {
 
         RelativeLayout tvItem;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        OnItemListener onItemListener;
+
+        public ItemViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             tvItem = itemView.findViewById(R.id.relative);
+            this.onItemListener = onItemListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClick(getAdapterPosition());
         }
     }
 
-    private class LoadingViewHolder extends RecyclerView.ViewHolder {
+    private class LoadingViewHolder extends RecyclerView.ViewHolder{
 
         ProgressBar progressBar;
 
@@ -89,6 +101,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             progressBar = itemView.findViewById(R.id.itemRow_progressBar);
         }
+
+    }
+
+    public interface OnItemListener{
+        void onItemClick(int position);
     }
 
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
