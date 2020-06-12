@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,7 @@ import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
 import com.example.huc_project.Start;
 import com.example.huc_project.chat.Chat;
+import com.example.huc_project.posts.postView;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -335,6 +337,14 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(Homepage.this, "Clicked item" + position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(Homepage.this, "Clicked item" + position, Toast.LENGTH_SHORT).show();
+        PostRow post_clicked = rowsArrayList.get(position);
+        Intent intent = new Intent(Homepage.this, postView.class);
+        intent.putExtra("title", post_clicked.getTitle());
+        intent.putExtra("desc", post_clicked.getDesc());
+        intent.putExtra("storageref", post_clicked.getPost().getStorageref());
+        intent.putExtra("user", post_clicked.getPost().getUser());
+        intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
+        startActivity(intent);
     }
 }

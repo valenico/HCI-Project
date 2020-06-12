@@ -16,6 +16,8 @@ public class PostRow {
         this.glide = glide;
     }
 
+    public Post getPost(){ return post;}
+
     public String getTitle() {
         return post.title;
     }
