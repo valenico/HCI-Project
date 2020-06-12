@@ -85,7 +85,10 @@ public class ChatView extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
-                        ((TextView)findViewById(R.id.name_on_chat)).setText(document.get("Name").toString());
+                        String name = document.get("Name").toString();
+                        TextView name_display = ((TextView)findViewById(R.id.name_on_chat));
+                        name_display.setText(name);
+                        name_display.setPaddingRelative(10,10, 60/name.length()  ,10);
                         StorageReference ref = storage.getReference().child("users/" + usr_uid);
                         Glide.with(ChatView.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into((ImageView)findViewById(R.id.chat_avatar));
                     }
