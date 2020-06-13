@@ -18,7 +18,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
         android:background="#00FFFFFF"
-        android:src="@drawable/ic_plus"
+        app:srcCompat="@drawable/ic_plus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -30,7 +30,7 @@
         android:layout_marginRight="70dp"
         android:layout_marginTop="20dp"
         android:background="#00FFFFFF"
-        android:src="@drawable/ic_minus"
+        app:srcCompat="@drawable/ic_minus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -75,7 +75,7 @@
         android:id="@+id/ricicla"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="60sp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:layout_marginTop="20dp"
         android:isScrollContainer="true"
         app:layout_constraintBottom_toBottomOf="parent"
