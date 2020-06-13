@@ -1,5 +1,6 @@
 package com.example.huc_project.homepage;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,6 +132,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tv2.setText(desc);
         }
         if(img_ref!=null ) Homepage.glideTask(item.glide, img_ref, view);
+        else {
+            //default image
+            view.setImageResource(R.drawable.ic_no_image);
+        }
 
     }
 

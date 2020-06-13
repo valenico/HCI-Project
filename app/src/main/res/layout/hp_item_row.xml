@@ -19,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_image"
-            android:src="@drawable/ic_no_image"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="16dp"
@@ -36,8 +35,7 @@
             android:id="@+id/tvItem"
             android:layout_toRightOf="@+id/post_image"
             android:layout_alignParentTop="true"
-            android:textSize="30sp"
-            android:text="Item X"/>
+            android:textSize="30sp"/>
 
 
         <TextView
