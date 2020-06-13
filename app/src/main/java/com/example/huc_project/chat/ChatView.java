@@ -122,6 +122,7 @@ public class ChatView extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                linearLayoutManager.scrollToPosition(messages.size() - 1);
             }
         });
     }
