@@ -83,7 +83,7 @@ public class Profile_prof_frag extends Fragment {
                         String name = (String) document.get("Name");
                         String description = (String) document.get("Description");
                         TextView descrizione = getView().findViewById(R.id.description);
-                        if (description == null) descrizione.setText("Hi I am " + name + " and I am using this App!");
+                        if (description == null || description.trim().equals("")) descrizione.setText("Hi I am " + name + " and I am using this App!");
                         else descrizione.setText(description);
 
                         /*try {
