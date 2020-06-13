@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.homepage.CreateNewPostActivity;
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -260,4 +261,11 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         intent.putExtra("document",chat_clicked.getDocument());
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent back = new Intent(Chat.this, Homepage.class);
+        startActivity(back);
+    }
+
 }

@@ -30,6 +30,7 @@ import com.example.huc_project.Start;
 import com.example.huc_project.chat.Chat;
 import com.example.huc_project.posts.postView;
 import com.example.huc_project.profile.Profile_main_page;
+import com.example.huc_project.settings.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -334,6 +335,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(Homepage.this, Settings.class);
+                startActivity(i);
             }
         });
     }
