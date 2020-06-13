@@ -120,6 +120,7 @@ public class Profile_main_page extends AppCompatActivity {
                             edit_profile.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    final String c_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                                 }
                             });

@@ -72,12 +72,11 @@ public class Profile_photo_frag extends Fragment {
         });
 
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         gridView = view.findViewById(R.id.gridView);
 
 
-        db.collection("UTENTI").document(String.valueOf(current_user)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("UTENTI").document(current_user).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
