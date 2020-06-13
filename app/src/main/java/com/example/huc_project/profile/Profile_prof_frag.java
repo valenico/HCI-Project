@@ -65,7 +65,8 @@ public class Profile_prof_frag extends Fragment {
         rowsSocialList.clear();
 
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         final Boolean guest_user;
 
         if (current_user != null) guest_user = false;

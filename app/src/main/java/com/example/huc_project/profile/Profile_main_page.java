@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class Profile_main_page extends AppCompatActivity {
 
+    private static FirebaseUser current_user;
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -39,8 +42,10 @@ public class Profile_main_page extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         db = FirebaseFirestore.getInstance();
 
+        Bundle bundle = getIntent().getExtras();
+        current_user = (FirebaseUser) bundle. get("user");
+
         final Boolean guest_user;
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         final ViewPager viewPager = findViewById(R.id.pager);
 
         if (current_user != null) guest_user = false;
@@ -93,14 +98,27 @@ public class Profile_main_page extends AppCompatActivity {
 
                         user_name.setText(name);
 
-                        ImageButton edit_profile = findViewById(R.id.edit_profile);
-                        edit_profile.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getApplicationContext(), Edit_profile.class);
-                                startActivity(intent);
-                            }
-                        });
+                        if (current_user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            ImageButton edit_profile = findViewById(R.id.edit_profile);
+                            edit_profile.setImageResource(R.drawable.ic_pencil);
+                            edit_profile.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(getApplicationContext(), Edit_profile.class);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                        else {
+                            ImageButton edit_profile = findViewById(R.id.edit_profile);
+                            edit_profile.setImageResource(R.drawable.ic_star);
+                            edit_profile.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            });
+                        }
 
                         if (country == null) user_country.setText("Unknown");
                         else {
@@ -126,5 +144,9 @@ public class Profile_main_page extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivityIfNeeded(i, 0);
         startActivity(i);
+    }
+
+    public static FirebaseUser getCurrent_user() {
+        return current_user;
     }
 }

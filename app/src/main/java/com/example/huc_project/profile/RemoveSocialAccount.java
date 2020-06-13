@@ -55,7 +55,8 @@ public class RemoveSocialAccount extends AppCompatActivity {
         rowsSocialList.clear();
 
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         CollectionReference collection = db.collection("Social");
 
@@ -127,6 +128,7 @@ public class RemoveSocialAccount extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                intent.putExtra("user", current_user);
                 startActivity(intent);
             }
         });

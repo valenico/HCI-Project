@@ -58,7 +58,8 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
         rowsArrayList.clear();
         rowPostList.clear();
 
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         db = FirebaseFirestore.getInstance();
 

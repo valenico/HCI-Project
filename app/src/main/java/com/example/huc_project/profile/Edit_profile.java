@@ -65,7 +65,8 @@ public class Edit_profile extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         final Boolean guest_user;
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (current_user != null) guest_user = false;
         else guest_user = true;

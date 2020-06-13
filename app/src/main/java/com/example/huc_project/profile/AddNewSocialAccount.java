@@ -30,7 +30,8 @@ import java.util.Random;
 
 public class AddNewSocialAccount extends AppCompatActivity {
     private FirebaseFirestore db;
-    final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+    final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+    //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
     private String[] Text = {"facebook", "instagram", "twitter", "youtube",
                             "github", "linkedin", "reddit", "snapchat",
                             "twitch", "vimeo", "spotify", "tumblr", "vk"};
@@ -72,6 +73,7 @@ public class AddNewSocialAccount extends AppCompatActivity {
                     db.collection("Social").add(social);
                 }
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                intent.putExtra("user", current_user);
                 startActivity(intent);
             }
         });

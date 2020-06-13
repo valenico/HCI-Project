@@ -123,7 +123,8 @@ public class RecyclerViewAdapterSocial2 extends RecyclerView.Adapter<RecyclerVie
     @SuppressLint("SetTextI18n")
     private void populateItemRows(final ItemViewHolder viewHolder, final int position) {
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         SocialRow item = itemsList.get(position);
         String name = item.social.name;

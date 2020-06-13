@@ -53,7 +53,8 @@ public class Profile_photo_frag extends Fragment {
     Uri imageUri;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+    //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+    final FirebaseUser current_user = Profile_main_page.getCurrent_user();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -175,8 +176,5 @@ public class Profile_photo_frag extends Fragment {
             }
         });
     }
-
-
-
 }
 

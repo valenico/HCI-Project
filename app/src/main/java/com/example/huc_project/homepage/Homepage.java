@@ -33,6 +33,7 @@ import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
@@ -316,6 +317,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                intent.putExtra("user", current_user);
                 startActivity(intent);
             }
         });
