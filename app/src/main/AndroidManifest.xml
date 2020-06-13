@@ -9,13 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".chat.ChatView"
-             />
+        <activity android:name=".settings.Settings"></activity>
+        <activity android:name=".chat.ChatView" />
         <activity
             android:name=".posts.postView"
             android:label="@string/title_activity_post_view"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".homepage.DataGettingActivity" />
         <activity android:name=".OurLogin" />
         <activity android:name=".chat.Chat" />
@@ -42,9 +41,9 @@
         <activity android:name=".profile.AddNewSocialAccount" />
         <activity android:name=".profile.RemoveSocialAccount" />
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
