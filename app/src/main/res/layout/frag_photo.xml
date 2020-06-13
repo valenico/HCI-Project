@@ -5,7 +5,8 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.Profile_photo_frag">
+    tools:context=".profile.Profile_photo_frag"
+    android:fitsSystemWindows="true">
 
     <GridView
         android:id="@+id/gridView"
@@ -36,8 +37,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         app:layout_constraintTop_toBottomOf="@id/gridView"
-        android:layout_marginBottom="@dimen/_1sdp"
-        android:text="Upload image" />
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:text="Upload image"
+        android:fitsSystemWindows="true"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
