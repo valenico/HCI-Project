@@ -65,14 +65,14 @@ public class Profile_prof_frag extends Fragment {
         rowsSocialList.clear();
 
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         final Boolean guest_user;
 
         if (current_user != null) guest_user = false;
         else guest_user = true;
 
-        final DocumentReference docRef = db.collection("UTENTI").document(current_user.getUid());
+        final DocumentReference docRef = db.collection("UTENTI").document(current_user);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -118,7 +118,7 @@ public class Profile_prof_frag extends Fragment {
 
         CollectionReference collection = db.collection("Social");
 
-        collection.whereEqualTo("user", current_user.getUid()).get()
+        collection.whereEqualTo("user", current_user).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

@@ -33,7 +33,9 @@ import java.util.Random;
 
 public class RemoveSocialAccount extends AppCompatActivity {
     private FirebaseFirestore db;
-    final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+
+    final String current_user = Profile_main_page.getCurrent_user();
+    // final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
     RecyclerView recyclerView;
     RecyclerViewAdapterSocial2 recyclerViewAdapter;
@@ -55,12 +57,12 @@ public class RemoveSocialAccount extends AppCompatActivity {
         rowsSocialList.clear();
 
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         CollectionReference collection = db.collection("Social");
 
-        collection.whereEqualTo("user", current_user.getUid()).get()
+        collection.whereEqualTo("user", current_user).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                            @Override
                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {

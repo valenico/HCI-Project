@@ -318,7 +318,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
-                final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 intent.putExtra("user", current_user);
                 startActivity(intent);
             }

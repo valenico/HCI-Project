@@ -65,13 +65,13 @@ public class Edit_profile extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         final Boolean guest_user;
-        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (current_user != null) guest_user = false;
         else guest_user = true;
 
-        final DocumentReference docRef = db.collection("UTENTI").document(current_user.getUid());
+        final DocumentReference docRef = db.collection("UTENTI").document(current_user);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -82,7 +82,7 @@ public class Edit_profile extends AppCompatActivity {
                         String name = (String) document.get("Name");
                         final String country = (String) document.get("Country");
                         String city = (String) document.get("City");
-                        final String mail = current_user.getEmail();
+                        final String mail = (String) document.get("Email");
                         String description = (String) document.get("Description");
                         final Boolean hidden_mail = (Boolean) document.get("Hidemail");
 
@@ -103,7 +103,7 @@ public class Edit_profile extends AppCompatActivity {
                         final CheckBox h_mail = findViewById(R.id.hidemail);
                         final EditText user_description = findViewById(R.id.description);
 
-                        StorageReference ref = storage.getReference().child("users/" + current_user.getUid());
+                        StorageReference ref = storage.getReference().child("users/" + current_user);
                         Glide.with(Edit_profile.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
 
                         user_name.setText(name);
@@ -138,9 +138,10 @@ public class Edit_profile extends AppCompatActivity {
                                 if (user_city.getText().toString() != "Unknown") upd.put("City", user_city.getText().toString());
                                 upd.put("Description", user_description.getText().toString());
                                 upd2.put("Hidemail", h_mail.isChecked());
-                                db.collection("UTENTI").document(current_user.getUid()).set(upd, SetOptions.merge());
-                                db.collection("UTENTI").document(current_user.getUid()).set(upd2, SetOptions.merge());
+                                db.collection("UTENTI").document(current_user).set(upd, SetOptions.merge());
+                                db.collection("UTENTI").document(current_user).set(upd2, SetOptions.merge());
                                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                                intent.putExtra("user", current_user);
                                 startActivity(intent);
                             }
                         });
@@ -181,7 +182,7 @@ public class Edit_profile extends AppCompatActivity {
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
 
-        StorageReference r2 = storage.getReference().child("users/"+ mAuth.getCurrentUser().getUid());
+        StorageReference r2 = storage.getReference().child("users/"+ Profile_main_page.getCurrent_user());
         r2.putFile(filePath)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

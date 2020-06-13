@@ -58,14 +58,14 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
         rowsArrayList.clear();
         rowsPostList.clear();
 
-        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         db = FirebaseFirestore.getInstance();
 
         CollectionReference collezione = db.collection("posts");
 
-        collezione.whereEqualTo("user", current_user.getUid()).get()
+        collezione.whereEqualTo("user", current_user).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

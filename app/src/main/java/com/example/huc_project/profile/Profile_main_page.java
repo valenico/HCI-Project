@@ -3,6 +3,7 @@ package com.example.huc_project.profile;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,9 +29,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import androidx.viewpager.widget.ViewPager;
 
+import org.w3c.dom.Document;
+
 public class Profile_main_page extends AppCompatActivity {
 
-    private static FirebaseUser current_user;
+    private static String current_user;
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -43,7 +46,7 @@ public class Profile_main_page extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         Bundle bundle = getIntent().getExtras();
-        current_user = (FirebaseUser) bundle. get("user");
+        current_user = bundle. getString("user");
 
         final Boolean guest_user;
         final ViewPager viewPager = findViewById(R.id.pager);
@@ -75,9 +78,10 @@ public class Profile_main_page extends AppCompatActivity {
 
 
 
-        final DocumentReference docRef = db.collection("UTENTI").document(current_user.getUid());
+        final DocumentReference docRef = db.collection("UTENTI").document(current_user);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -86,6 +90,7 @@ public class Profile_main_page extends AppCompatActivity {
                         String name = (String) document.get("Name");
                         String country = (String) document.get("Country");
                         String city = (String) document.get("City");
+                        String mail = (String) document.get("Email");
                         Boolean hidden_mail = (Boolean) document.get("Hidemail");
                         Boolean slowLoad = (Boolean) document.get("SlowLoad");
                         TextView user_name = findViewById(R.id.user_name);
@@ -93,12 +98,12 @@ public class Profile_main_page extends AppCompatActivity {
                         TextView user_mail = findViewById(R.id.user_mail);
                         ImageView profile_img = findViewById(R.id.profile_image);
 
-                        StorageReference ref = storage.getReference().child("users/" + current_user.getUid());
+                        StorageReference ref = storage.getReference().child("users/" + current_user);
                         Glide.with(Profile_main_page.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
 
                         user_name.setText(name);
 
-                        if (current_user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                             ImageButton edit_profile = findViewById(R.id.edit_profile);
                             edit_profile.setImageResource(R.drawable.ic_pencil);
                             edit_profile.setOnClickListener(new View.OnClickListener() {
@@ -126,11 +131,11 @@ public class Profile_main_page extends AppCompatActivity {
                             else user_country.setText(country + ", " + city);
                         }
 
-                        if (hidden_mail) user_mail.setText("Hidden");
-                        else if (!guest_user) user_mail.setText(current_user.getEmail());
+                        if (hidden_mail.equals(true)) user_mail.setText("Hidden");
+                        else if (!guest_user) user_mail.setText(mail);
 
-                        if(user_mail.getWidth() + profile_img.getWidth() > 480 ){
-                            user_mail.setText( current_user.getEmail().substring(0 , current_user.getEmail().indexOf('@') ) + '\n' + current_user.getEmail().substring(current_user.getEmail().indexOf('@')) );
+                        else if(user_mail.getWidth() + profile_img.getWidth() > 480 ){
+                            user_mail.setText( mail.substring(0 , mail.indexOf('@') ) + '\n' + mail.substring(mail.indexOf('@')) );
                         }
                     }
                 }
@@ -146,7 +151,7 @@ public class Profile_main_page extends AppCompatActivity {
         startActivity(i);
     }
 
-    public static FirebaseUser getCurrent_user() {
+    public static String getCurrent_user() {
         return current_user;
     }
 }

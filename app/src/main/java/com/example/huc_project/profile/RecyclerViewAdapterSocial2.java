@@ -123,7 +123,7 @@ public class RecyclerViewAdapterSocial2 extends RecyclerView.Adapter<RecyclerVie
     @SuppressLint("SetTextI18n")
     private void populateItemRows(final ItemViewHolder viewHolder, final int position) {
         db = FirebaseFirestore.getInstance();
-        final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+        final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         SocialRow item = itemsList.get(position);
@@ -145,7 +145,7 @@ public class RecyclerViewAdapterSocial2 extends RecyclerView.Adapter<RecyclerVie
                 if (checkBox.isChecked()) {
                     CollectionReference collection = db.collection("Social");
 
-                    collection.whereEqualTo("user", current_user.getUid())
+                    collection.whereEqualTo("user", current_user)
                             .whereEqualTo("followers", followers)
                             .whereEqualTo("identity", identity).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

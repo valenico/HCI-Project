@@ -30,7 +30,7 @@ import java.util.Random;
 
 public class AddNewSocialAccount extends AppCompatActivity {
     private FirebaseFirestore db;
-    final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+    final String current_user = Profile_main_page.getCurrent_user();
     //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
     private String[] Text = {"facebook", "instagram", "twitter", "youtube",
                             "github", "linkedin", "reddit", "snapchat",
@@ -52,7 +52,7 @@ public class AddNewSocialAccount extends AppCompatActivity {
                 if (social_selected != null) {
                     HashMap<String, String> social = new HashMap<>();
                     social.put("name", social_selected);
-                    social.put("user", current_user.getUid());
+                    social.put("user", current_user);
                     Random rand = new Random();
                     int n = rand.nextInt(100000);
                     int lm = rand.nextInt(40);

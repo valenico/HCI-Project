@@ -54,7 +54,7 @@ public class Profile_photo_frag extends Fragment {
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-    final FirebaseUser current_user = Profile_main_page.getCurrent_user();
+    final String current_user = Profile_main_page.getCurrent_user();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +77,7 @@ public class Profile_photo_frag extends Fragment {
         gridView = view.findViewById(R.id.gridView);
 
 
-        db.collection("UTENTI").document(current_user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("UTENTI").document(String.valueOf(current_user)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -141,7 +141,7 @@ public class Profile_photo_frag extends Fragment {
         final Uri file = imageUri;
         final StorageReference storageRef = storage.getReference();
         final String imgRef = file.getLastPathSegment();
-        final String user = current_user.getUid();
+        final String user = current_user;
 
         db.collection("UTENTI").document(user).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
