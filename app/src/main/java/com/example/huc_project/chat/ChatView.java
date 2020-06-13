@@ -22,6 +22,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -60,6 +63,7 @@ public class ChatView extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private RecyclerView recyclerView;
+    private ImageView img_view;
     private RVA rcv_adapter;
     private String document;
 
@@ -86,11 +90,9 @@ public class ChatView extends AppCompatActivity {
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         String name = document.get("Name").toString();
-                        TextView name_display = ((TextView)findViewById(R.id.name_on_chat));
-                        name_display.setText(name);
-                        name_display.setPaddingRelative(10,10, 60/name.length()  ,10);
                         StorageReference ref = storage.getReference().child("users/" + usr_uid);
-                        Glide.with(ChatView.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into((ImageView)findViewById(R.id.chat_avatar));
+                        Glide.with(ChatView.this).load(ref).into(img_view);
+                        getSupportActionBar().setTitle(name);
                     }
                 }
             }
@@ -126,11 +128,17 @@ public class ChatView extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         menu.clear();
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.chat_menu, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.search_icon);
+        MenuItem avatar_item = menu.findItem(R.id.avatar);
+        img_view = (ImageView) avatar_item.getActionView();
+        img_view.setLayoutParams(new ImageSwitcher.LayoutParams( ImageSwitcher.LayoutParams.WRAP_CONTENT , ImageSwitcher.LayoutParams.MATCH_PARENT ));
+        img_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        /*MenuItem searchItem = menu.findItem(R.id.chat_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -144,7 +152,7 @@ public class ChatView extends AppCompatActivity {
                 rcv_adapter.getFilter().filter(newText);
                 return false;
             }
-        });
+        });*/
 
         return true;
     }

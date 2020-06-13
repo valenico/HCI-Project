@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".chat.ChatView"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan"
+             />
         <activity
             android:name=".posts.postView"
             android:label="@string/title_activity_post_view"
