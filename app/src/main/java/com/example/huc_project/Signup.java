@@ -270,8 +270,8 @@ public class Signup extends AppCompatActivity {
             upd.put("City", city.getText().toString());
             editor.putString("city", city.getText().toString());
         }
-        if (phone.getText().toString().trim().length() > 0) {
-           upd.put("Phone", Integer.parseInt(phone.getText().toString()));
+        if (phone.getText() != null ) {
+            upd.put("Phone", String.valueOf(phone.getText()));
             editor.putString("phone", phone.getText().toString());
         }
         upd.put("Hidemail" , ((CheckBox) findViewById(R.id.hidemail)).isChecked() );
