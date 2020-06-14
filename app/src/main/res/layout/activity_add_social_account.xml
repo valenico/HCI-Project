@@ -8,22 +8,21 @@
     <com.jh.circularlist.CircularListView
         android:id="@+id/circle_socials"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="@dimen/_340sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintBottom_toTopOf="@+id/socialChoosen"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layout_constraintVertical_bias="0.183"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.183"/>
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/_30sdp"
         android:gravity="center_horizontal|center_vertical"
         android:text="Choose the Social Network"
-        android:textSize="24sp"
+        android:textSize="@dimen/_19sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,9 +30,9 @@
 
     <TextView
         android:id="@+id/socialChoosen"
-        android:layout_width="160dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="508dp"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_440sdp"
         android:gravity="center_horizontal|center_vertical"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +44,8 @@
         android:id="@+id/button_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Add account"
+        android:layout_marginBottom="@dimen/_1sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
