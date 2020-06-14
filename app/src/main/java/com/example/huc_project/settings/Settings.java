@@ -122,11 +122,6 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             }
         });
     }
-    // 0 = all closed               5 = first and second         10 = third and fourth          15 = first second third fourth
-    // 1 = first open               6 = first and third         11 = first second third
-    // 2 = second open              7 = first and fourth        12 = first second fourth
-    // 3 = third open               8 = second and third        13 = second third fourth
-    // 4 = fourth open              9 = second and fourth       14 = first third fourth
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

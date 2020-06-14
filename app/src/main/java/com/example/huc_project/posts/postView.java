@@ -1,6 +1,8 @@
 package com.example.huc_project.posts;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -18,10 +20,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.huc_project.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.HashMap;
 
 public class postView extends AppCompatActivity {
 
@@ -30,13 +37,15 @@ public class postView extends AppCompatActivity {
     TextView title_view;
     TextView desc_view;
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_view);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false));
 
@@ -45,12 +54,19 @@ public class postView extends AppCompatActivity {
         this.desc_view = findViewById(R.id.postDesc);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                HashMap<String,Object> data = new HashMap<>();
+                data.put("title",intent.getStringExtra("title"));
+                data.put("user", intent.getStringExtra("user"));
+                data.put("postdesc",intent.getStringExtra("desc") );
+                data.put("isPackage",intent.getBooleanExtra("isPackage", false));
+                data.put("storageref",intent.getStringExtra("storageref"));
+                db.collection("Favorites").document(mAuth.getUid()).collection("post").add(data);
+                Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " added to your favorites posts!", Toast.LENGTH_LONG).show();;
+                fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#a2282a")));
             }
         });
 
