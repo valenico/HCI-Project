@@ -1,82 +1,132 @@
 package com.example.huc_project.settings;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Filterable;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
 import com.example.huc_project.R;
-import com.example.huc_project.Signup;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
-import static android.widget.ArrayAdapter.*;
 
-public class Settings extends AppCompatActivity {
+public class Settings extends AppCompatActivity implements CustomAdapter.OnItemListener {
 
-    private final ArrayList<String> listItems = new ArrayList<>();
+    private final List<String> listItems = new ArrayList<>();
+    private RecyclerView recyclerView;
+    CustomAdapter adapter;
+    private int cases = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        ListView lw = findViewById(R.id.list_of_settings);
-
         listItems.add("Invite Friends");
         listItems.add("General");
         listItems.add("Privacy & Security");
         listItems.add("Help & About");
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(Settings.this, android.R.layout.simple_list_item_1, listItems);
-        adapter.setNotifyOnChange(true);
-        lw.setAdapter(adapter);
-
-        lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String che_cazzo_ho_premuto = ((TextView)view).getText().toString();
-
-                if(che_cazzo_ho_premuto.equals("Invite Friends") && listItems.contains("Invite Friends by Email")){
-                    listItems.remove("Invite Friends by Email");
-                    listItems.remove("Invite Friends by SMS");
-                    adapter.notifyDataSetChanged();
-                } else if(che_cazzo_ho_premuto.equals("Invite Friends") && !listItems.contains("Invite Friends by Email")){
-                    listItems.add(position+1,"Invite Friends by Email");
-                    listItems.add(position+2,"Invite Friends by SMS");
-                    adapter.notifyDataSetChanged();
-                } else if(che_cazzo_ho_premuto.equals("General") && listItems.contains("Others")){
-                    listItems.remove("Change Email");
-                    listItems.remove("Change Username");
-                    listItems.remove("Language");
-                    listItems.remove("Modify/Delete Post");
-                    listItems.remove("Others");
-                    adapter.notifyDataSetChanged();
-                } else if (che_cazzo_ho_premuto.equals("General") && !listItems.contains("Others")){
-                    listItems.add(position+1,"Change Email");
-                    listItems.add(position+2,"Change Username");
-                    listItems.add(position+3,"Language");
-                    listItems.add(position+4,"Modify/Delete Post");
-                    listItems.add(position+5,"Others");
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
+        setUpRecyclerView();
+        initScrollListener();
 
     }
 
+    private void setUpRecyclerView(){
+        recyclerView = findViewById(R.id.list_of_settings);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new CustomAdapter(listItems, this);
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
+        ArrayList<String> mylist = new ArrayList<>(listItems);
+        String clicked = listItems.get(position);
+
+        if(clicked.equals("General") && !mylist.contains("Change Email")){
+            listItems.add(position+1,"Change Email");
+            listItems.add(position+2,"Change Username");
+            listItems.add(position+3,"Language");
+            listItems.add(position+4,"Modify or Delete Post");
+            listItems.add(position+5,"Others");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("General")){
+            listItems.remove("Change Email");
+            listItems.remove("Change Username");
+            listItems.remove("Language");
+            listItems.remove("Modify or Delete Post");
+            listItems.remove("Others");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
+            listItems.add(position+1,"Report a Problem");
+            listItems.add(position+2,"Send a Feedback");
+            listItems.add(position+3,"Terms of Use");
+            listItems.add(position+4,"Data Policy");
+            listItems.add(position+5,"About the App");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Help & About")){
+            listItems.remove("Report a Problem");
+            listItems.remove("Send a Feedback");
+            listItems.remove("Terms of Use");
+            listItems.remove("Data Policy");
+            listItems.remove("About the App");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Privacy & Security") && !mylist.contains("Change Password")){
+            listItems.add(position+1,"Change Password");
+            listItems.add(position+2,"Account Privacy");
+            listItems.add(position+3,"Blocked Accounts");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Privacy & Security")) {
+            listItems.remove("Change Password");
+            listItems.remove("Account Privacy");
+            listItems.remove("Blocked Accounts");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Invite Friends") && !mylist.contains("Invite Friends by Email")){
+            listItems.add(position+1,"Invite Friends by Email");
+            listItems.add(position+2,"Invite Friends by SMS");
+            listItems.add(position+3,"Invite Friends by ...");
+            adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Invite Friends")){
+            listItems.remove("Invite Friends by Email");
+            listItems.remove("Invite Friends by SMS");
+            listItems.remove("Invite Friends by ...");
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void initScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            }
+        });
+    }
+    // 0 = all closed               5 = first and second         10 = third and fourth          15 = first second third fourth
+    // 1 = first open               6 = first and third         11 = first second third
+    // 2 = second open              7 = first and fourth        12 = first second fourth
+    // 3 = third open               8 = second and third        13 = second third fourth
+    // 4 = fourth open              9 = second and fourth       14 = first third fourth
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
