@@ -221,6 +221,7 @@ public class Signup extends AppCompatActivity {
                                 mUser = mAuth.getCurrentUser();
                                 HashMap<String, String> upd = new HashMap<>();
                                 upd.put("Name", username.getText().toString());
+                                upd.put("Email", mail_view.getText().toString());
                                 db.collection("UTENTI").document(mUser.getUid()).set(upd);
                                  setContentView(R.layout.activity_signup1);
 
@@ -539,7 +540,7 @@ public class Signup extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        final AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         final ProgressDialog progressDialog = new ProgressDialog(Signup.this);
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
@@ -558,6 +559,7 @@ public class Signup extends AppCompatActivity {
                             HashMap<String, Object> upd = new HashMap<>();
                             upd.put("Hidemail", false);
                             upd.put("Name", personName);
+                            upd.put("Email", account.getEmail() );
                             db.collection("UTENTI").document(user.getUid()).set(upd, SetOptions.merge());
 
                             Intent gi = new Intent(Signup.this , Homepage.class);
