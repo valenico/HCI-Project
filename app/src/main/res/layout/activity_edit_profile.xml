@@ -69,7 +69,7 @@
     <TextView
         android:id="@+id/mail"
         android:layout_width="@dimen/_190sdp"
-        android:layout_height="@dimen/_30sdp"
+        android:layout_height="@dimen/_44sdp"
         android:layout_marginStart="@dimen/_6sdp"
         android:layout_marginLeft="@dimen/_6sdp"
         android:layout_marginTop="@dimen/_255sdp"
@@ -94,7 +94,7 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
-        android:layout_marginTop="@dimen/_285sdp"
+        android:layout_marginTop="@dimen/_295sdp"
         android:background="@drawable/custom_border"
         android:ems="10"
         android:gravity="start"
