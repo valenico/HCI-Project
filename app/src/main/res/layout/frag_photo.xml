@@ -16,12 +16,12 @@
         app:layout_constraintBottom_toTopOf="@id/add_photo"
         android:layout_above="@id/add_photo"
 
-        android:columnWidth="90dp"
+        android:columnWidth="@dimen/_60sdp"
         android:gravity="center"
-        android:horizontalSpacing="10dp"
+        android:horizontalSpacing="@dimen/_6sdp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp"
+        android:verticalSpacing="@dimen/_2sdp"
         >
 
     </GridView>

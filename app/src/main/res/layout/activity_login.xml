@@ -134,11 +134,11 @@
 
     <ImageView
         android:id="@+id/password_show"
-        android:layout_width="@dimen/_33sdp"
-        android:layout_height="@dimen/_33sdp"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/_17sdp"
         android:layout_marginRight="@dimen/_18sdp"
-        android:layout_marginTop="@dimen/_298sdp"
+        android:layout_marginTop="@dimen/_290sdp"
         android:onClick="show_password_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
