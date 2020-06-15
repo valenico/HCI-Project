@@ -115,11 +115,11 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(item.equals("General") || item.equals("Help & About") || item.equals("Privacy & Security") || item.equals("Invite Friends")) {
             ((TextView)viewHolder.tvItem.getChildAt(0)).setTextSize(25);
             ((TextView)viewHolder.tvItem.getChildAt(0)).setTypeface( null, Typeface.BOLD);
-            ((TextView)viewHolder.tvItem.getChildAt(0)).setGravity(Gravity.CENTER_HORIZONTAL);
+            ((RelativeLayout)viewHolder.tvItem).setGravity(Gravity.CENTER);
             ((CardView)viewHolder.tvItem.getParent()).setCardBackgroundColor(0);
         } else {
             ((TextView)viewHolder.tvItem.getChildAt(0)).setTextSize(15);
-            ((TextView)viewHolder.tvItem.getChildAt(0)).setGravity(Gravity.START);
+            ((RelativeLayout)viewHolder.tvItem).setGravity(Gravity.CENTER_VERTICAL);
             ((TextView)viewHolder.tvItem.getChildAt(0)).setTypeface( null, Typeface.NORMAL);
             ((CardView)viewHolder.tvItem.getParent()).setCardBackgroundColor(Color.parseColor("#e6e6e6"));
         }
