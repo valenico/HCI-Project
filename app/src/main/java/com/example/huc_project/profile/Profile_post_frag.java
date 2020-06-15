@@ -37,10 +37,6 @@ import java.util.ArrayList;
 
 public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.OnItemListener {
 
-    public Profile_post_frag() {
-        // Required empty public constructor
-    }
-
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();

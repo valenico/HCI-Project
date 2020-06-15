@@ -76,8 +76,6 @@ public class Profile_main_page extends AppCompatActivity {
             }
         });
 
-
-
         final DocumentReference docRef = db.collection("UTENTI").document(current_user);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -103,8 +101,10 @@ public class Profile_main_page extends AppCompatActivity {
 
                         user_name.setText(name);
 
+                        ImageButton edit_profile = findViewById(R.id.edit_profile);
+                        ImageButton favorite = findViewById(R.id.favorites);
+
                         if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                            ImageButton edit_profile = findViewById(R.id.edit_profile);
                             edit_profile.setImageResource(R.drawable.ic_pencil);
                             edit_profile.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -113,9 +113,16 @@ public class Profile_main_page extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             });
+
+                            favorite.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(getApplicationContext(), Favorite.class);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                         else {
-                            ImageButton edit_profile = findViewById(R.id.edit_profile);
                             edit_profile.setImageResource(R.drawable.ic_star);
                             edit_profile.setOnClickListener(new View.OnClickListener() {
                                 @Override
