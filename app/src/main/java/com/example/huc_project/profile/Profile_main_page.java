@@ -114,6 +114,7 @@ public class Profile_main_page extends AppCompatActivity {
                                 }
                             });
 
+                            favorite.setVisibility(View.VISIBLE);
                             favorite.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

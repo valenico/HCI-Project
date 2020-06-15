@@ -76,7 +76,8 @@
         android:background="#00F3F3F3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_bookmark" />
+        app:srcCompat="@drawable/ic_bookmark"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/divider"

@@ -19,7 +19,8 @@
         app:srcCompat="@drawable/ic_plus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description"
-        android:layout_marginStart="@dimen/_60sdp" />
+        android:layout_marginStart="@dimen/_60sdp"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/remove_account"
@@ -31,7 +32,8 @@
         app:srcCompat="@drawable/ic_minus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description"
-        android:layout_marginRight="@dimen/_60sdp" />
+        android:layout_marginRight="@dimen/_60sdp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/description"
@@ -56,7 +58,8 @@
         android:textSize="@dimen/_11sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addSocial"
-        android:layout_marginStart="@dimen/_18sdp" />
+        android:layout_marginStart="@dimen/_18sdp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView9"
@@ -69,7 +72,8 @@
         android:text="Remove a social account"
         android:textSize="@dimen/_11sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/remove_account" />
+        app:layout_constraintTop_toBottomOf="@+id/remove_account"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ricicla"

@@ -13,4 +13,8 @@ public class UserRow {
         this.glide = glide;
         this.uid = uid;
     }
+
+    public String getUid() {
+        return String.valueOf(uid);
+    }
 }

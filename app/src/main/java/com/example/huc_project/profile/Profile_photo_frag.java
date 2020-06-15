@@ -61,15 +61,20 @@ public class Profile_photo_frag extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.frag_photo, container, false);
-        Button button = view.findViewById(R.id.add_photo);
-        l.add("/storage/emulated/0/WhatsApp/Media/WhatsApp Images/IMG-20200607-WA0004.jpg");
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
+        if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            Button button = view.findViewById(R.id.add_photo);
+            button.setVisibility(View.VISIBLE);
+            l.add("/storage/emulated/0/WhatsApp/Media/WhatsApp Images/IMG-20200607-WA0004.jpg");
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openGallery();
+                }
+            });
+        }
+
 
         db = FirebaseFirestore.getInstance();
 

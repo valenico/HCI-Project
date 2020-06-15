@@ -24,12 +24,14 @@ import java.util.List;
 public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    private RecyclerViewAdapter.OnItemListener onItemListener;
 
     public List<UserRow> itemsList;
     public List<UserRow> itemsListFull;
+    private OnItemListener onItemListener;
 
-    public RecyclerViewAdapterUser(List<UserRow> itemList, RecyclerViewAdapter.OnItemListener onItemListener) {
+    public RecyclerViewAdapterUser() {}
+
+    public RecyclerViewAdapterUser(List<UserRow> itemList, OnItemListener onItemListener) {
         this.itemsList = itemList;
         this.onItemListener = onItemListener;
         itemsListFull = new ArrayList<>(itemList);
@@ -40,7 +42,7 @@ public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerView.V
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_row_user, parent, false);
-            return new ItemViewHolder(view);
+            return new ItemViewHolder(view, onItemListener);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_loading, parent, false);
             return new LoadingViewHolder(view);
@@ -71,14 +73,22 @@ public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerView.V
         return null;
     }
 
-
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         RelativeLayout tvItem;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        OnItemListener onItemListener;
+
+        public ItemViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
             tvItem = itemView.findViewById(R.id.relative_user);
+            this.onItemListener = onItemListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClickUser(getAdapterPosition());
         }
     }
 
@@ -90,6 +100,10 @@ public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
             progressBar = itemView.findViewById(R.id.itemRow_progressBar);
         }
+    }
+
+    public interface OnItemListener{
+        void onItemClickUser(int position);
     }
 
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
@@ -104,7 +118,7 @@ public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerView.V
         StorageReference uid = item.uid;
         TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(1);
         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
-        tv1.setText(name);
+        tv1.setText(name.substring(0 , name.indexOf(' ') ) + '\n' + name.substring(name.indexOf(' ') + 1));
         Favorite.glideTask(item.glide, uid, view);
     }
 }
