@@ -1,6 +1,5 @@
 package com.example.huc_project.homepage;
 
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,8 +124,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
         tv1.setText(title);
-        if(desc.length()>30){
-            String long_desc = desc.substring(0, Math.min(desc.length(), 30)) + " ... ";
+        if(desc.length()>70){
+            String long_desc = desc.substring(0, Math.min(desc.length(), 70)) + " ... ";
             tv2.setText(long_desc);
         } else {
             tv2.setText(desc);

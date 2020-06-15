@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="2dp"
+    app:cardElevation="@dimen/_2sdp"
     app:cardUseCompatPadding="true"
     android:id="@+id/cardItem">
 
@@ -12,22 +12,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="@dimen/_6sdp"
         android:id="@+id/relative">
 
         <ImageView
+            android:id="@+id/post_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/post_image"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="16dp"
-            android:maxHeight="70dp"
-            android:maxWidth="100dp"
+            android:layout_marginRight="@dimen/_12sdp"
+            android:maxHeight="@dimen/_60sdp"
+            android:maxWidth="@dimen/_60sdp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:layout_centerInParent="true"
-            />
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,7 +36,8 @@
             android:id="@+id/tvItem"
             android:layout_toRightOf="@+id/post_image"
             android:layout_alignParentTop="true"
-            android:textSize="30sp"/>
+            android:textSize="@dimen/_15sdp"
+            android:layout_toEndOf="@+id/post_image" />
 
 
         <TextView
@@ -43,7 +45,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/desc_preview"
             android:layout_toRightOf="@+id/post_image"
-            android:layout_below="@+id/tvItem"/>
+            android:layout_below="@+id/tvItem"
+            android:textSize="@dimen/_11sdp"
+            android:layout_toEndOf="@+id/post_image" />
 
     </RelativeLayout>
 

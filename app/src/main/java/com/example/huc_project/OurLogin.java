@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -240,12 +241,20 @@ public class OurLogin extends AppCompatActivity  {
     }
 
     public void show_password_login(View v){
+        ImageView eye = (ImageView)findViewById(R.id.password_show);
         if(see_password){
             ((EditText)findViewById(R.id.password)).setTransformationMethod(null);
-            ((ImageView)findViewById(R.id.password_show)).setImageResource(R.drawable.show);
+            eye.setImageResource(R.drawable.show);
+            int size = getResources().getDimensionPixelSize(R.dimen._23sdp);
+            eye.getLayoutParams().height = size;
+            eye.getLayoutParams().width = size;
         } else {
             ((EditText)findViewById(R.id.password)).setTransformationMethod(new PasswordTransformationMethod());
-            ((ImageView)findViewById(R.id.password_show)).setImageResource(R.drawable.noshow);
+            eye.setImageResource(R.drawable.noshow);
+
+            int size = getResources().getDimensionPixelSize(R.dimen._30sdp);
+            eye.getLayoutParams().height = size;
+            eye.getLayoutParams().width = size;
         }
         see_password = !see_password;
     }

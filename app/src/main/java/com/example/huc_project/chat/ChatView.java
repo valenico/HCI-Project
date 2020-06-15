@@ -138,22 +138,14 @@ public class ChatView extends AppCompatActivity {
         img_view = (ImageView) avatar_item.getActionView();
         img_view.setLayoutParams(new ImageSwitcher.LayoutParams( ImageSwitcher.LayoutParams.WRAP_CONTENT , ImageSwitcher.LayoutParams.MATCH_PARENT ));
         img_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        /*MenuItem searchItem = menu.findItem(R.id.chat_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        img_view.setOnClickListener(new ImageView.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public void onClick(View v) {
+                Intent go_profile = new Intent(ChatView.this, Profile_main_page.class);
+                go_profile.putExtra("user",usr_uid);
+                startActivity(go_profile);
             }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                rcv_adapter.getFilter().filter(newText);
-                return false;
-            }
-        });*/
+        });
 
         return true;
     }

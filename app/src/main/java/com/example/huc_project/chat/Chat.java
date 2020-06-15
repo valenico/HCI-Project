@@ -47,9 +47,7 @@ import java.util.List;
 public class Chat extends AppCompatActivity implements com.example.huc_project.chat.RecyclerViewAdapter.OnItemListener {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
-    private SharedPreferences pref;
     private FirebaseFirestore db;
-    private SharedPreferences.Editor editor;
     private FirebaseUser usr = mAuth.getCurrentUser();
     private RecyclerView recyclerView;
     ArrayList<ChatMessage> rowsChatList = new ArrayList<>();
@@ -60,9 +58,6 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
-        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        editor = pref.edit();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +73,6 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
 
     private void setUp(){
         db = FirebaseFirestore.getInstance();
-        //CollectionReference mess = db.collection("Chats");
         CollectionReference mess = db.collection("Chat");
         mess.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -103,7 +97,6 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
                             setUpRecyclerView();
                             setUpCircularMenu();
                             initScrollListener();
-
                         } else {
                             Log.w("Tag", "Error getting documents.", task.getException());
                         }
@@ -134,7 +127,6 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
             }
         });
@@ -148,8 +140,6 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
 
         MenuItem searchItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) searchItem.getActionView();
-
-        MenuItem addItem = menu.findItem(R.id.add_icon);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

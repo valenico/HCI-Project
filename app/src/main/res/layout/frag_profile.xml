@@ -4,41 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
     android:background="#00D8D8D8"
-    tools:context=".Profile_prof_frag">
+    tools:context="profile.Profile_prof_frag">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageButton
         android:id="@+id/addSocial"
-        android:layout_width="46dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="@dimen/_38sdp"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_marginLeft="@dimen/_60sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:background="#00FFFFFF"
         app:srcCompat="@drawable/ic_plus"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        android:layout_marginStart="@dimen/_60sdp" />
 
     <ImageButton
         android:id="@+id/remove_account"
-        android:layout_width="46dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginRight="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="@dimen/_38sdp"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_marginEnd="@dimen/_60sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:background="#00FFFFFF"
         app:srcCompat="@drawable/ic_minus"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        android:layout_marginRight="@dimen/_60sdp" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="@dimen/_18sdp"
         android:background="@drawable/custom_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -47,27 +46,28 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="169dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_6sdp"
         android:background="#00FFFFFF"
         android:gravity="left|center_vertical"
         android:text="Add a new social account"
-        android:textSize="14sp"
+        android:textSize="@dimen/_11sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addSocial" />
+        app:layout_constraintTop_toBottomOf="@+id/addSocial"
+        android:layout_marginStart="@dimen/_18sdp" />
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="169dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_18sdp"
+        android:layout_marginRight="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_6sdp"
         android:gravity="right|center_vertical"
         android:text="Remove a social account"
+        android:textSize="@dimen/_11sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/remove_account" />
 
@@ -75,8 +75,8 @@
         android:id="@+id/ricicla"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="60sp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
         android:isScrollContainer="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
