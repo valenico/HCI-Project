@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.Homepage;
+import com.example.huc_project.posts.postView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -27,9 +30,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import org.w3c.dom.Document;
+
+import java.util.HashMap;
 
 public class Profile_main_page extends AppCompatActivity {
 
@@ -129,6 +137,19 @@ public class Profile_main_page extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     final String c_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    final HashMap<String,Object> data = new HashMap<>();
+                                    db.collection("UTENTI").document(current_user).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if(task.isSuccessful()) {
+                                                data.put("Name",  task.getResult().get("Name") );
+                                                data.put("id", current_user);
+                                                db.collection("Favorites").document(c_user).collection("user").add(data);
+                                                Toast.makeText(Profile_main_page.this, "User added to favorites." ,Toast.LENGTH_SHORT ).show();
+                                            }
+                                        }
+                                    });
+
 
                                 }
                             });
