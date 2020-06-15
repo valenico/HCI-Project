@@ -7,15 +7,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.example.huc_project.R;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import com.example.huc_project.OurLogin;
+import com.example.huc_project.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -23,8 +39,9 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
 
     private final List<String> listItems = new ArrayList<>();
     private RecyclerView recyclerView;
-    CustomAdapter adapter;
-    private int cases = 0;
+    private CustomAdapter adapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +122,79 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             listItems.remove("Invite Friends by SMS");
             listItems.remove("Invite Friends by ...");
             adapter.notifyDataSetChanged();
+        } else if(clicked.equals("Invite Friends by Email")){
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "DOWNLOAD SPONSOR APP");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Download Sponsor App from here! I'm already there!");
+            startActivity(Intent.createChooser(emailIntent, "Send email..."));
+        } else if(clicked.equals("Invite Friends by SMS")){
+            Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+            sendIntent.setData(Uri.parse("sms:"));
+            sendIntent.putExtra("sms_body", "Download Sponsor App from here! I'm already there!" );
+            startActivity(sendIntent);
+        } else if(clicked.equals("Report a Problem")){
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { "progettohumanci@gmail.com" });
+            intent.putExtra(Intent.EXTRA_SUBJECT, "REPORT A BUG");
+            startActivity(Intent.createChooser(intent, "Email via..."));
+        } else if(clicked.equals("Change Username")){
+            final Context c = Settings.this;
+            final EditText taskEditText = new EditText(c);
+            AlertDialog dialog = new AlertDialog.Builder(c)
+                    .setTitle("Change Username")
+                    .setView(taskEditText)
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            HashMap<String,String> data = new HashMap<>();
+                            data.put("Name",taskEditText.getText().toString());
+                            db.collection("UTENTI").document(mAuth.getUid()).set(data, SetOptions.merge())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(c, "Username successfully changed to " + taskEditText.getText().toString() , Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(c, "Error: our server is not answering correctly to this update.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .create();
+            dialog.show();
+        } else if(clicked.equals("Change Email")){
+            final Context c = Settings.this;
+            final EditText taskEditText = new EditText(c);
+            AlertDialog dialog = new AlertDialog.Builder(c)
+                    .setTitle("Change Email")
+                    .setView(taskEditText)
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            HashMap<String,String> data = new HashMap<>();
+                            data.put("Email",taskEditText.getText().toString());
+                            db.collection("UTENTI").document(mAuth.getUid()).set(data, SetOptions.merge());
+                            mAuth.getCurrentUser().updateEmail(taskEditText.getText().toString())
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(Settings.this, "Email changed successfully." , Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(Settings.this, "Error: our servers are not able to change your email now." , Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .create();
+            dialog.show();
         }
     }
 
