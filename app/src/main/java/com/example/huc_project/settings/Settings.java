@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -193,6 +194,18 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
                     .setNegativeButton("Cancel", null)
                     .create();
             dialog.show();
+        } else if(clicked.equals("Change Password")){
+            FirebaseAuth.getInstance().sendPasswordResetEmail(mAuth.getCurrentUser().getEmail())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Settings.this, "An email to change your password has been sent to your email.", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(Settings.this, "Error: our servers are busy and cannot handle your request now.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
         }
     }
 
