@@ -3,6 +3,7 @@ package com.example.huc_project.posts;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -14,7 +15,9 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.util.Log;
 import android.view.View;
@@ -65,8 +68,11 @@ public class postView extends AppCompatActivity {
                 data.put("isPackage",intent.getBooleanExtra("isPackage", false));
                 data.put("storageref",intent.getStringExtra("storageref"));
                 db.collection("Favorites").document(mAuth.getUid()).collection("post").add(data);
-                Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " added to your favorites posts!", Toast.LENGTH_LONG).show();;
-                fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#a2282a")));
+                Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " added to your favorites posts!", Toast.LENGTH_LONG).show();
+                Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_baseline_favorite_24);
+                Drawable wrappedDrawable = DrawableCompat.wrap(like);
+                DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                fab.setImageDrawable(wrappedDrawable);
             }
         });
 
