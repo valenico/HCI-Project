@@ -135,24 +135,28 @@
         android:id="@+id/show_password"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
-        android:layout_marginEnd="@dimen/_38sdp"
-        android:layout_marginRight="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_220sdp"
+        android:layout_marginStart="@dimen/_200sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginLeft="@dimen/_200sdp"
         android:onClick="show_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_signup"
+        app:layout_constraintLeft_toRightOf="@id/password_signup"
         app:srcCompat="@drawable/noshow" />
 
     <ImageView
         android:id="@+id/show_cpassword"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
-        android:layout_marginEnd="@dimen/_38sdp"
-        android:layout_marginRight="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_275sdp"
+        android:layout_marginStart="@dimen/_200sdp"
+        android:layout_marginTop="@dimen/_75sdp"
+        android:layout_marginLeft="@dimen/_200sdp"
         android:onClick="show_cpassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_signup"
+        app:layout_constraintLeft_toRightOf="@id/confirm_password"
         app:srcCompat="@drawable/noshow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

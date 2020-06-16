@@ -123,7 +123,6 @@ public class Signup extends AppCompatActivity {
         if (pref.contains("username")) {
             username_view.setText(pref.getString("username", ""));
             mail_view.setText(pref.getString("mail", ""));
-            mAuth.getCurrentUser().delete();
         }
 
         mail_view.addTextChangedListener(new InputValidator(mail_view , this.getResources()));
@@ -599,23 +598,39 @@ public class Signup extends AppCompatActivity {
     }
 
     public void show_password(View v){
+        ImageView eye = (ImageView)findViewById(R.id.show_password);
         if(see_password){
             ((EditText)findViewById(R.id.password_signup)).setTransformationMethod(null);
-            ((ImageView)findViewById(R.id.show_password)).setImageResource(R.drawable.show);
+            eye.setImageResource(R.drawable.show);
+            int size = getResources().getDimensionPixelSize(R.dimen._23sdp);
+            eye.getLayoutParams().height = size;
+            eye.getLayoutParams().width = size;
         } else {
             ((EditText)findViewById(R.id.password_signup)).setTransformationMethod(new PasswordTransformationMethod());
-            ((ImageView)findViewById(R.id.show_password)).setImageResource(R.drawable.noshow);
+            eye.setImageResource(R.drawable.noshow);
+
+            int size = getResources().getDimensionPixelSize(R.dimen._30sdp);
+            eye.getLayoutParams().height = size;
+            eye.getLayoutParams().width = size;
         }
         see_password = !see_password;
     }
 
     public void show_cpassword(View v){
+        ImageView eye = (ImageView)findViewById(R.id.show_cpassword);
         if(see_cpassword){
             ((EditText)findViewById(R.id.confirm_password)).setTransformationMethod(null);
-            ((ImageView)findViewById(R.id.show_cpassword)).setImageResource(R.drawable.show);
+            eye.setImageResource(R.drawable.show);
+            int size = getResources().getDimensionPixelSize(R.dimen._23sdp);
+            eye.getLayoutParams().height = size;
+            eye.getLayoutParams().width = size;
         } else {
             ((EditText)findViewById(R.id.confirm_password)).setTransformationMethod(new PasswordTransformationMethod());
-            ((ImageView)findViewById(R.id.show_cpassword)).setImageResource(R.drawable.noshow);
+            eye.setImageResource(R.drawable.noshow);
+
+            int size = getResources().getDimensionPixelSize(R.dimen._30sdp);
+            eye.getLayoutParams().height = size;
+            eye.getLayoutParams().width = size;
         }
         see_cpassword = !see_cpassword;
     }
