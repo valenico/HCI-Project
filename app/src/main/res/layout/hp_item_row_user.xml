@@ -54,7 +54,8 @@
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:background="#00FFFFFF"
-            app:srcCompat="@drawable/ic_star_add" />
+            android:tint="#BD0000"
+            app:srcCompat="@drawable/ic_heart" />
 
     </RelativeLayout>
 

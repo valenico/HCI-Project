@@ -28,6 +28,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -37,6 +40,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Profile_main_page extends AppCompatActivity {
@@ -44,6 +48,7 @@ public class Profile_main_page extends AppCompatActivity {
     private static String current_user;
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     TabLayout tabLayout;
 
@@ -100,7 +105,7 @@ public class Profile_main_page extends AppCompatActivity {
                         Boolean hidden_mail = (Boolean) document.get("Hidemail");
                         Boolean slowLoad = (Boolean) document.get("SlowLoad");
                         TextView user_name = findViewById(R.id.user_name);
-                        TextView user_country = findViewById(R.id.user_country);
+                        final TextView user_country = findViewById(R.id.user_country);
                         TextView user_mail = findViewById(R.id.user_mail);
                         ImageView profile_img = findViewById(R.id.profile_image);
 
@@ -109,7 +114,7 @@ public class Profile_main_page extends AppCompatActivity {
 
                         user_name.setText(name);
 
-                        ImageButton edit_profile = findViewById(R.id.edit_profile);
+                        final ImageButton edit_profile = findViewById(R.id.edit_profile);
                         ImageButton favorite = findViewById(R.id.favorites);
 
                         if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
@@ -132,24 +137,93 @@ public class Profile_main_page extends AppCompatActivity {
                             });
                         }
                         else {
-                            edit_profile.setImageResource(R.drawable.ic_star);
+                            Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_heart);
+                            final Drawable wrappedDrawable = DrawableCompat.wrap(like);
+
+                            final ArrayList<String> fav_user = new ArrayList<>();
+                            db.collection("Favorites").document(mAuth.getCurrentUser().getUid()).collection("user")
+                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            fav_user.add((String) document.get("id"));
+                                        }
+                                    } else {
+                                        Log.w("lola", "Error getting documents.", task.getException());
+                                    }
+                                    for (int i=0; i<fav_user.size(); i++) {
+                                        if (current_user.equals(fav_user.get(i))) {
+                                            DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                                            edit_profile.setImageDrawable(wrappedDrawable);
+                                            break;
+                                        }
+                                        else {
+                                            DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86));
+                                            edit_profile.setImageDrawable(wrappedDrawable);
+
+                                        }
+                                    }
+                                }
+                            });
+
+
                             edit_profile.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    final String c_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                    final HashMap<String,Object> data = new HashMap<>();
-                                    db.collection("UTENTI").document(current_user).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if(task.isSuccessful()) {
-                                                data.put("Name",  task.getResult().get("Name") );
-                                                data.put("id", current_user);
-                                                db.collection("Favorites").document(c_user).collection("user").add(data);
-                                                Toast.makeText(Profile_main_page.this, "User added to favorites." ,Toast.LENGTH_SHORT ).show();
-                                            }
-                                        }
-                                    });
 
+                                    Boolean add_fav = true;
+                                    for (int i=0; i<fav_user.size(); i++) {
+                                        if (current_user.equals(fav_user.get(i))) {
+                                            add_fav = false;
+                                            break;
+                                        }
+                                        else {
+                                            add_fav = true;
+                                        }
+                                    }
+                                    if (add_fav) {
+                                        final String c_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                        final HashMap<String,Object> data = new HashMap<>();
+                                        db.collection("UTENTI").document(current_user).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if(task.isSuccessful()) {
+                                                    data.put("Name",  task.getResult().get("Name") );
+                                                    data.put("id", current_user);
+                                                    db.collection("Favorites").document(c_user).collection("user").add(data);
+                                                    fav_user.add(current_user);
+                                                    HashMap<String, ArrayList<String>> user_favorites = new HashMap<>();
+                                                    user_favorites.put("Fav_user", fav_user);
+                                                    db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(user_favorites, SetOptions.merge());
+                                                    Toast.makeText(Profile_main_page.this, "User added to favorites." ,Toast.LENGTH_SHORT ).show();
+                                                    DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        fav_user.remove(current_user);
+                                        HashMap<String, ArrayList<String>> user_favorites = new HashMap<>();
+                                        user_favorites.put("Fav_user", fav_user);
+                                        db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(user_favorites, SetOptions.merge());
+                                        Toast.makeText(Profile_main_page.this, "User removed from favorites." ,Toast.LENGTH_SHORT ).show();
+                                        DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86));
+                                        db.collection("Favorites").document(mAuth.getCurrentUser().getUid()).collection("user")
+                                                .whereEqualTo("id", current_user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        document.getReference().delete();
+                                                    }
+                                                } else {
+                                                    Log.w("lola", "Error getting documents.", task.getException());
+                                                }
+                                            }
+                                        });
+                                    }
+                                    edit_profile.setImageDrawable(wrappedDrawable);
 
                                 }
                             });
