@@ -13,11 +13,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Scroller;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.huc_project.R;
@@ -74,51 +77,47 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         String clicked = listItems.get(position);
 
         if(clicked.equals("General") && !mylist.contains("Change Email")){
-            listItems.add(position+1,"Change Email");
-            listItems.add(position+2,"Change Username");
-            listItems.add(position+3,"Language");
-            listItems.add(position+4,"Modify or Delete Post");
-            listItems.add(position+5,"Others");
+            listItems.add(position+1,"Change Email"); // done
+            listItems.add(position+2,"Language");
+            listItems.add(position+3,"Others");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("General")){
-            listItems.remove("Change Email");
-            listItems.remove("Change Username");
+            listItems.remove("Change Email"); // done
             listItems.remove("Language");
-            listItems.remove("Modify or Delete Post");
             listItems.remove("Others");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
-            listItems.add(position+1,"Report a Problem");
-            listItems.add(position+2,"Send a Feedback");
-            listItems.add(position+3,"Terms of Use");
+            listItems.add(position+1,"Report a Problem"); // done
+            listItems.add(position+2,"Send a Feedback"); // done
+            listItems.add(position+3,"Terms of Use"); // done
             listItems.add(position+4,"Data Policy");
             listItems.add(position+5,"About the App");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About")){
-            listItems.remove("Report a Problem");
-            listItems.remove("Send a Feedback");
-            listItems.remove("Terms of Use");
+            listItems.remove("Report a Problem"); // done
+            listItems.remove("Send a Feedback"); // done
+            listItems.remove("Terms of Use");  // done
             listItems.remove("Data Policy");
             listItems.remove("About the App");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Privacy & Security") && !mylist.contains("Change Password")){
-            listItems.add(position+1,"Change Password");
+            listItems.add(position+1,"Change Password"); // done
             listItems.add(position+2,"Account Privacy");
             listItems.add(position+3,"Blocked Accounts");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Privacy & Security")) {
-            listItems.remove("Change Password");
+            listItems.remove("Change Password"); // done
             listItems.remove("Account Privacy");
             listItems.remove("Blocked Accounts");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Invite Friends") && !mylist.contains("Invite Friends by Email")){
-            listItems.add(position+1,"Invite Friends by Email");
-            listItems.add(position+2,"Invite Friends by SMS");
+            listItems.add(position+1,"Invite Friends by Email"); // done
+            listItems.add(position+2,"Invite Friends by SMS"); // done
             listItems.add(position+3,"Invite Friends by ...");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Invite Friends")){
-            listItems.remove("Invite Friends by Email");
-            listItems.remove("Invite Friends by SMS");
+            listItems.remove("Invite Friends by Email"); // done
+            listItems.remove("Invite Friends by SMS"); // done
             listItems.remove("Invite Friends by ...");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Invite Friends by Email")){
@@ -138,35 +137,7 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { "progettohumanci@gmail.com" });
             intent.putExtra(Intent.EXTRA_SUBJECT, "REPORT A BUG");
             startActivity(Intent.createChooser(intent, "Email via..."));
-        } else if(clicked.equals("Change Username")){
-            final Context c = Settings.this;
-            final EditText taskEditText = new EditText(c);
-            AlertDialog dialog = new AlertDialog.Builder(c)
-                    .setTitle("Change Username")
-                    .setView(taskEditText)
-                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            HashMap<String,String> data = new HashMap<>();
-                            data.put("Name",taskEditText.getText().toString());
-                            db.collection("UTENTI").document(mAuth.getUid()).set(data, SetOptions.merge())
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText(c, "Username successfully changed to " + taskEditText.getText().toString() , Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(c, "Error: our server is not answering correctly to this update.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .create();
-            dialog.show();
-        } else if(clicked.equals("Change Email")){
+        }  else if(clicked.equals("Change Email")){
             final Context c = Settings.this;
             final EditText taskEditText = new EditText(c);
             AlertDialog dialog = new AlertDialog.Builder(c)
@@ -206,6 +177,25 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
                             }
                         }
                     });
+        } else if(clicked.equals("Send a Feedback")){
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://")));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/")));
+            }
+        } else if(clicked.equals("Terms of Use")){
+            final Context c = Settings.this;
+            final TextView taskEditText = new TextView(c);
+            taskEditText.setText(R.string.termsofuse);
+            taskEditText.setScroller(new Scroller(this));
+            taskEditText.setVerticalScrollBarEnabled(true);
+            taskEditText.setMovementMethod(new ScrollingMovementMethod());
+            AlertDialog dialog = new AlertDialog.Builder(c)
+                    .setTitle("Change Email")
+                    .setView(taskEditText)
+                    .setPositiveButton("Ok", null)
+                    .create();
+            dialog.show();
         }
     }
 
