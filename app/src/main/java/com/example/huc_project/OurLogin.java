@@ -33,6 +33,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +49,8 @@ public class OurLogin extends AppCompatActivity  {
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 101;
     private boolean see_password = true;
+    private GoogleSignInAccount account;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SharedPreferences pref;
@@ -196,7 +202,7 @@ public class OurLogin extends AppCompatActivity  {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account.getIdToken());
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -220,6 +226,12 @@ public class OurLogin extends AppCompatActivity  {
                             Log.d("TAG", "signInWithCredential:success");
                             editor.putBoolean("logged",true);
                             editor.commit();
+                            String personName = account.getDisplayName();
+                            HashMap<String, Object> upd = new HashMap<>();
+                            upd.put("Hidemail", false);
+                            upd.put("Name", personName);
+                            upd.put("Email", account.getEmail() );
+                            db.collection("UTENTI").document(mAuth.getUid()).set(upd, SetOptions.merge());
                             Intent gi = new Intent(OurLogin.this , Homepage.class);
                             startActivity(gi);
 
