@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -23,6 +24,7 @@ import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,11 +46,16 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
     private CustomAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        editor = pref.edit();
 
         listItems.add("Invite Friends");
         listItems.add("General");
@@ -79,11 +86,13 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         if(clicked.equals("General") && !mylist.contains("Change Email")){
             listItems.add(position+1,"Change Email"); // done
             listItems.add(position+2,"Language");
-            listItems.add(position+3,"Others");
+            listItems.add(position+3,"Log Out");
+            listItems.add(position+4,"Others");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("General")){
             listItems.remove("Change Email"); // done
             listItems.remove("Language");
+            listItems.remove("Log Out");
             listItems.remove("Others");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
@@ -196,6 +205,12 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
                     .setPositiveButton("Ok", null)
                     .create();
             dialog.show();
+        } else if(clicked.equals("Log Out")){
+            mAuth.signOut();
+            editor.clear();
+            editor.commit();
+            Intent to_start = new Intent(getApplicationContext() , OurLogin.class);
+            startActivity(to_start);
         }
     }
 

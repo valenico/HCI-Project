@@ -202,10 +202,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         MenuItem searchItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
-        MenuItem addItem = menu.findItem(R.id.add_icon);
-        Button addView = (Button) addItem.getActionView();
-
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -219,18 +215,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             }
         });
 
-        addView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), DataGettingActivity.class);
-                //startActivity(intent);
-                mAuth.signOut();
-                editor.clear();
-                editor.commit();
-                Intent to_start = new Intent(getApplicationContext() , OurLogin.class);
-                startActivity(to_start);
-            }
-        });
         return true;
     }
 
