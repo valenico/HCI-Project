@@ -224,6 +224,8 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                intent.putExtra("user", current_user);
                 startActivity(intent);
             }
         });
