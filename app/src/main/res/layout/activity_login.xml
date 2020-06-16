@@ -17,26 +17,25 @@
         android:id="@+id/newhere"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/_11sdp"
         android:text="New here?"
         android:layout_marginRight="@dimen/_90sdp"
         android:layout_marginBottom="@dimen/_6sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/signup"
+        app:layout_constraintRight_toLeftOf="@id/signup"
     />
     <TextView
         android:id="@+id/signup"
+        android:textSize="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:layout_marginLeft="@dimen/_6sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_6sdp"
-        app:layout_constraintRight_toRightOf="@id/newhere"
         android:text="@string/create_an_account"
-        android:layout_marginLeft="@dimen/_60sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="@dimen/_60sdp" />
+        app:layout_constraintLeft_toRightOf="@id/newhere" />
     <Button
         android:id="@+id/google_login"
         android:layout_width="@dimen/_170sdp"
