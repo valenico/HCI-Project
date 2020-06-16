@@ -69,6 +69,10 @@ public class postView extends AppCompatActivity {
         this.title_view = findViewById(R.id.postTitle);
         this.desc_view = findViewById(R.id.postDesc);
 
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_baseline_favorite_24);
+        final Drawable wrappedDrawable = DrawableCompat.wrap(like);
+
         final ArrayList<String> fav_post = new ArrayList<>();
         db.collection("UTENTI").document(mAuth.getCurrentUser().getUid())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -83,19 +87,16 @@ public class postView extends AppCompatActivity {
                 } else {
                     Log.w("lola", "Error getting documents.", task.getException());
                 }
+                for (int i=0; i<fav_post.size(); i++) {
+                    if (intent.getStringExtra("storageref").equals(fav_post.get(i))) {
+                        DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                        fab.setImageDrawable(wrappedDrawable);
+                        break;
+                    }
+                }
             }
         });
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_baseline_favorite_24);
-        final Drawable wrappedDrawable = DrawableCompat.wrap(like);
-        for (int i=0; i<fav_post.size(); i++) {
-            if (intent.getStringExtra("storageref").equals(fav_post.get(i))) {
-                DrawableCompat.setTint(wrappedDrawable, Color.RED); // TODO cercare di farlo diventare rosso se già esistente nei preferiti
-                fab.setImageDrawable(wrappedDrawable);
-                break;
-            }
-        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,7 +131,7 @@ public class postView extends AppCompatActivity {
                     HashMap<String, ArrayList<String>> post_favorites = new HashMap<>();
                     post_favorites.put("Fav_post", fav_post);
                     db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(post_favorites, SetOptions.merge());
-                    DrawableCompat.setTint(wrappedDrawable, Color.GREEN); //TODO Cercare di rimettere il colore originale
+                    DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86)); 
                     Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " removed from your favorites posts!", Toast.LENGTH_LONG).show();
                     db.collection("Favorites").document(mAuth.getCurrentUser().getUid()).collection("post")
                             .whereEqualTo("storageref", intent.getStringExtra("storageref")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -42,10 +42,13 @@
 
     <Button
         android:id="@+id/button_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Add account"
-        android:layout_marginBottom="@dimen/_1sdp"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

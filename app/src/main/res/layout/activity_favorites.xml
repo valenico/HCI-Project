@@ -28,10 +28,14 @@
 
     <Button
         android:id="@+id/save_and_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="Go back to my profile"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintEnd_toStartOf="@+id/rev_post"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toEndOf="@+id/rev_post"

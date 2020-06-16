@@ -7,25 +7,35 @@
 
     <Button
         android:id="@+id/done_button"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_36sdp"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_35sdp"
         android:layout_marginBottom="@dimen/_12sdp"
+        android:background="@drawable/custom_button"
         android:text="Save and Close"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/reset_button"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_36sdp"
-        android:layout_marginBottom="@dimen/_47sdp"
-        android:text="Reset Changes"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reset_button" />
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginBottom="@dimen/_47sdp"
+        android:background="@drawable/custom_button"
+        android:text="Reset Changes"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <EditText
         android:id="@+id/name"
@@ -120,13 +130,13 @@
         android:id="@+id/profImage"
         android:layout_width="@dimen/_160sdp"
         android:layout_height="@dimen/_160sdp"
-        app:srcCompat="@drawable/add_img"
-        android:layout_marginTop="@dimen/_1sdp"
         android:layout_marginLeft="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_1sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_img" />
 
     <ImageButton
         android:id="@+id/editImageButton"
