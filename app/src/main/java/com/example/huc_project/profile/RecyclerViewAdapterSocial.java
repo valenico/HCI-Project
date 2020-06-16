@@ -123,6 +123,47 @@ public class RecyclerViewAdapterSocial extends RecyclerView.Adapter<RecyclerView
         tv2.setText(followers + " followers");
         tv3.setText("last month: " + lm + "%");
         tv4.setText("last week: " + lw + "%");
-        Profile_prof_frag.glideTask(item.glide, Integer.parseInt(identity), view);
+        switch (name) {
+            case "instagram":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_instagram, view);
+                break;
+            case "facebook":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_facebook, view);
+                break;
+            case "spotify":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_spotify, view);
+                break;
+            case "snapchat":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_snapchat, view);
+                break;
+            case "github":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_github, view);
+                break;
+            case "linkedin":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_linkedin, view);
+                break;
+            case "tumblr":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_tumblr, view);
+                break;
+            case "twitch":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_twitch, view);
+                break;
+            case "twitter":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_twitter, view);
+                break;
+            case "vimeo":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_vimeo, view);
+                break;
+            case "youtube":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_youtube, view);
+                break;
+            case "reddit":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_reddit, view);
+                break;
+            default:
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_vk, view);
+                break;
+        }
+
     }
 }
