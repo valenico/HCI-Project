@@ -17,8 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.huc_project.dialog.GuestModeDialog;
 import com.example.huc_project.homepage.Homepage;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -34,6 +36,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 public class OurLogin extends AppCompatActivity  {
 
@@ -66,6 +69,8 @@ public class OurLogin extends AppCompatActivity  {
 
         setContentView(R.layout.activity_login);
         Button btn = findViewById(R.id.login);
+        Button guest_btn = findViewById(R.id.guest);
+        TextView signup_btn = findViewById(R.id.signup);
         final EditText pwd = findViewById(R.id.password);
         final EditText usr = findViewById(R.id.username);
         final Drawable error_indicator = this.getResources().getDrawable(R.drawable.error);
@@ -75,6 +80,22 @@ public class OurLogin extends AppCompatActivity  {
 
         pwd.setOnEditorActionListener(new EmptyTextListener(pwd , this.getResources()));
         usr.setOnEditorActionListener(new EmptyTextListener(usr , this.getResources()));
+
+        signup_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OurLogin.this , Signup.class);
+                startActivity(intent);
+            }
+        });
+
+        guest_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = new GuestModeDialog();
+                dialog.show(getSupportFragmentManager(), "guestmode");
+            }
+        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

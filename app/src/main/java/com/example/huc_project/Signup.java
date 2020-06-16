@@ -580,7 +580,7 @@ public class Signup extends AppCompatActivity {
         Intent i;
         switch(SCREEN){
             case 1:
-                i = new Intent(this , Start.class);
+                i = new Intent(this , OurLogin.class);
                 startActivity(i);
                 break;
             case 2:

@@ -7,19 +7,23 @@
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_1sdp"
-        android:layout_marginEnd="@dimen/_6sdp"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_38sdp"
+        android:layout_marginLeft="@dimen/_38sdp"
+        android:layout_marginEnd="@dimen/_38sdp"
+        android:layout_marginRight="@dimen/_38sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_14sdp"
         android:text="End"
         android:onClick="end_signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/look_sponsors"
-        android:layout_marginLeft="@dimen/_1sdp"
-        android:layout_marginRight="@dimen/_6sdp"
-        android:textSize="@dimen/_11sdp"/>
+        app:layout_constraintTop_toBottomOf="@+id/look_sponsors"/>
 
     <CheckBox
         android:id="@+id/look_sponsors"

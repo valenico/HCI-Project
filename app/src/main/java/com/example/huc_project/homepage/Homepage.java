@@ -23,6 +23,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
 import com.example.huc_project.Start;
 import com.example.huc_project.chat.Chat;
@@ -226,7 +227,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 mAuth.signOut();
                 editor.clear();
                 editor.commit();
-                Intent to_start = new Intent(getApplicationContext() , Start.class);
+                Intent to_start = new Intent(getApplicationContext() , OurLogin.class);
                 startActivity(to_start);
             }
         });

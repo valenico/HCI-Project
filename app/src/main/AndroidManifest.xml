@@ -16,7 +16,12 @@
             android:label="@string/title_activity_post_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".homepage.DataGettingActivity" />
-        <activity android:name=".OurLogin" />
+        <activity android:name=".OurLogin">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter></activity>
         <activity android:name=".chat.Chat" />
         <activity android:name=".homepage.CreateNewPostActivity" />
         <activity android:name=".chat.NewMessage" />
@@ -29,13 +34,6 @@
 <activity android:name=".homepage.RecyclerViewAdapter" />
             android:theme="@style/Base.Theme.AppCompat"/>
         -->
-        <activity android:name=".Start">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".profile.Profile_main_page" />
         <activity android:name=".profile.Edit_profile" />
         <activity android:name=".profile.Favorite" />
