@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -109,8 +110,13 @@ public class Signup extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     sign_up_button.setEnabled(true);
+                    sign_up_button.setBackgroundResource(R.drawable.custom_button);
+                    sign_up_button.setTextColor(Color.WHITE);
                 } else {
                     sign_up_button.setEnabled(false);
+                    sign_up_button.setBackgroundResource(R.drawable.custom_button_disabled);
+                    sign_up_button.setTextColor(Color.parseColor("#2Af598"));
+                    
                 }
             }
         });
