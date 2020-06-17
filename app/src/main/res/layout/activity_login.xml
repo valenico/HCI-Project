@@ -106,7 +106,7 @@
         android:layout_height="@dimen/_38sdp"
         android:layout_marginStart="@dimen/_110sdp"
         android:layout_marginLeft="@dimen/_110sdp"
-        android:layout_marginTop="@dimen/_100sdp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="@dimen/_110sdp"
         android:layout_marginRight="@dimen/_110sdp"
         android:text="@string/login"
@@ -123,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_18sdp"
         android:layout_marginLeft="@dimen/_18sdp"
-        android:layout_marginTop="@dimen/_210sdp"
+        android:layout_marginTop="110dp"
 
         android:layout_marginEnd="@dimen/_18sdp"
         android:layout_marginRight="@dimen/_18sdp"
@@ -131,12 +131,12 @@
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
-        app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintBottom_toTopOf="@id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView" />
 
     <EditText
         android:id="@+id/password"
@@ -159,23 +159,23 @@
         android:id="@+id/login"
         android:layout_width="@dimen/_170sdp"
         android:layout_height="@dimen/_35sdp"
+        android:layout_gravity="start"
         android:layout_marginStart="@dimen/_38sdp"
         android:layout_marginLeft="@dimen/_38sdp"
         android:layout_marginEnd="@dimen/_38sdp"
         android:layout_marginRight="@dimen/_38sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/custom_button"
+        android:enabled="true"
+        android:text="Log in"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_14sdp"
-        android:layout_gravity="start"
-        android:enabled="true"
-        android:text="Log in"
-        app:layout_constraintBottom_toTopOf="@+id/google_login"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/google_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@id/forgot"
         app:layout_constraintVertical_bias="0.403" />
 
     <ProgressBar
