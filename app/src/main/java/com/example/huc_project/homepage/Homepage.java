@@ -311,6 +311,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     @Override
     public void onItemClick(int position) {
         //Toast.makeText(Homepage.this, "Clicked item" + position, Toast.LENGTH_SHORT).show();
+        final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         PostRow post_clicked = rowsArrayList.get(position);
         Intent intent = new Intent(Homepage.this, postView.class);
         intent.putExtra("title", post_clicked.getTitle());

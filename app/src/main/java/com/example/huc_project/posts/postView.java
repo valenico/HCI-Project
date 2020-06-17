@@ -55,6 +55,7 @@ public class postView extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    String current_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class postView extends AppCompatActivity {
         setContentView(R.layout.activity_post_view);
 
         final Intent intent = getIntent();
+        this.current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
                 intent.getStringExtra("role"));
@@ -71,88 +73,102 @@ public class postView extends AppCompatActivity {
         this.desc_view = findViewById(R.id.postDesc);
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_baseline_favorite_24);
-        final Drawable wrappedDrawable = DrawableCompat.wrap(like);
 
-        final ArrayList<String> fav_post = new ArrayList<>();
-        db.collection("UTENTI").document(mAuth.getCurrentUser().getUid())
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.get("Fav_post") != null) {
-                        ArrayList<String> l = (ArrayList<String>) document.get("Fav_post");
-                        for (int i=0; i<l.size(); i++) { fav_post.add(l.get(i)); }
-                    }
-                } else {
-                    Log.w("lola", "Error getting documents.", task.getException());
+        if (current_user.equals(post.getUser())) {
+            Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_pencil);
+            final Drawable wrappedDrawable = DrawableCompat.wrap(like);
+            fab.setImageDrawable(wrappedDrawable);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(postView.this, "Non puoi ancora modificarlo STRONZO", Toast.LENGTH_LONG).show();
                 }
-                for (int i=0; i<fav_post.size(); i++) {
-                    if (intent.getStringExtra("storageref").equals(fav_post.get(i))) {
-                        DrawableCompat.setTint(wrappedDrawable, Color.RED);
-                        fab.setImageDrawable(wrappedDrawable);
-                        break;
-                    }
-                }
-            }
-        });
+            });
+        }
+        else {
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_baseline_favorite_24);
+            final Drawable wrappedDrawable = DrawableCompat.wrap(like);
 
-                Boolean add_post = true;
-                for (int i=0; i<fav_post.size(); i++) {
-                    if (intent.getStringExtra("storageref").equals(fav_post.get(i))) {
-                        add_post = false;
-                        break;
-                    }
-                    else {
-                        add_post = true;
-                    }
-                }
-                if (add_post) {
-                    HashMap<String,Object> data = new HashMap<>();
-                    data.put("title",intent.getStringExtra("title"));
-                    data.put("user", intent.getStringExtra("user"));
-                    data.put("postdesc",intent.getStringExtra("desc") );
-                    data.put("isPackage",intent.getBooleanExtra("isPackage", false));
-                    data.put("storageref",intent.getStringExtra("storageref"));
-                    db.collection("Favorites").document(mAuth.getUid()).collection("post").add(data);
-                    fav_post.add(intent.getStringExtra("storageref"));
-                    HashMap<String, ArrayList<String>> post_favorites = new HashMap<>();
-                    post_favorites.put("Fav_post", fav_post);
-                    db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(post_favorites, SetOptions.merge());
-                    Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " added to your favorites posts!", Toast.LENGTH_LONG).show();
-                    DrawableCompat.setTint(wrappedDrawable, Color.RED);
-                }
-                else {
-                    fav_post.remove(intent.getStringExtra("storageref"));
-                    HashMap<String, ArrayList<String>> post_favorites = new HashMap<>();
-                    post_favorites.put("Fav_post", fav_post);
-                    db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(post_favorites, SetOptions.merge());
-                    DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86)); 
-                    Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " removed from your favorites posts!", Toast.LENGTH_LONG).show();
-                    db.collection("Favorites").document(mAuth.getCurrentUser().getUid()).collection("post")
-                            .whereEqualTo("storageref", intent.getStringExtra("storageref")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    document.getReference().delete();
-                                }
-                            } else {
-                                Log.w("lola", "Error getting documents.", task.getException());
+            final ArrayList<String> fav_post = new ArrayList<>();
+            db.collection("UTENTI").document(mAuth.getCurrentUser().getUid())
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.get("Fav_post") != null) {
+                            ArrayList<String> l = (ArrayList<String>) document.get("Fav_post");
+                            for (int i = 0; i < l.size(); i++) {
+                                fav_post.add(l.get(i));
                             }
                         }
-                    });
-
+                    } else {
+                        Log.w("lola", "Error getting documents.", task.getException());
+                    }
+                    for (int i = 0; i < fav_post.size(); i++) {
+                        if (post.getStorageref().equals(fav_post.get(i))) {
+                            DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                            fab.setImageDrawable(wrappedDrawable);
+                            break;
+                        }
+                    }
                 }
-                fab.setImageDrawable(wrappedDrawable);
-            }
-        });
+            });
 
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Boolean add_post = true;
+                    for (int i = 0; i < fav_post.size(); i++) {
+                        if (intent.getStringExtra("storageref").equals(fav_post.get(i))) {
+                            add_post = false;
+                            break;
+                        } else {
+                            add_post = true;
+                        }
+                    }
+                    if (add_post) {
+                        HashMap<String, Object> data = new HashMap<>();
+                        data.put("title", intent.getStringExtra("title"));
+                        data.put("user", intent.getStringExtra("user"));
+                        data.put("postdesc", intent.getStringExtra("desc"));
+                        data.put("isPackage", intent.getBooleanExtra("isPackage", false));
+                        data.put("storageref", intent.getStringExtra("storageref"));
+                        db.collection("Favorites").document(mAuth.getUid()).collection("post").add(data);
+                        fav_post.add(intent.getStringExtra("storageref"));
+                        HashMap<String, ArrayList<String>> post_favorites = new HashMap<>();
+                        post_favorites.put("Fav_post", fav_post);
+                        db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(post_favorites, SetOptions.merge());
+                        Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " added to your favorites posts!", Toast.LENGTH_LONG).show();
+                        DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                    } else {
+                        fav_post.remove(intent.getStringExtra("storageref"));
+                        HashMap<String, ArrayList<String>> post_favorites = new HashMap<>();
+                        post_favorites.put("Fav_post", fav_post);
+                        db.collection("UTENTI").document(mAuth.getCurrentUser().getUid()).set(post_favorites, SetOptions.merge());
+                        DrawableCompat.setTint(wrappedDrawable, Color.rgb(3, 98, 86));
+                        Toast.makeText(postView.this, intent.getStringExtra("title").toString() + " removed from your favorites posts!", Toast.LENGTH_LONG).show();
+                        db.collection("Favorites").document(mAuth.getCurrentUser().getUid()).collection("post")
+                                .whereEqualTo("storageref", intent.getStringExtra("storageref")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        document.getReference().delete();
+                                    }
+                                } else {
+                                    Log.w("lola", "Error getting documents.", task.getException());
+                                }
+                            }
+                        });
+
+                    }
+                    fab.setImageDrawable(wrappedDrawable);
+                }
+            });
+        }
         setUpPost();
     }
 
