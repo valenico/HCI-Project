@@ -13,8 +13,8 @@
         android:layout_marginLeft="@dimen/_38sdp"
         android:layout_marginEnd="@dimen/_38sdp"
         android:layout_marginRight="@dimen/_38sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_18sdp"
         android:background="@drawable/custom_button"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
@@ -23,7 +23,9 @@
         android:onClick="end_signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/look_sponsors"/>
+
 
     <CheckBox
         android:id="@+id/look_sponsors"

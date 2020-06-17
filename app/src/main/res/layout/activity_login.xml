@@ -90,7 +90,7 @@
         android:layout_marginTop="@dimen/_45sdp"
         android:layout_marginEnd="@dimen/_200sdp"
         android:layout_marginRight="@dimen/_200sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
         android:onClick="showForgotDialog"
         android:text="@string/forgot_password"
         app:layout_constraintBottom_toTopOf="@+id/login"
@@ -203,9 +203,10 @@
 
         android:layout_marginEnd="@dimen/_17sdp"
         android:layout_marginRight="@dimen/_18sdp"
-        android:layout_marginTop="@dimen/_250sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:onClick="show_password_login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/password"
+        app:layout_constraintTop_toBottomOf="@id/username"
         app:srcCompat="@drawable/noshow" />
 </androidx.constraintlayout.widget.ConstraintLayout>
