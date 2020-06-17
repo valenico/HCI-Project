@@ -63,7 +63,8 @@ public class postView extends AppCompatActivity {
 
         final Intent intent = getIntent();
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
-                intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false));
+                intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
+                intent.getStringExtra("role"));
 
         this.post_image_view = findViewById(R.id.imageViewplaces);
         this.title_view = findViewById(R.id.postTitle);

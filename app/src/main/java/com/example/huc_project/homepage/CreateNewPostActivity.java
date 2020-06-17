@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,11 +97,61 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 StorageReference storageRef = storage.getReference();
                 StorageReference riversRef;
                 UploadTask uploadTask;
+                String role="";
+                CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
+                CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
+                if (sponsor.isChecked()) {
+                    role="sponsor";
+                }
+                else if (sponsorship.isChecked()) {
+                    role="sponsorship";
+                }
+
+                ArrayList<String> categoriesChosen = new ArrayList<String>();
+
+                CheckBox science=(CheckBox) findViewById(R.id.checkBoxScience);
+                CheckBox nature=(CheckBox) findViewById(R.id.checkBoxNature);
+                CheckBox sport=(CheckBox) findViewById(R.id.checkBoxSport);
+                CheckBox fashion=(CheckBox) findViewById(R.id.checkBoxFashion);
+                CheckBox food=(CheckBox) findViewById(R.id.checkBoxFood);
+                CheckBox movies=(CheckBox) findViewById(R.id.checkBoxMovies);
+                CheckBox music=(CheckBox) findViewById(R.id.checkBoxMusic);
+
+                if (science.isChecked()) {
+                    categoriesChosen.add("science");
+
+                }
+                if (nature.isChecked()) {
+                    categoriesChosen.add("nature");
+
+                }
+                if (sport.isChecked()) {
+                    categoriesChosen.add("sport");
+
+                }
+                if (fashion.isChecked()) {
+                    categoriesChosen.add("fashion");
+
+                }
+                if (food.isChecked()) {
+                    categoriesChosen.add("food");
+
+                }
+                if (movies.isChecked()) {
+                    categoriesChosen.add("movies");
+
+                }
+                if (music.isChecked()) {
+                    categoriesChosen.add("music");
+
+                }
 
                 post.put("title", postTitle);
                 post.put("postdesc", postDescription);
                 post.put("user", current_user.getUid());
                 post.put("isPackage", isPackage);
+                post.put("categories", categoriesChosen);
+                post.put("role", role);
 
                 if(file != null){
                     riversRef = storageRef.child("images/"+file.getLastPathSegment());
