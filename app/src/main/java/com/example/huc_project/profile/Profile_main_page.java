@@ -62,12 +62,12 @@ public class Profile_main_page extends AppCompatActivity {
         current_user = bundle. getString("user");
 
         final Boolean guest_user;
+        tabLayout = findViewById(R.id.tabLayout);
         final ViewPager viewPager = findViewById(R.id.pager);
 
         if (current_user != null) guest_user = false;
         else guest_user = true;
 
-        tabLayout = findViewById(R.id.tabLayout);
         ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
