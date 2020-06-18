@@ -251,6 +251,7 @@ public class Profile_main_page extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivityIfNeeded(i, 0);
         startActivity(i);
+        finish();
     }
 
     public static String getCurrent_user() {

@@ -203,6 +203,7 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             editor.commit();
             Intent to_start = new Intent(getApplicationContext() , OurLogin.class);
             startActivity(to_start);
+            finish();
         } else if(clicked.equals("About the App")){
             final Context c = Settings.this;
             final TextView taskEditText = new TextView(c);
