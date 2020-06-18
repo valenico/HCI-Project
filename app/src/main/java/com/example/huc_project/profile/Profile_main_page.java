@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.huc_project.R;
 import com.example.huc_project.chat.Chat;
 import com.example.huc_project.homepage.CreateNewPostActivity;
@@ -124,8 +125,9 @@ public class Profile_main_page extends AppCompatActivity {
                         TextView user_mail = findViewById(R.id.user_mail);
                         ImageView profile_img = findViewById(R.id.profile_image);
 
+                        RequestOptions options = new RequestOptions().error(R.drawable.add_img); //if load gets error bc image does not exist, load default image
                         StorageReference ref = storage.getReference().child("users/" + current_user);
-                        Glide.with(Profile_main_page.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
+                        Glide.with(Profile_main_page.this).load(ref).apply(options).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
 
                         user_name.setText(name);
 

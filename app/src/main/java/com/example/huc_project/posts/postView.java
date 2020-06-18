@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.huc_project.homepage.DataGettingActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
@@ -42,10 +43,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.protobuf.StringValue;
 import com.google.protobuf.StringValueOrBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -198,8 +201,9 @@ public class postView extends AppCompatActivity {
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         owner_name.setText((String) document.get("Name"));
+                        RequestOptions options = new RequestOptions().error(R.drawable.add_img);
                         StorageReference ref = storage.getReference().child("users/" + post.getUser());
-                        Glide.with(postView.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(owner_img);
+                        Glide.with(postView.this).load(ref).apply(options).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(owner_img);
                     }
                 }
             }
