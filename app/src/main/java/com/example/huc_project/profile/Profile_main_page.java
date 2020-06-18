@@ -365,9 +365,15 @@ public class Profile_main_page extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
-                final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                intent.putExtra("user", current_user);
-                startActivity(intent);
+                if (current_user.equals(mAuth.getCurrentUser().getUid())) {
+                    Toast.makeText(Profile_main_page.this, "Stai già sul tuo profilo fattone di merda!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    intent.putExtra("user", current_user);
+                    startActivity(intent);
+
+                }
             }
         });
 
