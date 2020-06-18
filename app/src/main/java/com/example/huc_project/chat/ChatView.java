@@ -255,8 +255,10 @@ class RVA extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filte
        // Log.d("CHAT", "code " + item.charAt(0) + " from user who texted? " + this.who_text.toString());
         if((item.charAt(0) == '0' && this.who_text) || ( (item.charAt(0) == '1' && !this.who_text) )) {
             viewHolder.message.setGravity(Gravity.END);
+            ((TextView)viewHolder.message.getChildAt(0)).setBackgroundResource(R.drawable.my_message);
         } else if ( (item.charAt(0) == '1' && this.who_text) || (item.charAt(0) == '0' && !this.who_text) ) {
             viewHolder.message.setGravity(Gravity.START);
+            ((TextView)viewHolder.message.getChildAt(0)).setBackgroundResource(R.drawable.other_message);
         }
 
     }
