@@ -76,6 +76,7 @@ public class OurLogin extends AppCompatActivity  {
         if(logged){
             Intent i = new Intent(this, Homepage.class);
             startActivity(i);
+            finish();
         }
 
         setContentView(R.layout.activity_login);
@@ -157,6 +158,7 @@ public class OurLogin extends AppCompatActivity  {
                                         editor.commit();
                                         Intent i = new Intent(c, Homepage.class);
                                         startActivity(i);
+                                        finish();
 
                                     } else {
 
@@ -239,6 +241,7 @@ public class OurLogin extends AppCompatActivity  {
                             db.collection("UTENTI").document(mAuth.getUid()).set(upd, SetOptions.merge());
                             Intent gi = new Intent(OurLogin.this , Homepage.class);
                             startActivity(gi);
+                            finish();
 
                         } else {
                             // If sign in fails, display a message to the user.
