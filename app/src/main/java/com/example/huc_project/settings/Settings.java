@@ -85,29 +85,25 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
 
         if(clicked.equals("General") && !mylist.contains("Change Email")){
             listItems.add(position+1,"Change Email"); // done
-            listItems.add(position+2,"Language");
-            listItems.add(position+3,"Log Out");
-            listItems.add(position+4,"Others");
+            listItems.add(position+2,"Log Out"); // done
+            listItems.add(position+3,"Others");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("General")){
             listItems.remove("Change Email"); // done
-            listItems.remove("Language");
-            listItems.remove("Log Out");
+            listItems.remove("Log Out"); // done
             listItems.remove("Others");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
             listItems.add(position+1,"Report a Problem"); // done
             listItems.add(position+2,"Send a Feedback"); // done
-            listItems.add(position+3,"Terms of Use"); // done
-            listItems.add(position+4,"Data Policy");
-            listItems.add(position+5,"About the App");
+            listItems.add(position+3,"Terms of Use & Data Policy"); // done
+            listItems.add(position+4,"About the App"); // done
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About")){
             listItems.remove("Report a Problem"); // done
             listItems.remove("Send a Feedback"); // done
-            listItems.remove("Terms of Use");  // done
-            listItems.remove("Data Policy");
-            listItems.remove("About the App");
+            listItems.remove("Terms of Use & Data Policy");  // done
+            listItems.remove("About the App"); // done
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Privacy & Security") && !mylist.contains("Change Password")){
             listItems.add(position+1,"Change Password"); // done
@@ -122,12 +118,10 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         } else if(clicked.equals("Invite Friends") && !mylist.contains("Invite Friends by Email")){
             listItems.add(position+1,"Invite Friends by Email"); // done
             listItems.add(position+2,"Invite Friends by SMS"); // done
-            listItems.add(position+3,"Invite Friends by ...");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Invite Friends")){
             listItems.remove("Invite Friends by Email"); // done
             listItems.remove("Invite Friends by SMS"); // done
-            listItems.remove("Invite Friends by ...");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Invite Friends by Email")){
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
@@ -192,7 +186,7 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             } catch (android.content.ActivityNotFoundException anfe) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/")));
             }
-        } else if(clicked.equals("Terms of Use")){
+        } else if(clicked.equals("Terms of Use & Data Policy")){
             final Context c = Settings.this;
             final TextView taskEditText = new TextView(c);
             taskEditText.setText(R.string.termsofuse);
@@ -200,7 +194,7 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             taskEditText.setVerticalScrollBarEnabled(true);
             taskEditText.setMovementMethod(new ScrollingMovementMethod());
             AlertDialog dialog = new AlertDialog.Builder(c)
-                    .setTitle("Change Email")
+                    .setTitle("Terms of Use & Data Policy")
                     .setView(taskEditText)
                     .setPositiveButton("Ok", null)
                     .create();
@@ -211,6 +205,19 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             editor.commit();
             Intent to_start = new Intent(getApplicationContext() , OurLogin.class);
             startActivity(to_start);
+        } else if(clicked.equals("About the App")){
+            final Context c = Settings.this;
+            final TextView taskEditText = new TextView(c);
+            taskEditText.setText(R.string.about_app);
+            taskEditText.setScroller(new Scroller(this));
+            taskEditText.setVerticalScrollBarEnabled(true);
+            taskEditText.setMovementMethod(new ScrollingMovementMethod());
+            AlertDialog dialog = new AlertDialog.Builder(c)
+                    .setTitle("About the App")
+                    .setView(taskEditText)
+                    .setPositiveButton("Ok", null)
+                    .create();
+            dialog.show();
         }
     }
 

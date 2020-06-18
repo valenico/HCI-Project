@@ -25,9 +25,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="@dimen/_40sdp"
-        android:layout_marginLeft="@dimen/_38sdp"
-        android:layout_marginStart="@dimen/_35sdp"
-        android:hint="Type your message here..."
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:hint="@string/type_message"
+        android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_messages" />
 
@@ -38,11 +39,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/_40sdp"
-        android:layout_marginRight="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_45sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_toEndOf="@+id/text_in_chat"
+        android:layout_toRightOf="@+id/text_in_chat"
         android:onClick="send_chat_text"
-        app:srcCompat="@drawable/ic_send_text"
-        android:layout_marginEnd="@dimen/_25sdp" />
+        app:srcCompat="@drawable/ic_send_text" />
 
 
 </RelativeLayout>

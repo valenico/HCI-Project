@@ -87,9 +87,7 @@
         <item>Washington D.C.</item>
         <item>Caracas</item>
     </string-array>
-    <string name="termsofuse">Terms and conditions \n \n
-
-These terms and conditions ("Terms", "Agreement") are an agreement between Mobile Application Developer ("Mobile Application Developer", "us", "we" or "our") and you ("User", "you" or "your"). This Agreement sets forth the general terms and conditions of your use of the this application mobile application and any of its products or services (collectively, "Mobile Application" or "Services").
+    <string name="termsofuse">These terms and conditions ("Terms", "Agreement") are an agreement between Mobile Application Developer ("Mobile Application Developer", "us", "we" or "our") and you ("User", "you" or "your"). This Agreement sets forth the general terms and conditions of your use of the this application mobile application and any of its products or services (collectively, "Mobile Application" or "Services").
 
 \n \nAccounts and membership \n \n
 
@@ -118,4 +116,6 @@ You acknowledge that you have read this Agreement and agree to all its terms and
 \n \nContacting us \n \n
 
 If you would like to contact us to understand more about this Agreement or wish to contact us concerning any matter relating to it, you may send an email to progettohumanci@gmail.com \n \nThis document was last updated on June 16, 2020</string>
+    <string name="type_message">Type your message here...</string>
+    <string name="about_app">This app has been developed as final project for the Human-Computer Interaction course, La Sapienza, year 2019/2020, by \n \nCarlini Tommaso, Lo Iudice Davide, Nicolanti Valerio and Roggiolani Gianmarco</string>
 </resources>
