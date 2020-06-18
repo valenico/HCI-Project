@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/backgroundColor"
         tools:context="com.example.huc_project.homepage.CreateNewPostActivity">
 
         <ImageButton
@@ -16,8 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:adjustViewBounds="true"
+            android:background="@color/backgroundColor"
             android:scaleType="centerCrop"
-            android:src="@drawable/add_img" />
+            android:src="@drawable/add_img"
+            />
 
         <EditText
             android:id="@+id/textTitle"
@@ -26,10 +30,11 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/edit_text_styles"
+            android:textColorHint="@color/hint_color"
             android:hint="Post Title"
             android:padding="10dp"
-            android:textColor="#fff"
+            android:background="@color/card_color"
+            android:textColor="@color/textColor"
             android:textStyle="bold" />
 
         <EditText
@@ -38,19 +43,23 @@
             android:layout_height="194dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
+            android:textColorHint="@color/hint_color"
+            android:textColor="@color/textColor"
+            android:background="@color/card_color"
             android:layout_marginRight="5dp"
-            android:background="@drawable/edit_text_styles"
             android:hint="Post Description"
             android:padding="10dp"
-            android:textColor="#fff" />
+             />
         <CheckBox
             android:id="@+id/sponsor"
+            android:textColor="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="I am looking for a sponsor" />
 
         <CheckBox
             android:id="@+id/sponsorship"
+            android:textColor="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="I am proposing a sponsorship" />
@@ -59,14 +68,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Choose Categories: "
-            android:textColor="#f00"
+            android:textColor="@color/textColor"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <FrameLayout
             android:layout_width="387dp"
             android:layout_height="221dp"
-            android:background="#918E8E">
+            android:background="@color/backgroundColor" >
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -81,17 +90,20 @@
                         android:id="@+id/checkBoxScience"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColor"
                         android:text="Science" />
 
                     <CheckBox
                         android:id="@+id/checkBoxNature"
                         android:layout_width="match_parent"
+                        android:textColor="@color/textColor"
                         android:layout_height="wrap_content"
                         android:text="Nature" />
 
                     <CheckBox
                         android:id="@+id/checkBoxSport"
                         android:layout_width="match_parent"
+                        android:textColor="@color/textColor"
                         android:layout_height="wrap_content"
                         android:text="Sport" />
 
@@ -99,24 +111,28 @@
                         android:id="@+id/checkBoxFashion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColor"
                         android:text="Fashion" />
 
                     <CheckBox
                         android:id="@+id/checkBoxFood"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColor"
                         android:text="Food" />
 
                     <CheckBox
                         android:id="@+id/checkBoxMovies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColor"
                         android:text="Movies" />
 
                     <CheckBox
                         android:id="@+id/checkBoxMusic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColor"
                         android:text="Music" />
                 </LinearLayout>
             </ScrollView>
@@ -129,7 +145,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/action_button_style"
+            android:background="@drawable/custom_button"
             android:text="Post"
             android:textColor="#fff"
             android:textStyle="bold" />
