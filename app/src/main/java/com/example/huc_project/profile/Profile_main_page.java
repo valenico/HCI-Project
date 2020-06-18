@@ -154,6 +154,8 @@ public class Profile_main_page extends AppCompatActivity {
                         else {
                             Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_heart);
                             final Drawable wrappedDrawable = DrawableCompat.wrap(like);
+                            DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86));
+                            edit_profile.setImageDrawable(wrappedDrawable);
 
                             final ArrayList<String> fav_user = new ArrayList<>();
                             db.collection("Favorites").document(mAuth.getCurrentUser().getUid()).collection("user")
@@ -263,10 +265,6 @@ public class Profile_main_page extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        Intent i = new Intent(this, Homepage.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivityIfNeeded(i, 0);
-        startActivity(i);
         finish();
     }
 

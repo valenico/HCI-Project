@@ -90,7 +90,7 @@
         app:layout_constraintStart_toEndOf="@+id/user_country"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_edit_black_24dp" />
+        app:srcCompat="@drawable/ic_heart" />
 
     <ImageButton
         android:id="@+id/favorites"
