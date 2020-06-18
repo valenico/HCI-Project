@@ -7,11 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.homepage.DataGettingActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.profile.Favorite;
+import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 import com.example.huc_project.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -52,6 +55,8 @@ public class postView extends AppCompatActivity {
     ImageView post_image_view;
     TextView title_view;
     TextView desc_view;
+    TextView owner_name;
+    ImageView owner_img;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -71,6 +76,8 @@ public class postView extends AppCompatActivity {
         this.post_image_view = findViewById(R.id.imageViewplaces);
         this.title_view = findViewById(R.id.postTitle);
         this.desc_view = findViewById(R.id.postDesc);
+        owner_name = findViewById(R.id.owner_name);
+        owner_img = findViewById(R.id.owner_img);
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -181,8 +188,22 @@ public class postView extends AppCompatActivity {
             StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
 
             Glide.with(this).load(islandRef).into(post_image_view);
-
         }
+
+        final DocumentReference docRef = db.collection("UTENTI").document(post.getUser());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    final DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        owner_name.setText((String) document.get("Name"));
+                        StorageReference ref = storage.getReference().child("users/" + post.getUser());
+                        Glide.with(postView.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(owner_img);
+                    }
+                }
+            }
+        });
     }
 
     @Override
