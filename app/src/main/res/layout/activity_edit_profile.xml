@@ -98,29 +98,28 @@
         android:id="@+id/hidemail"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_32sdp"
-        android:textColor="@color/textColor"
-        android:layout_marginStart="@dimen/_200sdp"
-        android:layout_marginLeft="@dimen/_200sdp"
-        android:layout_marginTop="@dimen/_255sdp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
         android:text="Hide Mail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/textColor"
+        app:layout_constraintStart_toEndOf="@+id/mail"
+        app:layout_constraintTop_toBottomOf="@+id/city" />
 
     <EditText
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
-        android:textColor="@color/textColor"
-        android:layout_marginTop="@dimen/_295sdp"
         android:background="@drawable/custom_border"
         android:ems="10"
         android:gravity="start"
         android:inputType="textMultiLine"
         android:text="Add a description"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mail" />
 
     <View
         android:id="@+id/divider2"
