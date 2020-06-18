@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     android:fitsSystemWindows="true">
 
     <ImageView
@@ -22,6 +23,7 @@
         android:id="@+id/user_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginTop="68dp"
         android:text="Altro"
         app:layout_constraintStart_toStartOf="@+id/user_name"
@@ -31,6 +33,7 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginStart="160dp"
         android:layout_marginLeft="160dp"
         android:layout_marginTop="17dp"
@@ -47,6 +50,7 @@
         android:id="@+id/user_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginTop="96dp"
         android:text="Mail"
         android:textStyle="italic"
@@ -104,6 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:tint="@color/textColor"
             android:background="@drawable/left_border"
             app:srcCompat="@drawable/ic_travel" />
 
@@ -112,6 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:tint="@color/textColor"
             android:background="@drawable/left_border"
             app:srcCompat="@drawable/ic_pictures" />
 
@@ -120,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:tint="@color/textColor"
             android:background="@drawable/left_border"
             app:srcCompat="@drawable/ic_ads" />
 
@@ -128,6 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:tint="@color/textColor"
             android:background="@drawable/left_border"
             app:srcCompat="@drawable/ic_commerce" />
 
@@ -173,6 +181,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
         android:layout_marginTop="220dp"
         android:fitsSystemWindows="true"
         android:layout_marginBottom="@dimen/_1sdp"

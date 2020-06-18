@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="@dimen/_2sdp"
+    android:background="@color/card_color"
     app:cardUseCompatPadding="true"
     android:id="@+id/cardItem">
 
@@ -12,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/card_color"
         android:padding="@dimen/_6sdp"
         android:id="@+id/relative_social">
 
@@ -37,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:textColor="@color/textColor"
             android:layout_toRightOf="@+id/post_image"
             android:layout_marginLeft="@dimen/_6sdp"
             android:text=""
@@ -50,6 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvItem"
+            android:textColor="@color/textColor"
             android:layout_marginLeft="@dimen/_6sdp"
             android:layout_toRightOf="@+id/post_image"
             android:textSize="@dimen/_12sdp" />
@@ -73,6 +77,7 @@
             android:layout_below="@+id/tvItem"
             android:layout_alignTop="@+id/graph_follower"
             android:layout_marginBottom="@dimen/_18sdp"
+            android:textColor="@color/textColor"
             android:layout_toStartOf="@+id/graph_follower"
             android:layout_toLeftOf="@+id/graph_follower"
             android:textSize="@dimen/_11sdp"
@@ -84,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvItem"
             android:layout_marginTop="@dimen/_6sdp"
+            android:textColor="@color/textColor"
             android:textSize="@dimen/_11sdp"
             android:layout_toStartOf="@+id/graph_follower"
             android:layout_toLeftOf="@+id/graph_follower"

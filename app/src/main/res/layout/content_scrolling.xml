@@ -16,6 +16,7 @@
         <TextView
             android:id="@+id/postTitle"
             android:layout_width="wrap_content"
+            android:textColor="@color/textColor"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Title" />
@@ -23,6 +24,7 @@
             android:id="@+id/postDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
             android:layout_margin="@dimen/text_margin"
             android:text="Description" />
     </androidx.appcompat.widget.LinearLayoutCompat>

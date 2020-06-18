@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".chat.ChatView">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_messages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
         android:layout_above="@+id/text_in_chat"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/_15sdp"
@@ -23,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="@dimen/_40sdp"
         android:layout_marginLeft="@dimen/_20sdp"

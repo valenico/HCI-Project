@@ -40,6 +40,7 @@ import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 
 public class OurLogin extends AppCompatActivity  {
@@ -68,6 +69,10 @@ public class OurLogin extends AppCompatActivity  {
         pref =  getSharedPreferences("Preferences", Context.MODE_PRIVATE); // 0 - for private mode
         editor = pref.edit();
         boolean logged = pref.getBoolean("logged",false);
+        boolean night = pref.getBoolean("night", false);
+        if(night){
+            AppCompatDelegate.setDefaultNightMode( AppCompatDelegate.MODE_NIGHT_YES);
+        }
         if(logged){
             Intent i = new Intent(this, Homepage.class);
             startActivity(i);
@@ -215,7 +220,7 @@ public class OurLogin extends AppCompatActivity  {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         final ProgressDialog progressDialog = new ProgressDialog(OurLogin.this);
-        progressDialog.setMessage("Registering Please Wait...");
+        progressDialog.setMessage("Logging in, please Wait...");
         progressDialog.show();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

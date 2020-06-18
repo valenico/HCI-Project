@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/backgroundColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,6 +11,7 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginTop="@dimen/_38sdp"
         android:text="@string/new_message"
         android:textSize="@dimen/_25sdp"
@@ -19,6 +21,7 @@
 
     <TextView
         android:id="@+id/textView11"
+        android:textColor="@color/textColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_38sdp"
@@ -33,6 +36,7 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginLeft="@dimen/_38sdp"
         android:layout_marginStart="@dimen/_38sdp"
         android:layout_marginTop="@dimen/_90sdp"
@@ -45,6 +49,8 @@
         android:id="@+id/new_text"
         android:layout_width="@dimen/_250sdp"
         android:layout_height="@dimen/_38sdp"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hint_color"
         android:layout_marginLeft="@dimen/_38sdp"
         android:layout_marginStart="@dimen/_38sdp"
         android:layout_marginTop="@dimen/_18sdp"
@@ -67,6 +73,8 @@
         android:id="@+id/autoCompleteTextView"
         android:layout_width="@dimen/_200sdp"
         android:layout_height="@dimen/_38sdp"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hint_color"
         android:layout_marginLeft="@dimen/_80sdp"
         android:layout_marginTop="@dimen/_100sdp"
         android:hint="Search user..."

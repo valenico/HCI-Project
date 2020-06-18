@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
 
     <com.jh.circularlist.CircularListView
         android:id="@+id/circle_socials"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_340sdp"
         android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/backgroundColor"
         app:layout_constraintBottom_toTopOf="@+id/socialChoosen"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
@@ -20,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30sdp"
+        android:textColor="@color/textColor"
         android:gravity="center_horizontal|center_vertical"
         android:text="Choose the Social Network"
         android:textSize="@dimen/_19sdp"
@@ -35,6 +38,7 @@
         android:layout_marginTop="@dimen/_440sdp"
         android:gravity="center_horizontal|center_vertical"
         android:textSize="24sp"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

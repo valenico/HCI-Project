@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="@dimen/_2sdp"
+    android:background="@color/card_color"
     app:cardUseCompatPadding="true"
     android:id="@+id/cardItem">
 
@@ -12,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/card_color"
         android:padding="@dimen/_6sdp"
         android:id="@+id/relative_social2">
 
@@ -37,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/_6sdp"
+            android:textColor="@color/textColor"
             android:layout_toRightOf="@+id/post_image"
             android:text=""
             android:textSize="@dimen/_17sdp"
@@ -50,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvItem"
             android:layout_marginLeft="@dimen/_6sdp"
+            android:textColor="@color/textColor"
             android:layout_toRightOf="@+id/post_image"
             android:textSize="16sp" />
 

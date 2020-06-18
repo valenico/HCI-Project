@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
 
     <Button
         android:id="@+id/done_button"
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_165sdp"
         android:ems="10"
+        android:textColor="@color/textColor"
         android:inputType="textPersonName"
         android:text="Username"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +56,7 @@
         android:id="@+id/country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginTop="@dimen/_195sdp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -67,6 +70,7 @@
         android:id="@+id/city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
         android:layout_marginTop="@dimen/_225sdp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -80,6 +84,7 @@
         android:id="@+id/mail"
         android:layout_width="@dimen/_190sdp"
         android:layout_height="@dimen/_44sdp"
+        android:textColor="@color/textColor"
         android:layout_marginStart="@dimen/_6sdp"
         android:layout_marginLeft="@dimen/_6sdp"
         android:layout_marginTop="@dimen/_255sdp"
@@ -93,6 +98,7 @@
         android:id="@+id/hidemail"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_32sdp"
+        android:textColor="@color/textColor"
         android:layout_marginStart="@dimen/_200sdp"
         android:layout_marginLeft="@dimen/_200sdp"
         android:layout_marginTop="@dimen/_255sdp"
@@ -104,6 +110,7 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
+        android:textColor="@color/textColor"
         android:layout_marginTop="@dimen/_295sdp"
         android:background="@drawable/custom_border"
         android:ems="10"

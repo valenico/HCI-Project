@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
-    android:id="@+id/cardItem">
+    android:id="@+id/cardItem"
+    android:background="@color/card_color">
 
 
 
@@ -13,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:id="@+id/relative_user">
+        android:id="@+id/relative_user"
+        android:background="@color/card_color">
 
         <ImageView
             android:id="@+id/user_image"
@@ -37,6 +39,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="30dp"
+            android:textColor="@color/textColor"
             android:layout_toEndOf="@+id/user_image"
             android:layout_toRightOf="@+id/user_image"
             android:text="Item X"

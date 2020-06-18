@@ -12,6 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/card_color"
         android:padding="@dimen/_6sdp"
         android:id="@+id/relative">
 
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvItem"
             android:layout_toRightOf="@+id/post_image"
+            android:textColor="@color/textColor"
             android:layout_alignParentTop="true"
             android:textSize="@dimen/_15sdp"
             android:layout_toEndOf="@+id/post_image" />
@@ -44,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/desc_preview"
+            android:textColor="@color/textColor"
             android:layout_toRightOf="@+id/post_image"
             android:layout_below="@+id/tvItem"
             android:textSize="@dimen/_11sdp"

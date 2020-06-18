@@ -1,0 +1,121 @@
+<resources>
+    <string name="app_name">HCI-Project</string>
+    <string name="pattern">-__-</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="title_activity_homepage">Homepage</string>
+    <string name="action_settings">Settings</string>
+    <string name="complete_your_profile">Complete your profile</string>
+    <string name="info_profile">Your information will be visible in your profile</string>
+    <string name="guest_accept">Ok</string>
+    <string name="guest_cancel">Cancel</string>
+    <string name="new_message">New Message</string>
+    <string name="dialog_gues_mode">Using a guest account you will have access to limited features!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_post_view">ScrollingActivity</string>
+    <string name="create_an_account"><u>Create an account.</u></string>
+    <string-array name="countries_array">
+        <item>Australia</item>
+        <item>Belgium</item>
+        <item>Canada</item>
+        <item>China</item>
+        <item>Denmark</item>
+        <item>Egypt</item>
+        <item>Ethiopia</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>India</item>
+        <item>Italy</item>
+        <item>Japan</item>
+        <item>Mexico</item>
+        <item>New Zealand</item>
+        <item>Norway</item>
+        <item>Philipphines</item>
+        <item>Poland</item>
+        <item>Portugal</item>
+        <item>Russia</item>
+        <item>South Africa</item>
+        <item>Switzerland</item>
+        <item>Thailand</item>
+        <item>Turkey</item>
+        <item>United Arab Emirates</item>
+        <item>United Kingdom</item>
+        <item>United States of America</item>
+        <item>Venezuela</item>
+    </string-array>
+    <string-array name="cities_array">
+        <item>Canberra</item>
+        <item>Brussels</item>
+        <item>Ottawa</item>
+        <item>Beijing</item>
+        <item>Copenaghen</item>
+        <item>Cairo</item>
+        <item>Addis Ababa</item>
+        <item>Paris</item>
+        <item>Berlin</item>
+        <item>New Delhi</item>
+        <item>Rome</item>
+        <item>Tokyo</item>
+        <item>Mexico City</item>
+        <item>Wellington</item>
+        <item>Oslo</item>
+        <item>Manila</item>
+        <item>Warsaw</item>
+        <item>Lisbon</item>
+        <item>Moscow</item>
+        <item>Cape Town</item>
+        <item>Bern</item>
+        <item>Bangkok</item>
+        <item>Ankara</item>
+        <item>Abu Dhabi</item>
+        <item>London</item>
+        <item>Washington D.C.</item>
+        <item>Caracas</item>
+    </string-array>
+    <string name="termsofuse">These terms and conditions ("Terms", "Agreement") are an agreement between Mobile Application Developer ("Mobile Application Developer", "us", "we" or "our") and you ("User", "you" or "your"). This Agreement sets forth the general terms and conditions of your use of the this application mobile application and any of its products or services (collectively, "Mobile Application" or "Services").
+
+\n \nAccounts and membership \n \n
+
+You must be at least 18 years of age to use this Mobile Application. By using this Mobile Application and by agreeing to this Agreement you warrant and represent that you are at least 18 years of age. If you create an account in the Mobile Application, you are responsible for maintaining the security of your account and you are fully responsible for all activities that occur under the account and any other actions taken in connection with it. We may, but have no obligation to, monitor and review new accounts before you may sign in and use our Services. Providing false contact information of any kind may result in the termination of your account. You must immediately notify us of any unauthorized uses of your account or any other breaches of security. We will not be liable for any acts or omissions by you, including any damages of any kind incurred as a result of such acts or omissions.
+
+\n \nUser content \n \n
+
+We do not own any data, information or material ("Content") that you submit in the Mobile Application in the course of using the Service. You shall have sole responsibility for the accuracy, quality, integrity, legality, reliability, appropriateness, and intellectual property ownership or right to use of all submitted Content. We may, but have no obligation to, monitor and review Content in the Mobile Application submitted or created using our Services by you. You grant us permission to access, copy, distribute, store, transmit, reformat, display and perform the Content of your user account solely as required for the purpose of providing the Services to you. You also grant us the license to use, reproduce, adapt, modify, publish or distribute the Content created by you or stored in your user account for commercial, marketing or any similar purpose.
+
+\n \nBackups \n \n
+
+We are not responsible for Content residing in the Mobile Application. In no event shall we be held liable for any loss of any Content. It is your sole responsibility to maintain appropriate backup of your Content. Notwithstanding the foregoing, on some occasions and in certain circumstances, with absolutely no obligation, we may be able to restore some or all of your data that has been deleted as of a certain date and time when we may have backed up data for our own purposes. We make no guarantee that the data you need will be available.
+
+\n \nLinks to other mobile applications \n \n
+
+Although this Mobile Application may link to other mobile applications, we are not, directly or indirectly, implying any approval, association, sponsorship, endorsement, or affiliation with any linked mobile application, unless specifically stated herein. Some of the links in the Mobile Application may be "affiliate links". This means if you click on the link and purchase an item, Mobile Application Developer will receive an affiliate commission. We are not responsible for examining or evaluating, and we do not warrant the offerings of, any businesses or individuals or the content of their mobile applications. We do not assume any responsibility or liability for the actions, products, services, and content of any other third parties. You should carefully review the legal statements and other conditions of use of any mobile application which you access through a link from this Mobile Application. Your linking to any other off-site mobile applications is at your own risk.
+
+\n \nChanges and amendments \n \n
+
+We reserve the right to modify this Agreement or its policies relating to the Mobile Application or Services at any time, effective upon posting of an updated version of this Agreement in the Mobile Application. When we do, we will send you an email to notify you. Continued use of the Mobile Application after any such changes shall constitute your consent to such changes. Policy was created with https://www.WebsitePolicies.com
+
+\n \nAcceptance of these terms \n \n
+
+You acknowledge that you have read this Agreement and agree to all its terms and conditions. By using the Mobile Application or its Services you agree to be bound by this Agreement. If you do not agree to abide by the terms of this Agreement, you are not authorized to use or access the Mobile Application and its Services.
+
+\n \nContacting us \n \n
+
+If you would like to contact us to understand more about this Agreement or wish to contact us concerning any matter relating to it, you may send an email to progettohumanci@gmail.com \n \nThis document was last updated on June 16, 2020</string>
+    <string name="type_message">Type your message here...</string>
+    <string name="about_app">This app has been developed as final project for the Human-Computer Interaction course, La Sapienza, year 2019/2020, by \n \nCarlini Tommaso, Lo Iudice Davide, Nicolanti Valerio and Roggiolani Gianmarco</string>
+</resources>

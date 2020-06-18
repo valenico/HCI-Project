@@ -2,6 +2,7 @@ package com.example.huc_project.homepage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,6 +75,10 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
+        boolean night = pref.getBoolean("night", false);
+        if(night){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
         Intent i = getIntent();
         String guest = i.getStringExtra("guest");
         if(guest != null && guest == "true"){
