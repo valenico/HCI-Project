@@ -84,12 +84,12 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         if(clicked.equals("General") && !mylist.contains("Change Email")){
             listItems.add(position+1,"Change Email"); // done
             listItems.add(position+2,"Log Out"); // done
-            listItems.add(position+3,"Others");
+            listItems.add(position+3,"Dark Theme On/Off"); // done
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("General")){
             listItems.remove("Change Email"); // done
             listItems.remove("Log Out"); // done
-            listItems.remove("Others");
+            listItems.remove("Dark Theme On/Off"); // done
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
             listItems.add(position+1,"Report a Problem"); // done
@@ -216,9 +216,14 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
                     .setPositiveButton("Ok", null)
                     .create();
             dialog.show();
-        } else if(clicked.equals("Others")){
-            AppCompatDelegate.setDefaultNightMode( AppCompatDelegate.MODE_NIGHT_YES);
-            editor.putBoolean("night", true);
+        } else if(clicked.equals("Dark Theme On/Off")){
+            if(pref.getBoolean("night", false)){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                editor.putBoolean("night", false);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                editor.putBoolean("night", true);
+            }
             editor.commit();
         }
     }
