@@ -9,6 +9,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,8 +21,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
+import com.example.huc_project.chat.Chat;
+import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.homepage.Homepage;
+import com.example.huc_project.homepage.RecyclerViewAdapter;
 import com.example.huc_project.posts.postView;
+import com.example.huc_project.settings.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -33,9 +40,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import org.w3c.dom.Document;
@@ -49,6 +61,9 @@ public class Profile_main_page extends AppCompatActivity {
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    RecyclerView recyclerView;
+    RecyclerViewAdapter recyclerViewAdapter;
 
     TabLayout tabLayout;
 
@@ -240,6 +255,7 @@ public class Profile_main_page extends AppCompatActivity {
                             user_mail.setText( mail.substring(0 , mail.indexOf('@') ) + '\n' + mail.substring(mail.indexOf('@')) );
                         } else if (!guest_user) user_mail.setText(mail);
                     }
+                    setUpCircularMenu();
                 }
             }
         });
@@ -256,5 +272,120 @@ public class Profile_main_page extends AppCompatActivity {
 
     public static String getCurrent_user() {
         return current_user;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                recyclerViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+
+    private void setUpCircularMenu(){
+        final ImageView icon = new ImageView(this);
+        final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+        final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
+        icon.setImageDrawable(menu_ic_id);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
+        itemBuilder.setLayoutParams(params);
+
+        //settings
+        ImageView settingsItem = new ImageView(this);
+        settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
+        SubActionButton settingsButton = itemBuilder.setContentView(settingsItem).build();
+        //chat
+        ImageView chatItem = new ImageView(this);
+        chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+        SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
+        //profile
+        ImageView profItem = new ImageView(this);
+        profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
+        SubActionButton profButton = itemBuilder.setContentView(profItem).build();
+        //new post
+        ImageView addItem = new ImageView(this);
+        addItem.setImageDrawable(add_ic_id);
+        SubActionButton addButton = itemBuilder.setContentView(addItem).build();
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(settingsButton)
+                .addSubActionView(chatButton)
+                .addSubActionView(profButton)
+                .addSubActionView(addButton)
+                .setRadius(470)
+                .attachTo(actionButton)
+                .build();
+
+        actionMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+            @Override
+            public void onMenuOpened(FloatingActionMenu menu) {
+                icon.setImageDrawable(add_ic_id);
+                icon.setRotation(45);
+            }
+
+            @Override
+            public void onMenuClosed(FloatingActionMenu menu) {
+                icon.setImageDrawable(menu_ic_id);
+                icon.setRotation(0);
+            }
+        });
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        profButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                intent.putExtra("user", current_user);
+                startActivity(intent);
+            }
+        });
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Profile_main_page.this, Chat.class);
+                startActivity(i);
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Profile_main_page.this, Settings.class);
+                startActivity(i);
+            }
+        });
     }
 }
