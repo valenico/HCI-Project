@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class CreateNewPostActivity extends AppCompatActivity {
     private static final int GET_FROM_GALLERY = 1;
     private static final String TAG = "taggy";
@@ -53,7 +54,8 @@ public class CreateNewPostActivity extends AppCompatActivity {
     ImageButton imageView;
     Button button;
     private static final int PICK_IMAGE = 100;
-    Uri imageUri;
+    boolean isTheImageUp=false;
+    Uri imageUri= Uri.parse("android.resource://com.example.project/"+R.drawable.error);
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
@@ -154,23 +156,49 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 post.put("role", role);
 
                 if(file != null){
-                    riversRef = storageRef.child("images/"+file.getLastPathSegment());
-                    post.put("storageref", file.getLastPathSegment());
-                    uploadTask = riversRef.putFile(file);
+                    if (isTheImageUp==false) {
+                        String stringRef=file.getLastPathSegment()+"_"+ System.currentTimeMillis();
+                        riversRef = storageRef.child("images/" + stringRef);
+                        Log.e("PROVOLA",  stringRef);
+                        post.put("storageref", stringRef);
+                        Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.add_img);
+                        uploadTask = riversRef.putFile(imageUri);
 
-                    // Register observers to listen for when the download is done or if it fails
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle unsuccessful uploads
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                            // ...
-                        }
-                    });
+                        // Register observers to listen for when the download is done or if it fails
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle unsuccessful uploads
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                                // ...
+                            }
+                        });
+                    }
+                    else {
+                        riversRef = storageRef.child("images/" + file.getLastPathSegment());
+                        Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
+                        post.put("storageref", file.getLastPathSegment());
+                        uploadTask = riversRef.putFile(file);
+
+                        // Register observers to listen for when the download is done or if it fails
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle unsuccessful uploads
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                                // ...
+                            }
+                        });
+
+                    }
                 }
 
                 // Add a new document with a generated ID
@@ -196,7 +224,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
         });
 
     }
-    
+
     private void openGallery() {
         Intent gallery = new Intent();//(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         gallery.setAction(Intent.ACTION_GET_CONTENT);
@@ -206,6 +234,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        isTheImageUp=true;
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == -1 && requestCode == PICK_IMAGE && data!=null) {
             imageUri = data.getData();
@@ -214,6 +243,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                     .setAspectRatio(1,1)
                     .setRequestedSize(500,500, CropImageView.RequestSizeOptions.RESIZE_EXACT)
                     .start(this);
+
         }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
