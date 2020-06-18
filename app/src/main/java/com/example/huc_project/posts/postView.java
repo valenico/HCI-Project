@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.huc_project.chat.ChatView;
 import com.example.huc_project.homepage.DataGettingActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
@@ -81,6 +82,24 @@ public class postView extends AppCompatActivity {
         this.desc_view = findViewById(R.id.postDesc);
         owner_name = findViewById(R.id.owner_name);
         owner_img = findViewById(R.id.owner_img);
+
+        owner_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go_profile = new Intent(postView.this, Profile_main_page.class);
+                go_profile.putExtra("user",post.getUser());
+                startActivity(go_profile);
+            }
+        });
+
+        owner_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go_profile = new Intent(postView.this, Profile_main_page.class);
+                go_profile.putExtra("user",post.getUser());
+                startActivity(go_profile);
+            }
+        });
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
