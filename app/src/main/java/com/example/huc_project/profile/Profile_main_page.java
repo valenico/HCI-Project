@@ -253,7 +253,7 @@ public class Profile_main_page extends AppCompatActivity {
                         }
 
                         if (hidden_mail.equals(true)) user_mail.setText("Hidden");
-                        else if(user_mail.getWidth() + profile_img.getWidth() > 480 && !guest_user){
+                        else if(mail.length() > 18  && !guest_user){
                             user_mail.setText( mail.substring(0 , mail.indexOf('@') ) + '\n' + mail.substring(mail.indexOf('@')) );
                         } else if (!guest_user) user_mail.setText(mail);
                     }
