@@ -175,11 +175,6 @@ public class Profile_main_page extends AppCompatActivity {
                                             edit_profile.setImageDrawable(wrappedDrawable);
                                             break;
                                         }
-                                        else {
-                                            DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86));
-                                            edit_profile.setImageDrawable(wrappedDrawable);
-
-                                        }
                                     }
                                 }
                             });
