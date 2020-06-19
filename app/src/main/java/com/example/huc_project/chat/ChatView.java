@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.CreateNewPostActivity;
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -173,6 +174,12 @@ public class ChatView extends AppCompatActivity {
 
         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(((EditText)findViewById(R.id.text_in_chat)).getWindowToken(), 0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent back = new Intent(ChatView.this, Chat.class);
+        startActivity(back);
     }
 
 

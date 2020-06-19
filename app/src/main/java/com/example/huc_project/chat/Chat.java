@@ -88,7 +88,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
                                 if(convo.getUser1().equals(usr.getUid())){
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
-                                    unread_messages = convo.isRead1();
+                                    unread_messages = convo.isRead1(); // isread is false when you haven't read,
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId(), unread_messages);
                                     rowsChatList.add(cm);
                                 } else if (convo.getUser2().equals(usr.getUid())) {
@@ -165,7 +165,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
         final Drawable menu_ic_id;
-         if(unread_messages){
+        if(unread_messages){
             menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
         } else {
             menu_ic_id = getResources().getDrawable(R.drawable.ic_menu_notification);
@@ -263,6 +263,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         intent.putExtra("who", chat_clicked.getI_am_0());
         intent.putExtra("document",chat_clicked.getDocument());
         startActivity(intent);
+        finish();
     }
 
     @Override
