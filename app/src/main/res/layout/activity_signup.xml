@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Signup">
+    tools:context=".Signup"
+    android:background="@color/backgroundColor">
 
     <Button
         android:id="@+id/signup"
@@ -54,6 +55,7 @@
         android:layout_height="@dimen/_38sdp"
         android:layout_marginEnd="@dimen/_70sdp"
         android:layout_marginLeft="@dimen/_70sdp"
+        android:textColor="@color/textColor"
         android:layout_marginRight="@dimen/_70sdp"
         android:layout_marginStart="@dimen/_70sdp"
         android:layout_marginTop="@dimen/_18sdp"
@@ -75,6 +77,8 @@
         android:hint="Confirm Password*"
         android:inputType="textPassword"
         android:lines="1"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,6 +98,8 @@
         android:hint="Password*"
         android:inputType="textPassword"
         android:lines="1"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,6 +115,8 @@
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,6 +132,8 @@
         android:layout_marginStart="@dimen/_38sdp"
         android:layout_marginTop="@dimen/_120sdp"
         android:hint="E-mail*"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"

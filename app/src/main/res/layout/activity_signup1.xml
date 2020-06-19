@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
 
     <AutoCompleteTextView
         android:id="@+id/autocomplete_city"
@@ -15,10 +16,11 @@
         android:layout_marginStart="@dimen/_38sdp"
         android:layout_marginTop="@dimen/_18sdp"
         android:hint="City"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"
-        android:textColor="#707070"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autocomplete_country" />
@@ -28,6 +30,8 @@
         android:layout_width="@dimen/_240sdp"
         android:layout_height="@dimen/_38sdp"
         android:layout_marginEnd="@dimen/_38sdp"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:layout_marginLeft="@dimen/_38sdp"
         android:layout_marginRight="@dimen/_38sdp"
         android:layout_marginStart="@dimen/_38sdp"
@@ -36,7 +40,6 @@
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"
-        android:textColor="#707070"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/info_p1" />
@@ -52,6 +55,8 @@
         android:layout_marginTop="@dimen/_18sdp"
         android:ems="10"
         android:hint="Phone Number"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:inputType="number"
         android:maxLines="1"
         android:lines="1"
@@ -69,6 +74,7 @@
         android:layout_marginRight="@dimen/_97sdp"
         android:layout_marginStart="@dimen/_97sdp"
         android:layout_marginTop="@dimen/_70sdp"
+        android:textColor="@color/textColor"
         android:text="@string/complete_your_profile"
         android:textSize="@dimen/_15sdp"
         android:textStyle="bold"
@@ -83,6 +89,7 @@
         android:layout_marginEnd="@dimen/_40sdp"
         android:layout_marginLeft="@dimen/_40sdp"
         android:layout_marginRight="@dimen/_40sdp"
+        android:textColor="@color/textColor"
         android:layout_marginStart="@dimen/_40sdp"
         android:layout_marginTop="@dimen/_6sdp"
         android:text="@string/info_profile"
@@ -100,6 +107,7 @@
         android:layout_marginStart="@dimen/_38sdp"
         android:layout_marginTop="@dimen/_18sdp"
         android:text="Hide my e-mail"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phonenumber" />

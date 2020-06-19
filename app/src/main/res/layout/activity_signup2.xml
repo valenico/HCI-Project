@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
 
     <EditText
         android:id="@+id/description"
@@ -17,6 +18,8 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/border"
         android:ems="10"
+        android:textColorHint="@color/hint_color"
+        android:textColor="@color/textColor"
         android:gravity="start|top"
         android:hint="Hello!"
         android:inputType="textMultiLine"
@@ -69,6 +72,7 @@
         android:text="@string/complete_your_profile"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -83,6 +87,7 @@
         android:layout_marginStart="@dimen/_100sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:text="Upload a profile picture"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_pic" />
@@ -96,6 +101,7 @@
         android:layout_marginStart="@dimen/_50sdp"
         android:layout_marginTop="@dimen/_30sdp"
         android:text="Write a description:"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/_11sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +118,7 @@
         android:layout_marginStart="@dimen/_45sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:textSize="@dimen/_11sdp"
+        android:textColor="@color/textColor"
         android:text="@string/info_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
