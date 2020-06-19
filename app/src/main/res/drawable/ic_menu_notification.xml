@@ -12,10 +12,15 @@
         </vector>
     </item>
     <item
-        android:width="5dp"
-        android:height="5dp"
-        android:gravity="start"
-        >
+        android:bottom="@dimen/_15sdp"
+        android:right="@dimen/_15sdp">
+
+        <!-- Nel caso dia problemi coi margini top e left
+        android:top="@dimen/_2sdp"
+        android:bottom="@dimen/_13sdp"
+        android:left="@dimen/_1sdp"
+        android:right="@dimen/_14sdp"-->
+
         <shape android:shape="oval">
             <stroke android:color="@android:color/transparent"
                 android:width="0dp" />
