@@ -9,9 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,15 +21,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.huc_project.R;
 import com.example.huc_project.chat.Chat;
 import com.example.huc_project.homepage.CreateNewPostActivity;
-import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.RecyclerViewAdapter;
-import com.example.huc_project.posts.postView;
 import com.example.huc_project.settings.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,12 +40,10 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
