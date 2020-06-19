@@ -14,13 +14,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.huc_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,7 +46,10 @@ public class Profile_photo_frag extends Fragment {
     final int PICK_IMAGE = 100;
     final String TAG = "TAG";
     GridView gridView;
+    SwipeRefreshLayout swipeRefresh;
     ArrayList<String> l = new ArrayList<>();
+    ArrayList<String> list = new ArrayList<>();
+    ImageAdapter gridAdapter;
 
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
@@ -61,6 +65,9 @@ public class Profile_photo_frag extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.frag_photo, container, false);
+
+        gridView = view.findViewById(R.id.gridView);
+        swipeRefresh = view.findViewById(R.id.swipeContainerPhotos);
 
         if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             Button button = view.findViewById(R.id.add_photo);
@@ -78,22 +85,38 @@ public class Profile_photo_frag extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        gridView = view.findViewById(R.id.gridView);
 
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                list.clear();
+                gridAdapter.notifyDataSetChanged();
+                setUpGridView();
+                swipeRefresh.setRefreshing(false);
+            }
+        });
 
+        setUpGridView();
+
+        return view;
+    }
+
+    public void setUpGridView(){
         db.collection("UTENTI").document(current_user).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    ArrayList<String> list = new ArrayList<>();
+                    list = new ArrayList<>();
                     if (document.get("images") != null){
                         list = (ArrayList<String>) document.get("images");
                         Collections.reverse(list);
                     }
 
-                    gridView.setAdapter(new ImageAdapter(getContext(), list));
+
+                    gridAdapter = new ImageAdapter(getContext(), list);
+                    gridView.setAdapter(gridAdapter);
                     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -107,7 +130,6 @@ public class Profile_photo_frag extends Fragment {
                 }
             }
         });
-        return view;
     }
 
 
@@ -158,16 +180,23 @@ public class Profile_photo_frag extends Fragment {
                         if (document.get("images") != null)
                             list = (ArrayList<String>) document.get("images");
                         list.add(imgRef);
-                        HashMap<String, ArrayList<String>> imgs = new HashMap<>();
+                        final HashMap<String, ArrayList<String>> imgs = new HashMap<>();
                         imgs.put("images", list);
 
                         StorageReference riversRef = storageRef.child("images/" + file.getLastPathSegment());
                         UploadTask uploadTask = riversRef.putFile(file);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 
-                        db.collection("UTENTI").document(user).set(imgs, SetOptions.merge());
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Profile_photo_frag.this).attach(Profile_photo_frag.this).commit();
+                                db.collection("UTENTI").document(user).set(imgs, SetOptions.merge());
+                            }
+                        });
 
                     } else {
                         Log.d(TAG, "No such document");
