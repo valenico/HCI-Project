@@ -160,6 +160,7 @@ public class ChatView extends AppCompatActivity {
 
     public void send_chat_text(View v){
         String what = ((EditText)findViewById(R.id.text_in_chat)).getText().toString();
+        if(what.trim().length() == 0) return;
         HashMap<String,Object> to_put = new HashMap<>();
         if (i_am_0){
             messages.add("0"+what);
