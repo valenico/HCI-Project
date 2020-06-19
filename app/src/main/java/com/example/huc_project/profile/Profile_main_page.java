@@ -269,31 +269,6 @@ public class Profile_main_page extends AppCompatActivity {
         return current_user;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.search_icon);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                recyclerViewAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-        return true;
-    }
-
 
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
