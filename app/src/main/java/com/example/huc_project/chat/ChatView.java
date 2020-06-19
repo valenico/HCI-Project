@@ -81,6 +81,13 @@ public class ChatView extends AppCompatActivity {
             document = (String) b.get("document");
         }
 
+        HashMap<String,Boolean> to_put = new HashMap<>();
+        if (i_am_0){
+            to_put.put("read1", true);
+        } else {
+            to_put.put("read2", true);
+        }
+        db.collection("Chat").document(document).set(to_put, SetOptions.merge());
         final DocumentReference docRef = db.collection("UTENTI").document(usr_uid);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -152,12 +159,14 @@ public class ChatView extends AppCompatActivity {
 
     public void send_chat_text(View v){
         String what = ((EditText)findViewById(R.id.text_in_chat)).getText().toString();
+        HashMap<String,Object> to_put = new HashMap<>();
         if (i_am_0){
             messages.add("0"+what);
+            to_put.put("read2", false);
         } else {
             messages.add("1"+what);
+            to_put.put("read1", false);
         }
-        HashMap<String,Object> to_put = new HashMap<>();
         to_put.put("Messages", messages);
         db.collection("Chat").document(document).set(to_put, SetOptions.merge());
         ((EditText)findViewById(R.id.text_in_chat)).setText("");

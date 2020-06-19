@@ -13,15 +13,17 @@ public class ChatMessage {
     private List<String> messages;
     private Boolean i_am_0;
     private String document;
+    private boolean read;
     private long messageTime;
 
-    public ChatMessage(RequestManager glide, String messageText, String messageUid, List<String> messages, Boolean i_am_0, String document){
+    public ChatMessage(RequestManager glide, String messageText, String messageUid, List<String> messages, Boolean i_am_0, String document, boolean read){
         this.messageText = messageText;
         this.messages = messages;
         this.document = document;
         this.messageUid = messageUid;
         this.glide = glide;
         this.i_am_0 = i_am_0;
+        this.read = read;
         this.messageTime = new Date().getTime();
     }
 
@@ -70,5 +72,13 @@ public class ChatMessage {
 
     public void setDocument(String document) {
         this.document = document;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

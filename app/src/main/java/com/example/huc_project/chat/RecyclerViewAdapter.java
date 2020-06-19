@@ -1,5 +1,8 @@
 package com.example.huc_project.chat;
 
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,6 +125,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         final ChatMessage item = itemsList.get(position);
         final String text = item.getMessageText();
         final String uid = item.getMessageUid();
+        final boolean read = item.isRead();
 
         final DocumentReference docRef = db.collection("UTENTI").document(uid);
 
@@ -136,6 +140,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
                         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
                         StorageReference ref = storage.getReference().child("users/" + uid);
+                        if(!read){
+                            viewHolder.tvItem.setBackgroundColor(Color.CYAN);
+                        }
                         Chat.glideTask(item.glide, ref, view);
                         tv1.setText(name);
                         tv2.setText(text);

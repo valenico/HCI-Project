@@ -86,10 +86,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
-        boolean night = pref.getBoolean("night", false);
-        if(night){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
         guest_mode = i.getBooleanExtra("guest",false);
 
         recyclerView=null;

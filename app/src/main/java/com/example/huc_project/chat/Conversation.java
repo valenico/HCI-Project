@@ -12,16 +12,19 @@ public class Conversation {
 
     private String User1;
     private String User2;
-    //private String Messages;
     private List<String> Messages;
+    private boolean read1;
+    private boolean read2;
 
     public Conversation(){
     }
 
-    public Conversation(String u1, String u2, List<String> messages){
+    public Conversation(String u1, String u2, List<String> messages, boolean read1, boolean reaad2){
         this.User1 = u1;
         this.User2 = u2;
         this.Messages = messages;
+        this.read1 = read1;
+        this.read2 = read2;
     }
 
 
@@ -51,5 +54,21 @@ public class Conversation {
 
     public void setMessages(List<String> messages) {
         this.Messages = messages;
+    }
+
+    public boolean isRead1() {
+        return read1;
+    }
+
+    public void setRead1(boolean read1) {
+        this.read1 = read1;
+    }
+
+    public boolean isRead2() {
+        return read2;
+    }
+
+    public void setRead2(boolean read2) {
+        this.read2 = read2;
     }
 }

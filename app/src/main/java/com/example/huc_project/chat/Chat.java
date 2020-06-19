@@ -52,6 +52,8 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     private FirebaseUser usr = mAuth.getCurrentUser();
     private RecyclerView recyclerView;
     ArrayList<ChatMessage> rowsChatList = new ArrayList<>();
+    private boolean unread_messages = false;
+    static com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton;
 
     private RecyclerViewAdapter recyclerViewAdapter;
 
@@ -86,12 +88,14 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
                                 if(convo.getUser1().equals(usr.getUid())){
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
-                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId());
+                                    unread_messages = convo.isRead1();
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId(), unread_messages);
                                     rowsChatList.add(cm);
                                 } else if (convo.getUser2().equals(usr.getUid())) {
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
-                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser1() , all_messages ,false , document.getId() );
+                                    unread_messages = convo.isRead2();
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser1() , all_messages ,false , document.getId(),unread_messages);
                                     rowsChatList.add(cm);
                                 }
                             }
@@ -158,14 +162,18 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         return true;
     }
 
-
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
-        final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+        final Drawable menu_ic_id;
+         if(unread_messages){
+            menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+        } else {
+            menu_ic_id = getResources().getDrawable(R.drawable.ic_menu_notification);
+        }
         final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
         icon.setImageDrawable(menu_ic_id);
 
-        com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this).setContentView(icon).build();
+        actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this).setContentView(icon).build();
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.LayoutParams params=new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.LayoutParams(220,220);
