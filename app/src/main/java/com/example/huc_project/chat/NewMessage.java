@@ -73,6 +73,8 @@ public class NewMessage extends AppCompatActivity {
         to_put.put("User1", mAuth.getCurrentUser().getUid());
         to_put.put("User2", request_uid );
         to_put.put("Messages", messages);
+        to_put.put("read1", true);
+        to_put.put("read2", false);
         db.collection("Chat").document(UUID.randomUUID().toString()).set(to_put);
         Intent i = new Intent(getBaseContext(), Chat.class);
         startActivity(i);
