@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,8 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
@@ -67,6 +70,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     boolean guest_mode = false;
     boolean isLoading = false;
+
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -123,6 +128,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             setUpCircularMenu();
                             initScrollListener();
 
+                            swipeContainer.setRefreshing(false);
+
                         } else {
                             Log.w("Tag", "Error getting documents.", task.getException());
                         }
@@ -141,7 +148,19 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         recyclerView.setHasFixedSize(true);
         recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
         recyclerView.setAdapter(recyclerViewAdapter);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                rowsArrayList.clear();
+                rowsPostList.clear();
+                recyclerViewAdapter.notifyDataSetChanged();
+                setUpHomepage();
+            }
+        });
     }
+
 
     private void initScrollListener() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

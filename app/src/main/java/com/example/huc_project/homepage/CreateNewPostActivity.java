@@ -10,23 +10,17 @@ import android.os.Bundle;
 import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -41,18 +35,15 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 public class CreateNewPostActivity extends AppCompatActivity {
-    private static final int GET_FROM_GALLERY = 1;
     private static final String TAG = "taggy";
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
     private FirebaseFirestore db;
     ImageButton imageView;
-    Button button;
     private static final int PICK_IMAGE = 100;
     boolean isTheImageUp=false;
     Uri imageUri= Uri.parse("android.resource://com.example.project/"+R.drawable.error);
@@ -84,18 +75,14 @@ public class CreateNewPostActivity extends AppCompatActivity {
         buttonCreateP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, Object> post = new HashMap<>();
+                final Map<String, Object> post = new HashMap<>();
                 EditText text = (EditText) findViewById(R.id.textDesc);
                 EditText texttitle = (EditText) findViewById(R.id.textTitle);
                 String postDescription = text.getText().toString();
                 String postTitle=texttitle.getText().toString();
-                //imageView = (ImageView)findViewById(R.id.imageView);
+
                 Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                //DAVIDE I THINK YOU HAVE TO USE CLOUD STORAGE INSTEAD OF FIRESTORE e in particolare firebaseui
 
-                //Post postcomplete=new Post(postDescription, "le velineeee");
-
-                Uri file = imageUri;
                 StorageReference storageRef = storage.getReference();
                 StorageReference riversRef;
                 UploadTask uploadTask;
@@ -155,68 +142,48 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 post.put("categories", categoriesChosen);
                 post.put("role", role);
 
-                if(file != null){
-                    if (isTheImageUp==false) {
-                        String stringRef=file.getLastPathSegment()+"_"+ System.currentTimeMillis();
-                        riversRef = storageRef.child("images/" + stringRef);
-                        Log.e("PROVOLA",  stringRef);
-                        post.put("storageref", stringRef);
-                        Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.add_img);
-                        uploadTask = riversRef.putFile(imageUri);
-
-                        // Register observers to listen for when the download is done or if it fails
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                                // ...
-                            }
-                        });
-                    }
-                    else {
-                        riversRef = storageRef.child("images/" + file.getLastPathSegment());
-                        Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
-                        post.put("storageref", file.getLastPathSegment());
-                        uploadTask = riversRef.putFile(file);
-
-                        // Register observers to listen for when the download is done or if it fails
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                                // ...
-                            }
-                        });
-
-                    }
+                // Handle unsuccessful uploads
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                if (isTheImageUp==false) {
+                    String stringRef = imageUri.getLastPathSegment()+"_"+ System.currentTimeMillis();
+                    riversRef = storageRef.child("images/" + stringRef);
+                    Log.e("PROVOLA",  stringRef);
+                    post.put("storageref", stringRef);
+                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.add_img);
+                    uploadTask = riversRef.putFile(imageUri);
+                }
+                else {
+                    riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
+                    Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
+                    post.put("storageref", imageUri.getLastPathSegment());
+                    uploadTask = riversRef.putFile(imageUri);
                 }
 
-                // Add a new document with a generated ID
-                db.collection("posts")
-                        .add(post)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
-
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Add a new document with a generated ID
+                        db.collection("posts")
+                                .add(post)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });                    }
+                });
                 Intent intent = new Intent(getApplicationContext(), Homepage.class);
                 startActivity(intent);
                 finish();
@@ -234,7 +201,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        isTheImageUp=true;
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == -1 && requestCode == PICK_IMAGE && data!=null) {
             imageUri = data.getData();
@@ -250,6 +216,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if(resultCode == -1){
+                isTheImageUp=true;
                 imageUri = result.getUri();
                 imageView.setImageURI(imageUri);
             }

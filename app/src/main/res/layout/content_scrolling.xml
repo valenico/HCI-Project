@@ -32,7 +32,7 @@
             android:id="@+id/owner_info"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_110sdp"
-            android:layout_marginBottom="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
             android:backgroundTint="@color/card_color">
 
             <androidx.cardview.widget.CardView
