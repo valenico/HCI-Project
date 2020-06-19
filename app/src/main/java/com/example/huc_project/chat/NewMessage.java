@@ -4,13 +4,17 @@ package com.example.huc_project.chat;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.CreateNewPostActivity;
@@ -59,6 +63,26 @@ public class NewMessage extends AppCompatActivity {
                         av.setAdapter(adapter);
                     }
                 }
+        });
+
+        final ImageButton button = findViewById(R.id.send_new_text);
+        button.setEnabled(false);
+        final TextView tv = findViewById(R.id.new_text);
+        tv.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().trim().length()==0){
+                    button.setEnabled(false);
+                } else {
+                    button.setEnabled(true);
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) { }
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
     }
