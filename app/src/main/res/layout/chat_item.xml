@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_80sdp"
+    app:cardElevation="@dimen/_2sdp"
+    app:cardUseCompatPadding="true"
+    android:id="@+id/cardItem" >
+    <!--- app:cardCornerRadius="@dimen/_15sdp"  per farla rounded
+    -->
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/card_color"
+        android:padding="@dimen/_4sdp"
+        android:id="@+id/relative">
+
+        <ImageView
+            android:id="@+id/post_image"
+            android:layout_width="@dimen/_75sdp"
+            android:layout_height="@dimen/_75sdp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/_12sdp"
+            android:maxHeight="@dimen/_60sdp"
+            android:maxWidth="@dimen/_60sdp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_alignParentStart="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvItem"
+            android:layout_toRightOf="@+id/post_image"
+            android:textColor="@color/textColor"
+            android:layout_alignParentTop="true"
+            android:textSize="@dimen/_15sdp"
+            android:layout_toEndOf="@+id/post_image" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/desc_preview"
+            android:textColor="@color/textColor"
+            android:layout_toRightOf="@+id/post_image"
+            android:layout_below="@+id/tvItem"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textSize="@dimen/_12sdp"
+            android:maxLines="1"
+            android:layout_toEndOf="@+id/post_image" />
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>

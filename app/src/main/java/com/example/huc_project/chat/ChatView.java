@@ -108,6 +108,8 @@ public class ChatView extends AppCompatActivity {
 
         setUpRecyclerView();
         initScrollListener();
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        linearLayoutManager.scrollToPosition(messages.size() - 1);
     }
 
     private void setUpRecyclerView() {
@@ -129,8 +131,6 @@ public class ChatView extends AppCompatActivity {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                linearLayoutManager.scrollToPosition(messages.size() - 1);
             }
         });
     }
@@ -172,7 +172,8 @@ public class ChatView extends AppCompatActivity {
         to_put.put("Messages", messages);
         db.collection("Chat").document(document).set(to_put, SetOptions.merge());
         ((EditText)findViewById(R.id.text_in_chat)).setText("");
-
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        linearLayoutManager.scrollToPosition(messages.size() - 1);
         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(((EditText)findViewById(R.id.text_in_chat)).getWindowToken(), 0);
     }
