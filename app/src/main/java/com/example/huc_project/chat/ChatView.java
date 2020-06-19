@@ -180,6 +180,7 @@ public class ChatView extends AppCompatActivity {
     public void onBackPressed() {
         Intent back = new Intent(ChatView.this, Chat.class);
         startActivity(back);
+        finish();
     }
 
 
