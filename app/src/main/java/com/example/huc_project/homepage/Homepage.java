@@ -3,7 +3,9 @@ package com.example.huc_project.homepage;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -11,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,11 +75,14 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     boolean isLoading = false;
 
     private SwipeRefreshLayout swipeContainer;
+    private FloatingActionMenu actionMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        Intent i = getIntent();
+
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
@@ -84,11 +90,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         if(night){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
-        Intent i = getIntent();
-        String guest = i.getStringExtra("guest");
-        if(guest != null && guest == "true"){
-            guest_mode = true;
-        }
+        guest_mode = i.getBooleanExtra("guest",false);
 
         recyclerView=null;
         setUpHomepage();
@@ -127,7 +129,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             setUpRecyclerView();
                             setUpCircularMenu();
                             initScrollListener();
-
                             swipeContainer.setRefreshing(false);
 
                         } else {
@@ -245,97 +246,107 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
-        final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
-        final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
-        icon.setImageDrawable(menu_ic_id);
+        FloatingActionButton actionButton;
+        if(guest_mode){
+            Drawable exit = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_exit);
+            final Drawable wrappedDrawable = DrawableCompat.wrap(exit);
+            DrawableCompat.setTint(wrappedDrawable, Color.BLACK);
+            icon.setImageDrawable(wrappedDrawable);
+            actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        } else{
+            final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+            final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
+            icon.setImageDrawable(menu_ic_id);
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+            actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
 
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-        FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
-        itemBuilder.setLayoutParams(params);
+            SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+            FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
+            itemBuilder.setLayoutParams(params);
 
-        //settings
-        ImageView settingsItem = new ImageView(this);
-        settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
-        SubActionButton settingsButton = itemBuilder.setContentView(settingsItem).build();
-        //chat
-        ImageView chatItem = new ImageView(this);
-        chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
-        SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
-        //profile
-        ImageView profItem = new ImageView(this);
-        profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
-        SubActionButton profButton = itemBuilder.setContentView(profItem).build();
-        //new post
-        ImageView addItem = new ImageView(this);
-        addItem.setImageDrawable(add_ic_id);
-        SubActionButton addButton = itemBuilder.setContentView(addItem).build();
+            //settings
+            ImageView settingsItem = new ImageView(this);
+            settingsItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_settings));
+            SubActionButton settingsButton = itemBuilder.setContentView(settingsItem).build();
+            //chat
+            ImageView chatItem = new ImageView(this);
+            chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+            SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
+            //profile
+            ImageView profItem = new ImageView(this);
+            profItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_profile));
+            SubActionButton profButton = itemBuilder.setContentView(profItem).build();
+            //new post
+            ImageView addItem = new ImageView(this);
+            addItem.setImageDrawable(add_ic_id);
+            SubActionButton addButton = itemBuilder.setContentView(addItem).build();
 
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(settingsButton)
-                .addSubActionView(chatButton)
-                .addSubActionView(profButton)
-                .addSubActionView(addButton)
-                .setRadius(470)
-                .attachTo(actionButton)
-                .build();
+            actionMenu = new FloatingActionMenu.Builder(this)
+                    .addSubActionView(settingsButton)
+                    .addSubActionView(chatButton)
+                    .addSubActionView(profButton)
+                    .addSubActionView(addButton)
+                    .setRadius(470)
+                    .attachTo(actionButton)
+                    .build();
+            actionMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+                @Override
+                public void onMenuOpened(FloatingActionMenu menu) {
+                    icon.setImageDrawable(add_ic_id);
+                    icon.setRotation(45);
+                }
 
-        actionMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
-            @Override
-            public void onMenuOpened(FloatingActionMenu menu) {
-                icon.setImageDrawable(add_ic_id);
-                icon.setRotation(45);
-            }
-
-            @Override
-            public void onMenuClosed(FloatingActionMenu menu) {
-                icon.setImageDrawable(menu_ic_id);
-                icon.setRotation(0);
-            }
-        });
+                @Override
+                public void onMenuClosed(FloatingActionMenu menu) {
+                    icon.setImageDrawable(menu_ic_id);
+                    icon.setRotation(0);
+                }
+            });
 
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        profButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
-                final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                intent.putExtra("user", current_user);
-                startActivity(intent);
-            }
-        });
-
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Homepage.this, Chat.class);
-                startActivity(i);
-            }
-        });
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Homepage.this, Settings.class);
-                startActivity(i);
-            }
-        });
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            profButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                    final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    intent.putExtra("user", current_user);
+                    startActivity(intent);
+                }
+            });
+            chatButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Homepage.this, Chat.class);
+                    startActivity(i);
+                }
+            });
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Homepage.this, Settings.class);
+                    startActivity(i);
+                }
+            });
+        }
     }
 
     @Override
     public void onItemClick(int position) {
         //Toast.makeText(Homepage.this, "Clicked item" + position, Toast.LENGTH_SHORT).show();
-        final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         PostRow post_clicked = rowsArrayList.get(position);
         Intent intent = new Intent(Homepage.this, postView.class);
         intent.putExtra("title", post_clicked.getTitle());
@@ -343,6 +354,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         intent.putExtra("storageref", post_clicked.getPost().getStorageref());
         intent.putExtra("user", post_clicked.getPost().getUser());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
+        if(guest_mode) intent.putExtra("guest", true);
         startActivity(intent);
     }
 }

@@ -20,9 +20,8 @@ public class GuestModeDialog extends DialogFragment {
         builder.setMessage(R.string.dialog_gues_mode)
                 .setPositiveButton(R.string.guest_accept, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Context context = getContext();
-                        Intent intent = new Intent(context, Homepage.class);
-                        intent.putExtra("guest", "true");
+                        Intent intent = new Intent(getContext(), Homepage.class);
+                        intent.putExtra("guest", true);
                         startActivity(intent);
 
                     }

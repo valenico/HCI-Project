@@ -65,6 +65,7 @@ public class postView extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String current_user;
+    boolean guest_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,8 @@ public class postView extends AppCompatActivity {
         setContentView(R.layout.activity_post_view);
 
         final Intent intent = getIntent();
-        this.current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.guest_mode = intent.getBooleanExtra("guest",false);
+        if(!guest_mode) this.current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
                 intent.getStringExtra("role"));
@@ -83,27 +85,31 @@ public class postView extends AppCompatActivity {
         owner_name = findViewById(R.id.owner_name);
         owner_img = findViewById(R.id.owner_img);
 
-        owner_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent go_profile = new Intent(postView.this, Profile_main_page.class);
-                go_profile.putExtra("user",post.getUser());
-                startActivity(go_profile);
-            }
-        });
+        if(!guest_mode){
+            owner_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent go_profile = new Intent(postView.this, Profile_main_page.class);
+                    go_profile.putExtra("user",post.getUser());
+                    startActivity(go_profile);
+                }
+            });
 
-        owner_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent go_profile = new Intent(postView.this, Profile_main_page.class);
-                go_profile.putExtra("user",post.getUser());
-                startActivity(go_profile);
-            }
-        });
+            owner_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent go_profile = new Intent(postView.this, Profile_main_page.class);
+                    go_profile.putExtra("user",post.getUser());
+                    startActivity(go_profile);
+                }
+            });
+        }
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        if (current_user.equals(post.getUser())) {
+        if(guest_mode){
+            fab.setVisibility(View.INVISIBLE);
+        } else if (current_user.equals(post.getUser())) {
             Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_pencil);
             final Drawable wrappedDrawable = DrawableCompat.wrap(like);
             fab.setImageDrawable(wrappedDrawable);
