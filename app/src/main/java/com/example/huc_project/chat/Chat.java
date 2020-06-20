@@ -43,6 +43,7 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Chat extends AppCompatActivity implements com.example.huc_project.chat.RecyclerViewAdapter.OnItemListener {
@@ -88,13 +89,13 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
                                 if(convo.getUser1().equals(usr.getUid())){
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
-                                    unread_messages = convo.isRead1(); // isread is false when you haven't read,
+                                    if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId(), unread_messages);
                                     rowsChatList.add(cm);
                                 } else if (convo.getUser2().equals(usr.getUid())) {
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
-                                    unread_messages = convo.isRead2();
+                                    if(unread_messages) unread_messages = convo.isRead2();
                                     ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser1() , all_messages ,false , document.getId(),unread_messages);
                                     rowsChatList.add(cm);
                                 }
