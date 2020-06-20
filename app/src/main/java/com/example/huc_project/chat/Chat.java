@@ -53,7 +53,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     private FirebaseUser usr = mAuth.getCurrentUser();
     private RecyclerView recyclerView;
     ArrayList<ChatMessage> rowsChatList = new ArrayList<>();
-    private boolean unread_messages = false;
+    private boolean unread_messages = true;
     static com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton;
 
     private RecyclerViewAdapter recyclerViewAdapter;

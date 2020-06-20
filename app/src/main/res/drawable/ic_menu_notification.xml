@@ -12,8 +12,8 @@
         </vector>
     </item>
     <item
-        android:bottom="@dimen/_15sdp"
-        android:right="@dimen/_15sdp">
+        android:bottom="@dimen/_11sdp"
+        android:right="@dimen/_11sdp">
 
         <!-- Nel caso dia problemi coi margini top e left
         android:top="@dimen/_2sdp"
