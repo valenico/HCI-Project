@@ -22,8 +22,6 @@
         android:right="@dimen/_14sdp"-->
 
         <shape android:shape="oval">
-            <stroke android:color="@android:color/transparent"
-                android:width="0dp" />
             <solid android:color="#f00" />
         </shape>
     </item>
