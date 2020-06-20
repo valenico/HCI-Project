@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.huc_project.R;
@@ -138,7 +139,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         String name = (String) document.get("Name");
                         TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(1);
                         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
-                        ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
+                        ImageView view = (ImageView) ((CardView)viewHolder.tvItem.getChildAt(0)).getChildAt(0);
                         StorageReference ref = storage.getReference().child("users/" + uid);
                         if(!read){
                             viewHolder.tvItem.setBackgroundColor(Color.CYAN);

@@ -18,31 +18,38 @@
         android:padding="@dimen/_4sdp"
         android:id="@+id/relative">
 
-        <ImageView
-            android:id="@+id/post_image"
-            android:layout_width="@dimen/_75sdp"
-            android:layout_height="@dimen/_75sdp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_67sdp"
+            android:layout_height="@dimen/_67sdp"
+            android:id="@+id/card_chat_view"
+            app:cardCornerRadius="70dp"
+            android:innerRadius="0dp"
+            android:shape="ring"
+            android:thicknessRatio="1.9"
             android:layout_marginRight="@dimen/_12sdp"
-            android:maxHeight="@dimen/_60sdp"
-            android:maxWidth="@dimen/_60sdp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_centerInParent="true"
             android:layout_marginEnd="@dimen/_12sdp"
-            android:layout_alignParentStart="true"
-            />
-
+            >
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                />
+        </androidx.cardview.widget.CardView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvItem"
-            android:layout_toRightOf="@+id/post_image"
+            android:layout_toRightOf="@+id/card_chat_view"
             android:textColor="@color/textColor"
             android:layout_alignParentTop="true"
             android:textSize="@dimen/_15sdp"
-            android:layout_toEndOf="@+id/post_image" />
+            android:layout_toEndOf="@+id/card_chat_view" />
 
 
         <TextView
@@ -50,12 +57,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/desc_preview"
             android:textColor="@color/textColor"
-            android:layout_toRightOf="@+id/post_image"
+            android:layout_toRightOf="@+id/card_chat_view"
             android:layout_below="@+id/tvItem"
             android:layout_marginTop="@dimen/_5sdp"
             android:textSize="@dimen/_12sdp"
             android:maxLines="1"
-            android:layout_toEndOf="@+id/post_image" />
+            android:layout_toEndOf="@+id/card_chat_view" />
 
     </RelativeLayout>
 
