@@ -3,13 +3,16 @@ package com.example.huc_project.chat;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -82,6 +85,8 @@ public class ChatView extends AppCompatActivity {
             document = (String) b.get("document");
         }
 
+        img_view = new ImageView(this);
+
         HashMap<String,Boolean> to_put = new HashMap<>();
         if (i_am_0){
             to_put.put("read1", true);
@@ -143,8 +148,11 @@ public class ChatView extends AppCompatActivity {
         inflater.inflate(R.menu.chat_menu, menu);
 
         MenuItem avatar_item = menu.findItem(R.id.avatar);
-        img_view = (ImageView) avatar_item.getActionView();
-        img_view.setLayoutParams(new ImageSwitcher.LayoutParams( ImageSwitcher.LayoutParams.WRAP_CONTENT , ImageSwitcher.LayoutParams.MATCH_PARENT ));
+        CardView card_view = (CardView) avatar_item.getActionView();
+        int h = getSupportActionBar().getHeight() - 15;
+        card_view.setLayoutParams(new ImageSwitcher.LayoutParams( h , h));
+        card_view.setRadius(h);
+        card_view.addView(img_view, 0 ,new ImageSwitcher.LayoutParams( ImageSwitcher.LayoutParams.MATCH_PARENT , ImageSwitcher.LayoutParams.MATCH_PARENT ));
         img_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         img_view.setOnClickListener(new ImageView.OnClickListener() {
             @Override
