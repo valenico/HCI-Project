@@ -19,8 +19,10 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Scroller;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.example.huc_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -104,12 +107,12 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         } else if(clicked.equals("Privacy & Security") && !mylist.contains("Change Password")){
             listItems.add(position+1,"Change Password"); // done
             listItems.add(position+2,"Account Privacy");
-            listItems.add(position+3,"Blocked Accounts");
+            listItems.add(position+3,"Blocked Accounts"); // done
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Privacy & Security")) {
             listItems.remove("Change Password"); // done
             listItems.remove("Account Privacy");
-            listItems.remove("Blocked Accounts");
+            listItems.remove("Blocked Accounts"); // done
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Invite Friends") && !mylist.contains("Invite Friends by Email")){
             listItems.add(position+1,"Invite Friends by Email"); // done
@@ -218,6 +221,36 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         } else if(clicked.equals("Blocked Accounts")){
             Intent i = new Intent(getApplicationContext(), BlockedAccounts.class);
             startActivity(i);
+        } else if(clicked.equals("Account Privacy")){
+            final Context c = Settings.this;
+            final Switch sw = new Switch(c);
+            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    HashMap<String, Boolean> data = new HashMap<>();
+                    data.put("guest_can_see", isChecked);
+                    db.collection("UTENTI").document(mAuth.getUid()).set(data, SetOptions.merge());
+                }
+            });
+            db.collection("UTENTI").document(mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot d = task.getResult();
+                        Boolean on = false;
+                        if(d.contains("guest_can_see")){
+                            on = (Boolean) d.get("guest_can_see");
+                        }
+                        sw.setChecked(on);
+                        AlertDialog dialog = new AlertDialog.Builder(c)
+                                .setTitle("Can Guests see your profile?")
+                                .setView(sw)
+                                .create();
+                        dialog.show();
+                    }
+                }
+            });
+
         }
     }
 
