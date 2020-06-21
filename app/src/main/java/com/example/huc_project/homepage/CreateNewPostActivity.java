@@ -184,7 +184,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                     }
                                 });                    }
                 });
-                Intent intent = new Intent(getApplicationContext(), Homepage.class);
+                Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
                 startActivity(intent);
                 finish();
             }
