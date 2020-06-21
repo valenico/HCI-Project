@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity android:name=".homepage.PostCreatedSuccessfully"></activity>
+=======
+        <activity android:name=".settings.BlockedAccounts"></activity>
+>>>>>>> 50879731900aaf3275c0b2039d1cd649cb9c995d
         <activity android:name=".settings.Settings" />
         <activity android:name=".chat.ChatView" />
         <activity
@@ -46,5 +50,12 @@
         <activity android:name=".profile.AddNewSocialAccount" />
         <activity android:name=".profile.RemoveSocialAccount" />
     </application>
+<<<<<<< HEAD
+=======
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+>>>>>>> 50879731900aaf3275c0b2039d1cd649cb9c995d
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>
