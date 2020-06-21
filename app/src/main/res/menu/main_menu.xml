@@ -8,6 +8,12 @@
         android:icon="@drawable/search_icon"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView">
-
     </item>
+    <item
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title="Filter"
+        android:icon="@drawable/ic_filter"
+        android:id="@+id/menu_filter"
+        app:actionViewClass="android.widget.Spinner"
+        />
 </menu>

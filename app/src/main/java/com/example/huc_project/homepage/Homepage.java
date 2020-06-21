@@ -21,15 +21,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
+import com.example.huc_project.Signup;
 import com.example.huc_project.Start;
 import com.example.huc_project.chat.Chat;
 import com.example.huc_project.posts.postView;
@@ -46,6 +48,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.internal.bind.ArrayTypeAdapter;
+import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -53,6 +57,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
@@ -236,8 +241,32 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             }
         });
 
+        MenuItem filter = menu.findItem(R.id.menu_filter);
+        Spinner spinner_filter = (Spinner) filter.getActionView();
+        List<String> mylist = new ArrayList<>();
+        mylist.add("Nature");
+        mylist.add("Sport"); // "Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature"
+        mylist.add("Fashion");
+        mylist.add("Food");
+        mylist.add("Music");
+        mylist.add("Science & IT");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Homepage.this,  android.R.layout.simple_list_item_1 , mylist );
+        spinner_filter.setAdapter(adapter);
+        spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: tolgi da rowsPostList quelli con categorie diverse (?)
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         return true;
     }
+
 
 
     private void setUpCircularMenu(){
