@@ -215,6 +215,9 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
                     .setPositiveButton("Ok", null)
                     .create();
             dialog.show();
+        } else if(clicked.equals("Blocked Accounts")){
+            Intent i = new Intent(getApplicationContext(), BlockedAccounts.class);
+            startActivity(i);
         }
     }
 

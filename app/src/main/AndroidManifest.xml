@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".settings.Settings"></activity>
+        <activity android:name=".settings.BlockedAccounts"></activity>
+        <activity android:name=".settings.Settings" />
         <activity android:name=".chat.ChatView" />
         <activity
             android:name=".posts.postView"
@@ -21,7 +22,8 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter></activity>
+            </intent-filter>
+        </activity>
         <activity android:name=".chat.Chat" />
         <activity android:name=".homepage.CreateNewPostActivity" />
         <activity android:name=".chat.NewMessage" />
@@ -40,9 +42,9 @@
         <activity android:name=".profile.AddNewSocialAccount" />
         <activity android:name=".profile.RemoveSocialAccount" />
     </application>
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>
