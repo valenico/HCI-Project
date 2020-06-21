@@ -1,105 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="@dimen/_170sdp"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_marginStart="@dimen/_38sdp"
-        android:layout_marginLeft="@dimen/_38sdp"
-        android:layout_marginEnd="@dimen/_38sdp"
-        android:layout_marginRight="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_18sdp"
-        android:background="@drawable/custom_button"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/_14sdp"
-        android:text="End"
-        android:onClick="end_signup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/look_sponsors"/>
-
-
-    <CheckBox
-        android:id="@+id/look_sponsors"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_9sdp"
-        android:text="I want to look for Sponsors"
-        android:textColor="@color/textColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/is_sponsor"
-        android:textSize="@dimen/_11sdp"/>
-
-    <CheckBox
-        android:id="@+id/is_sponsor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_9sdp"
-        android:text="I want to be a Sponsor"
-        android:textColor="@color/textColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/_11sdp"
-        app:layout_constraintTop_toBottomOf="@+id/circle_interests" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_96sdp"
-        android:layout_marginLeft="@dimen/_96sdp"
-        android:layout_marginRight="@dimen/_96sdp"
-        android:layout_marginStart="@dimen/_96sdp"
-        android:layout_marginTop="@dimen/_70sdp"
-        android:text="@string/complete_your_profile"
-        android:textColor="@color/textColor"
-        android:textSize="@dimen/_15sdp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_100sdp"
-        android:layout_marginLeft="@dimen/_100sdp"
-        android:layout_marginRight="@dimen/_100sdp"
-        android:layout_marginStart="@dimen/_100sdp"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:textSize="@dimen/_11sdp"
-        android:textColor="@color/textColor"
-        android:text="What are your interests?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <com.jh.circularlist.CircularListView
-        android:id="@+id/circle_interests"
-        android:textColor="@color/textColor"
-        android:layout_width="@dimen/_220sdp"
-        android:layout_height="@dimen/_230sdp"
-        android:layout_marginEnd="@dimen/_60sdp"
-        android:layout_marginLeft="@dimen/_60sdp"
-        android:layout_marginRight="@dimen/_60sdp"
-        android:layout_marginStart="@dimen/_60sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_38sdp"
+            android:layout_marginLeft="@dimen/_38sdp"
+            android:layout_marginEnd="@dimen/_38sdp"
+            android:layout_marginRight="@dimen/_38sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_18sdp"
+            android:background="@drawable/custom_button"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_14sdp"
+            android:text="End"
+            android:onClick="end_signup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/look_sponsors"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <CheckBox
+            android:id="@+id/look_sponsors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:text="I want to look for Sponsors"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/is_sponsor"
+            android:textSize="@dimen/_11sdp"/>
+
+        <CheckBox
+            android:id="@+id/is_sponsor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:text="I want to be a Sponsor"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/_11sdp"
+            app:layout_constraintTop_toBottomOf="@+id/circle_interests" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_96sdp"
+            android:layout_marginLeft="@dimen/_96sdp"
+            android:layout_marginTop="65dp"
+            android:layout_marginEnd="@dimen/_96sdp"
+            android:layout_marginRight="@dimen/_96sdp"
+            android:text="@string/complete_your_profile"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_100sdp"
+            android:layout_marginLeft="@dimen/_100sdp"
+            android:layout_marginRight="@dimen/_100sdp"
+            android:layout_marginStart="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:textSize="@dimen/_11sdp"
+            android:textColor="@color/textColor"
+            android:text="What are your interests?"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <com.jh.circularlist.CircularListView
+            android:id="@+id/circle_interests"
+            android:textColor="@color/textColor"
+            android:layout_width="@dimen/_220sdp"
+            android:layout_height="@dimen/_230sdp"
+            android:layout_marginEnd="@dimen/_60sdp"
+            android:layout_marginLeft="@dimen/_60sdp"
+            android:layout_marginRight="@dimen/_60sdp"
+            android:layout_marginStart="@dimen/_60sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
