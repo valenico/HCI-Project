@@ -16,8 +16,10 @@ public class Post {
     Boolean isPackage;
     ArrayList<String> categories;
     String role; //sponsor or sponsorship
+    String country;
+    String city;
 
-    public Post(String title, String storageref, String postdesc, String user, Boolean isPackage, ArrayList<String> categories, String role) {
+    public Post(String title, String storageref, String postdesc, String user, Boolean isPackage, ArrayList<String> categories, String role, String country, String city) {
         this.title = title;
         this.storageref = storageref;
         this.postdesc = postdesc;
@@ -25,6 +27,9 @@ public class Post {
         this.isPackage = isPackage;
         this.categories = categories;
         this.role = role;
+        this.country = country;
+        this.city = city;
+
     }
     public Post() {}
 
@@ -72,5 +77,21 @@ public class Post {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

@@ -149,9 +149,12 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-        AutoCompleteTextView textView = (AutoCompleteTextView)
+        final AutoCompleteTextView countryView = (AutoCompleteTextView)
                 findViewById(R.id.countries_list);
-        textView.setAdapter(adapter);
+        countryView.setAdapter(adapter);
+
+        final AutoCompleteTextView cityView = (AutoCompleteTextView)
+                findViewById(R.id.cities_list);
 
 
 
@@ -163,7 +166,8 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 EditText texttitle = (EditText) findViewById(R.id.textTitle);
                 String postDescription = text.getText().toString();
                 String postTitle=texttitle.getText().toString();
-
+                String country=countryView.getText().toString();
+                String city = cityView.getText().toString();
                 Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
                 StorageReference storageRef = storage.getReference();
@@ -224,6 +228,9 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 post.put("isPackage", isPackage);
                 post.put("categories", categoriesChosen);
                 post.put("role", role);
+                post.put("city", city);
+                post.put("country", country);
+
 
                 // Handle unsuccessful uploads
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.

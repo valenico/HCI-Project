@@ -77,7 +77,7 @@ public class postView extends AppCompatActivity {
         if(!guest_mode) this.current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
-                intent.getStringExtra("role"));
+                intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
 
         this.post_image_view = findViewById(R.id.imageViewplaces);
         this.title_view = findViewById(R.id.postTitle);
