@@ -1,5 +1,6 @@
 package com.example.huc_project.settings;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +122,7 @@ public class BlockedRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private void populateItemRows(final ItemViewHolder viewHolder, final int position) {
-        final String item = itemsList.get(position); // this is the uid
+        final String item = itemsList.get(position).trim(); // this is the uid
         final DocumentReference docRef = db.collection("UTENTI").document(item);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -131,7 +132,8 @@ public class BlockedRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         TextView tv1 = (TextView) viewHolder.relative.getChildAt(1);
-                        tv1.setText(item);
+                        Log.d("TAG", document.get("Name").toString());
+                        tv1.setText((String) document.get("Name"));
                         ImageView imv = (ImageView) ((CardView) viewHolder.relative.getChildAt(0)).getChildAt(0);
                         StorageReference ref = storage.getReference().child("users/" + item);
                         BlockedAccounts.glideTask( glide , ref, imv);

@@ -55,6 +55,8 @@ public class BlockedAccounts extends AppCompatActivity implements com.example.hu
     private BlockedRecycler recycler;
     List<String> blocked_list;
     private RecyclerView recyclerView;
+    final ArrayList<String> uid = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class BlockedAccounts extends AppCompatActivity implements com.example.hu
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         nomi.add(document.get("Name").toString());
+                        uid.add(document.getId());
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, nomi );
                     new_blocked.setAdapter(adapter);
@@ -149,7 +152,8 @@ public class BlockedAccounts extends AppCompatActivity implements com.example.hu
     public void block_this_user(View v){
         String mytext = new_blocked.getText().toString() + " is not able to text you and see your profile now.";
         Toast.makeText(this, mytext, Toast.LENGTH_LONG).show();
-        blocked_list.add( new_blocked.getText().toString() );
+        String request_uid = uid.get(nomi.indexOf(new_blocked.getText().toString()));
+        blocked_list.add( request_uid );
         new_blocked.setText("");
         HashMap<String, Object> data = new HashMap<>();
         data.put( "blocked" , blocked_list );
