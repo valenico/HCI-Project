@@ -90,7 +90,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
                                     if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
-                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this), last_message, convo.getUser2(), all_messages, true, document.getId(), convo.isRead1());
+                                    ChatMessage cm = new ChatMessage( Glide.with(Chat.this) , last_message, convo.getUser2(), all_messages, true, document.getId(), convo.isRead1());
                                     rowsChatList.add(cm);
                                 } else if (convo.getUser2().equals(usr.getUid())) {
                                     final String last_message = convo.getLastMessage();

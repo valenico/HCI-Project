@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class BlockedAccounts extends AppCompatActivity {
+public class BlockedAccounts extends AppCompatActivity implements com.example.huc_project.settings.BlockedRecycler.OnItemListener {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     final ArrayList<String> nomi = new ArrayList<>();
@@ -122,7 +122,7 @@ public class BlockedAccounts extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_blocked);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recycler = new BlockedRecycler(blocked_list);
+        recycler = new BlockedRecycler(blocked_list, Glide.with(BlockedAccounts.this), this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recycler);
     }
@@ -145,6 +145,7 @@ public class BlockedAccounts extends AppCompatActivity {
         glide.load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(view);
     }
 
+
     public void block_this_user(View v){
         String mytext = new_blocked.getText().toString() + " is not able to text you and see your profile now.";
         Toast.makeText(this, mytext, Toast.LENGTH_LONG).show();
@@ -154,5 +155,14 @@ public class BlockedAccounts extends AppCompatActivity {
         data.put( "blocked" , blocked_list );
         db.collection("Blocked").document(mAuth.getUid()).set(data, SetOptions.merge());
         this.setUp();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        blocked_list.remove(position);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("blocked", blocked_list);
+        db.collection("Blocked").document(mAuth.getUid()).set(data, SetOptions.merge());
+        setUp();
     }
 }

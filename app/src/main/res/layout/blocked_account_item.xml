@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:background="@color/card_color"
         android:padding="@dimen/_4sdp"
-        android:id="@+id/relative">
+        android:id="@+id/rl_blocked">
 
         <androidx.cardview.widget.CardView
             android:layout_width="@dimen/_67sdp"
@@ -32,6 +32,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/bloked_image"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="true"
@@ -46,22 +47,22 @@
             android:id="@+id/tvItem"
             android:layout_toRightOf="@+id/card_chat_view"
             android:textColor="@color/textColor"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:textSize="@dimen/_15sdp"
             android:layout_toEndOf="@+id/card_chat_view" />
 
-
-        <TextView
+        <ImageView
+            android:id="@+id/remove_blocked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/desc_preview"
-            android:textColor="@color/textColor"
-            android:layout_toRightOf="@+id/card_chat_view"
-            android:layout_below="@+id/tvItem"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:textSize="@dimen/_12sdp"
-            android:maxLines="1"
-            android:layout_toEndOf="@+id/card_chat_view" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            app:srcCompat="@drawable/error" />
+
 
     </RelativeLayout>
 

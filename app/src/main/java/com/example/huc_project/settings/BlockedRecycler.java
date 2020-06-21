@@ -1,8 +1,5 @@
 package com.example.huc_project.settings;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +8,17 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
-import com.example.huc_project.chat.Chat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -34,20 +31,25 @@ public class BlockedRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     public List<String> itemsList;
+    private RequestManager glide;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private OnItemListener onitemlistener;
 
     public BlockedRecycler() {
     }
 
-    public BlockedRecycler(List<String> itemList) {
+    public BlockedRecycler(List<String> itemList, RequestManager glide, OnItemListener onItemListener) {
         this.itemsList = itemList;
+        this.glide = glide;
+        this.onitemlistener = onItemListener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.setting_main_item, parent, false);
-            return new ItemViewHolder(view);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.blocked_account_item, parent, false);
+            return new ItemViewHolder(view, onitemlistener);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hp_item_loading, parent, false);
             return new LoadingViewHolder(view);
@@ -77,15 +79,28 @@ public class BlockedRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        RelativeLayout tvItem;
+        RelativeLayout relative;
+        OnItemListener onItemListener;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
-            tvItem = itemView.findViewById(R.id.text_settings);
+            relative = itemView.findViewById(R.id.rl_blocked);
+            this.onItemListener = onItemListener;
+            View myview = ((View) itemView.findViewById(R.id.remove_blocked) );
+            myview.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClick(getAdapterPosition());
+        }
+
+    }
+
+    public interface OnItemListener{
+        void onItemClick(int position);
     }
 
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
@@ -105,8 +120,8 @@ public class BlockedRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    private void populateItemRows(final ItemViewHolder viewHolder, int position) {
-        final String item = itemsList.get(position);
+    private void populateItemRows(final ItemViewHolder viewHolder, final int position) {
+        final String item = itemsList.get(position); // this is the uid
         final DocumentReference docRef = db.collection("UTENTI").document(item);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -115,11 +130,11 @@ public class BlockedRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (task.isSuccessful()) {
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
-                        TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(0);
+                        TextView tv1 = (TextView) viewHolder.relative.getChildAt(1);
                         tv1.setText(item);
-                        ((TextView)viewHolder.tvItem.getChildAt(0)).setTextSize(15);
-                        ((RelativeLayout)viewHolder.tvItem).setGravity(Gravity.CENTER_VERTICAL);
-                        ((TextView)viewHolder.tvItem.getChildAt(0)).setTypeface( null, Typeface.NORMAL);
+                        ImageView imv = (ImageView) ((CardView) viewHolder.relative.getChildAt(0)).getChildAt(0);
+                        StorageReference ref = storage.getReference().child("users/" + item);
+                        BlockedAccounts.glideTask( glide , ref, imv);
                     }
                 }
             }
