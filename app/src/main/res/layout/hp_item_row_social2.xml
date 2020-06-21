@@ -59,28 +59,19 @@
 
         <ImageButton
             android:id="@+id/graph_follower"
-            android:layout_width="@dimen/_38sdp"
-            android:layout_height="@dimen/_38sdp"
+            android:layout_width="89dp"
+            android:layout_height="52dp"
             android:layout_below="@+id/tvItem"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="-15dp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:layout_marginRight="@dimen/_6sdp"
+            android:layout_marginStart="241dp"
+            android:layout_marginLeft="241dp"
+            android:layout_marginTop="-28dp"
+            android:layout_toEndOf="@+id/post_image"
+            android:layout_toRightOf="@+id/post_image"
             android:background="#00FFFFFF"
             app:srcCompat="@android:drawable/ic_delete" />
-
-        <CheckBox
-            android:id="@+id/check_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/graph_follower"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:layout_marginRight="@dimen/_6sdp"
-            android:layout_toStartOf="@+id/graph_follower"
-            android:layout_toLeftOf="@+id/graph_follower" />
 
     </RelativeLayout>
 
