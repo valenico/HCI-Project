@@ -16,43 +16,42 @@
         <ImageButton
             android:id="@+id/imageBtn"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="@dimen/_250sdp"
             android:adjustViewBounds="true"
             android:background="@color/backgroundColor"
             android:scaleType="centerCrop"
-            android:src="@drawable/add_img"
-            />
+            android:src="@drawable/add_img" />
 
         <EditText
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
-            android:textColorHint="@color/hint_color"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:background="#D8EFEF"
             android:hint="Post Title"
-            android:padding="10dp"
-            android:background="@color/card_color"
+            android:padding="@dimen/_10sdp"
             android:textColor="@color/textColor"
+            android:textColorHint="@color/hint_color"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/textDesc"
-            android:layout_width="match_parent"
-            android:layout_height="194dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@color/hint_color"
-            android:textColor="@color/textColor"
-            android:background="@color/card_color"
-            android:layout_marginRight="5dp"
+            android:layout_width="@dimen/_399sdp"
+            android:layout_height="@dimen/_133sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:background="#D4EDED"
             android:hint="Post Description"
-            android:padding="10dp"
-             />
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/hint_color" />
         <CheckBox
             android:id="@+id/sponsor"
             android:textColor="@color/textColor"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="I am looking for a sponsor" />
@@ -67,14 +66,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_21sdp"
             android:text="Choose Categories: "
             android:textColor="@color/textColor"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <FrameLayout
-            android:layout_width="387dp"
-            android:layout_height="221dp"
+            android:layout_width="@dimen/_387sdp"
+            android:layout_height="@dimen/_221sdp"
             android:background="@color/backgroundColor" >
 
             <ScrollView
@@ -136,15 +136,43 @@
                         android:text="Music" />
                 </LinearLayout>
             </ScrollView>
+
         </FrameLayout>
+
+        <AutoCompleteTextView
+            android:id="@+id/countries_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D8EFEF"
+            android:hint="Choose a Country"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/hint_color"
+            android:textStyle="bold"
+
+            />
+
+        <AutoCompleteTextView
+            android:id="@+id/cities_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_21sdp"
+            android:background="#D8EFEF"
+            android:hint="Choose a City"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/hint_color"
+            android:textStyle="bold"
+
+            />
 
         <Button
             android:id="@+id/postBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_5sdp"
             android:background="@drawable/custom_button"
             android:text="Post"
             android:textColor="#fff"
