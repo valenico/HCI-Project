@@ -36,12 +36,15 @@ import com.example.huc_project.R;
 import com.example.huc_project.Signup;
 import com.example.huc_project.Start;
 import com.example.huc_project.chat.Chat;
+import com.example.huc_project.chat.ChatMessage;
+import com.example.huc_project.chat.Conversation;
 import com.example.huc_project.posts.postView;
 import com.example.huc_project.profile.Profile_main_page;
 import com.example.huc_project.settings.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
@@ -69,6 +72,10 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
+
+    private boolean unread_messages = true;
+    private FirebaseUser usr = mAuth.getCurrentUser();
+
     final int numItems = 10;
 
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
@@ -131,11 +138,40 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                                 rowsPostList.add(post_row);
                             }
                             populateData();
+                            setUp();
+
+
+                        } else {
+                            Log.w("Tag", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+    private void setUp(){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference mess = db.collection("Chat");
+        mess.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                final Conversation convo = document.toObject(Conversation.class);
+                                if(convo.getUser1().equals(usr.getUid())){
+                                    final String last_message = convo.getLastMessage();
+                                    final List<String> all_messages = convo.getMessages();
+                                    if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
+                                } else if (convo.getUser2().equals(usr.getUid())) {
+                                    final String last_message = convo.getLastMessage();
+                                    final List<String> all_messages = convo.getMessages();
+                                    if(unread_messages) unread_messages = convo.isRead2();
+                                }
+                            }
                             setUpRecyclerView();
                             setUpCircularMenu();
                             initScrollListener();
                             swipeContainer.setRefreshing(false);
-
                         } else {
                             Log.w("Tag", "Error getting documents.", task.getException());
                         }
@@ -301,7 +337,12 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 }
             });
         } else{
-            final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+            final Drawable menu_ic_id;
+            if(unread_messages){
+                menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+            } else {
+                menu_ic_id = getResources().getDrawable(R.drawable.ic_menu_notification);
+            }
             final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
             icon.setImageDrawable(menu_ic_id);
 
