@@ -48,6 +48,7 @@
             android:padding="@dimen/_10sdp"
             android:textColor="@color/textColor"
             android:textColorHint="@color/hint_color" />
+
         <CheckBox
             android:id="@+id/sponsor"
             android:textColor="@color/textColor"
@@ -81,70 +82,79 @@
 
         <FrameLayout
             android:layout_width="@dimen/_387sdp"
-            android:layout_height="@dimen/_221sdp"
-            android:background="@color/backgroundColor" >
+            android:layout_height="226dp"
+            android:background="@color/backgroundColor">
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:background="#D8EFEF"
+                    android:orientation="vertical">
 
                     <CheckBox
                         android:id="@+id/checkBoxScience"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/textColor"
-                        android:text="Science" />
+                        android:text="Science"
+                        android:textColor="@color/textColor" />
 
                     <CheckBox
                         android:id="@+id/checkBoxNature"
                         android:layout_width="match_parent"
-                        android:textColor="@color/textColor"
                         android:layout_height="wrap_content"
-                        android:text="Nature" />
+                        android:text="Nature"
+                        android:textColor="@color/textColor" />
 
                     <CheckBox
                         android:id="@+id/checkBoxSport"
                         android:layout_width="match_parent"
-                        android:textColor="@color/textColor"
                         android:layout_height="wrap_content"
-                        android:text="Sport" />
+                        android:text="Sport"
+                        android:textColor="@color/textColor" />
 
                     <CheckBox
                         android:id="@+id/checkBoxFashion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/textColor"
-                        android:text="Fashion" />
+                        android:text="Fashion"
+                        android:textColor="@color/textColor" />
 
                     <CheckBox
                         android:id="@+id/checkBoxFood"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/textColor"
-                        android:text="Food" />
+                        android:text="Food"
+                        android:textColor="@color/textColor" />
 
                     <CheckBox
                         android:id="@+id/checkBoxMovies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/textColor"
-                        android:text="Movies" />
+                        android:text="Movies"
+                        android:textColor="@color/textColor" />
 
                     <CheckBox
                         android:id="@+id/checkBoxMusic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/textColor"
-                        android:text="Music" />
+                        android:text="Music"
+                        android:textColor="@color/textColor" />
                 </LinearLayout>
             </ScrollView>
 
         </FrameLayout>
+
+        <CheckBox
+            android:id="@+id/checkpackage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:text="I want a standard package" />
 
         <AutoCompleteTextView
             android:id="@+id/countries_list"

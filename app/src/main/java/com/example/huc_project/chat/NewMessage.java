@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,11 +47,14 @@ public class NewMessage extends AppCompatActivity {
     final ArrayList<String> nomi = new ArrayList<>();
     final ArrayList<String> uid = new ArrayList<>();
 
+    private FirebaseUser usr = mAuth.getCurrentUser();
+    private boolean unread_messages = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
-        setUpCircularMenu();
+        setUp();
 
         final AutoCompleteTextView av = findViewById(R.id.autoCompleteTextView);
         db.collection("UTENTI").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -86,6 +92,36 @@ public class NewMessage extends AppCompatActivity {
         });
 
     }
+    private void setUp(){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference mess = db.collection("Chat");
+        mess.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                final Conversation convo = document.toObject(Conversation.class);
+                                if(convo.getUser1().equals(usr.getUid())){
+                                    final String last_message = convo.getLastMessage();
+                                    final List<String> all_messages = convo.getMessages();
+                                    if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
+                                } else if (convo.getUser2().equals(usr.getUid())) {
+                                    final String last_message = convo.getLastMessage();
+                                    final List<String> all_messages = convo.getMessages();
+                                    if(unread_messages) unread_messages = convo.isRead2();
+                                }
+                            }
+
+                            setUpCircularMenu();
+
+                        } else {
+                            Log.w("Tag", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
 
     public void send_text(View v){
         String who = ((EditText)findViewById(R.id.autoCompleteTextView)).getText().toString();
@@ -115,7 +151,12 @@ public class NewMessage extends AppCompatActivity {
 
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
-        final Drawable menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+        final Drawable menu_ic_id;
+        if(unread_messages){
+            menu_ic_id = getResources().getDrawable(R.drawable.ic_menu);
+        } else {
+            menu_ic_id = getResources().getDrawable(R.drawable.ic_menu_notification);
+        }
         final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
         icon.setImageDrawable(menu_ic_id);
 
@@ -132,6 +173,11 @@ public class NewMessage extends AppCompatActivity {
         //chat
         ImageView chatItem = new ImageView(this);
         chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+        if(unread_messages){
+            chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+        } else {
+            chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat_notification));
+        }
         SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
         //profile
         ImageView profItem = new ImageView(this);
