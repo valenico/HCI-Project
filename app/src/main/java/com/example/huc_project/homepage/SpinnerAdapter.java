@@ -32,6 +32,17 @@ public class SpinnerAdapter extends ArrayAdapter  {
         titleView.setPadding(10, 3, 10, 3);
     }
 
+    private String create_filter_word(){
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for( ; i < checked.size(); i++){
+            if(checked.get(i)) {
+                sb.append(array.get(i));
+                sb.append("-");
+            }
+        }
+        return sb.toString();
+    }
 
     Integer getCheckedKeys(){
         Integer integer = 0;
@@ -71,13 +82,14 @@ public class SpinnerAdapter extends ArrayAdapter  {
             @Override
             public void onClick(View checkBox) {
                 setChecked(checkBox, position);
-                filtering(position);
+                filtering();
             }
         });
     }
 
-    void filtering(int position){
-        this.rva.getFilter().filter(array.get(position));
+    void filtering(){
+        String word = create_filter_word();
+        this.rva.getFilter().filter(word);
     }
 
     void setChecked(View view, int position){

@@ -91,7 +91,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         setContentView(R.layout.activity_homepage);
         Intent i = getIntent();
 
-
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
         guest_mode = i.getBooleanExtra("guest",false);
