@@ -2,6 +2,7 @@ package com.example.huc_project.homepage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
@@ -145,14 +147,15 @@ public class CreateNewPostActivity extends AppCompatActivity {
             "Wallis and Futuna", "West Bank", "Yemen", "Zambia", "Zimbabwe"
     };
 
+    @SuppressLint("ClickableViewAccessibility")
     private void iniPopup() {
 
         popChooseCategories = new Dialog(this);
         popChooseCategories.setContentView(R.layout.new_post_choose_categories);
-        popChooseCategories.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popChooseCategories.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        popChooseCategories.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.backgroundColor)));
+        popChooseCategories.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT);
         popChooseCategories.getWindow().getAttributes().gravity = Gravity.TOP;
-        popChooseCategories.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
 
         popChooseCategories.setOnKeyListener(new Dialog.OnKeyListener() {
 
