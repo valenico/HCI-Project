@@ -359,6 +359,11 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             //chat
             ImageView chatItem = new ImageView(this);
             chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+            if(unread_messages){
+                chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat));
+            } else {
+                chatItem.setImageDrawable(getResources().getDrawable(R.drawable.ic_chat_notification));
+            }
             SubActionButton chatButton = itemBuilder.setContentView(chatItem).build();
             //profile
             ImageView profItem = new ImageView(this);
