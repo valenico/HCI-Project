@@ -24,8 +24,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -163,7 +165,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 setUpHomepage();
             }
         });
-        SpinnerAdapter sa = new SpinnerAdapter(getApplicationContext(), mylist, list_check ,"Categories", recyclerViewAdapter);
+        SpinnerAdapter sa = new SpinnerAdapter(getApplicationContext(), mylist, list_check ,"" , recyclerViewAdapter);
         spinner_filter.setAdapter(sa);
     }
 
@@ -262,6 +264,21 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         list_check.add(false);
         list_check.add(false);
         list_check.add(false);
+
+        MenuItem search_package = menu.findItem(R.id.menu_switch);
+        Switch switch_package = (Switch) search_package.getActionView();
+        switch_package.setText("Packages");
+        switch_package.setTextSize(10);
+        switch_package.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    recyclerViewAdapter.getFilter().filter("is_package");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
 
         return true;
     }

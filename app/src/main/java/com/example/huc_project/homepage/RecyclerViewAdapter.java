@@ -162,6 +162,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     }
                 }
+            } else if(constraint.toString().equals("is_package")){
+                for (PostRow s : itemsListFull){
+                    if(s.post.isPackage){
+                        filteredList.add(s);
+                    }
+                }
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (PostRow s : itemsListFull){

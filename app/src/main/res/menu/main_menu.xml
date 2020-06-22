@@ -10,10 +10,17 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView">
     </item>
     <item
-        app:showAsAction="ifRoom|collapseActionView"
+        android:title="package"
+        app:actionViewClass="android.widget.Switch"
+        android:id="@+id/menu_switch"
+        app:showAsAction="always"
+        />
+    <item
+        app:showAsAction="ifRoom"
         android:title="Filter"
         android:icon="@drawable/ic_filter"
         android:id="@+id/menu_filter"
         app:actionViewClass="android.widget.Spinner"
         />
+
 </menu>
