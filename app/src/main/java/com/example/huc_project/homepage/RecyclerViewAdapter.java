@@ -155,7 +155,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (PostRow s : itemsListFull){
-                    if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern)){
+                    if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)){
                         filteredList.add(s);
                     }
                 }

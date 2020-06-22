@@ -74,6 +74,9 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     ArrayList<PostRow> rowsPostList = new ArrayList<>();
+    Spinner spinner_filter;
+    List<String> mylist;
+    List<Boolean> list_check;
     final private String pattern = Integer.toString(R.string.pattern);
 
     boolean guest_mode = false;
@@ -161,6 +164,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 setUpHomepage();
             }
         });
+        SpinnerAdapter sa = new SpinnerAdapter(getApplicationContext(), mylist, list_check ,"Categories", recyclerViewAdapter);
+        spinner_filter.setAdapter(sa);
     }
 
 
@@ -242,27 +247,22 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         });
 
         MenuItem filter = menu.findItem(R.id.menu_filter);
-        Spinner spinner_filter = (Spinner) filter.getActionView();
-        List<String> mylist = new ArrayList<>();
+        spinner_filter = (Spinner) filter.getActionView();
+        mylist = new ArrayList<>();
         mylist.add("Nature");
         mylist.add("Sport"); // "Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature"
         mylist.add("Fashion");
         mylist.add("Food");
         mylist.add("Music");
         mylist.add("Science & IT");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Homepage.this,  android.R.layout.simple_list_item_1 , mylist );
-        spinner_filter.setAdapter(adapter);
-        spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO: tolgi da rowsPostList quelli con categorie diverse (?)
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        list_check = new ArrayList<>();
+        list_check.add(false);
+        list_check.add(false);
+        list_check.add(false);
+        list_check.add(false);
+        list_check.add(false);
+        list_check.add(false);
 
         return true;
     }
