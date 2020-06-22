@@ -140,13 +140,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
 
-
-        //TODO aggiungere un modo per distinguere i post normali dai pacchetti
-        // andrà a modificare la variabile --- isPackage ---
-
-        final Boolean isPackage = true;
-
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         final AutoCompleteTextView countryView = (AutoCompleteTextView)
@@ -170,18 +163,28 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 String city = cityView.getText().toString();
                 Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
+                Boolean isPackage = true;
+
                 StorageReference storageRef = storage.getReference();
                 StorageReference riversRef;
                 UploadTask uploadTask;
                 String role="";
                 CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
                 CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
+                CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
                 if (sponsor.isChecked()) {
                     role="sponsor";
                 }
                 else if (sponsorship.isChecked()) {
                     role="sponsorship";
                 }
+                if (checkispackage.isChecked()) {
+                    isPackage = true;
+                }
+                else {
+                    isPackage = false;
+                }
+
 
                 ArrayList<String> categoriesChosen = new ArrayList<String>();
 
