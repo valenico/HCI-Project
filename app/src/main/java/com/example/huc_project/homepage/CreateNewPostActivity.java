@@ -2,8 +2,13 @@ package com.example.huc_project.homepage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,14 +18,25 @@ import androidx.annotation.NonNull;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.example.huc_project.profile.Edit_profile;
+import com.example.huc_project.ui.login.CircularItemAdapter;
+import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,10 +48,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jh.circularlist.CircularListView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,9 +65,14 @@ public class CreateNewPostActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     ImageButton imageView;
     private static final int PICK_IMAGE = 100;
+    private HashMap<String,Object>  interests_selected = new HashMap<>();
     boolean isTheImageUp=false;
     Uri imageUri= Uri.parse("android.resource://com.example.project/"+R.drawable.error);
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    Dialog popChooseCategories ;
+    TextView show_cat;
+    TextView choose;
+    private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
     private static final String[] COUNTRIES = new String[] {
             "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
 
@@ -122,12 +145,208 @@ public class CreateNewPostActivity extends AppCompatActivity {
             "Wallis and Futuna", "West Bank", "Yemen", "Zambia", "Zimbabwe"
     };
 
-    @Override
+    private void iniPopup() {
+
+        popChooseCategories = new Dialog(this);
+        popChooseCategories.setContentView(R.layout.new_post_choose_categories);
+        popChooseCategories.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popChooseCategories.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        popChooseCategories.getWindow().getAttributes().gravity = Gravity.TOP;
+        popChooseCategories.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+        popChooseCategories.setOnKeyListener(new Dialog.OnKeyListener() {
+
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    //doNothing
+                }
+                return true;
+            }});
+
+        final Context c = this.getBaseContext();
+        final int[] children = new int[]{ 6,6,6,6,6,6,6 };
+        final ArrayList<Integer> interests = new ArrayList<>(Arrays.asList(R.drawable.ic_sport , R.drawable.ic_fashion, R.drawable.ic_food, R.drawable.ic_movie, R.drawable.ic_music, R.drawable.ic_technology, R.drawable.ic_nature));
+        final CircularListView circularListView = popChooseCategories.findViewById(R.id.circle_interests_new_post);
+        final Button ok_categories = popChooseCategories.findViewById(R.id.ok_categories);
+        circularListView.setRadius(80);
+        CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), interests);
+        circularListView.setAdapter(adapter);
+
+        circularListView.setOnTouchListener(new CircularListView.OnTouchListener() {
+            private float init_x = 0;
+            private float init_y = 0;
+            private float cur_x = 0;
+            private float cur_y = 0;
+            private float move_x = 0;
+            private float move_y = 0;
+            private boolean can_rotate = true;
+            private boolean isCircularMoving = false; // ensure that item click only triggered when it's not moving
+            @Override
+            public boolean onTouch(final View v, MotionEvent event) {
+                int max = getMaxValue(children);
+                if(max == 6){
+                    can_rotate = true;
+                }
+                float minClickDistance = 30.0f;
+                float minMoveDistance = 30.0f;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        cur_x = event.getX();
+                        cur_y = event.getY();
+                        init_x = event.getX();
+                        init_y = event.getY();
+
+                    case MotionEvent.ACTION_MOVE:
+                        float pre_x = cur_x;
+                        float pre_y = cur_y;
+                        cur_x = event.getX();
+                        cur_y = event.getY();
+
+                        float diff_x = cur_x - pre_x;
+                        float diff_y = cur_y - pre_y;
+                        move_x = init_x - cur_x;
+                        move_y = init_y - cur_y;
+                        float moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
+
+
+                        if (cur_y >= ((CircularListView) v).layoutCenter_y) diff_x = -diff_x;
+                        if (cur_x <= ((CircularListView) v).layoutCenter_x) diff_y = -diff_y;
+
+                        // should rotate the layout
+                        if (moveDistance > minMoveDistance && can_rotate) {
+                            isCircularMoving = true;
+                            // default is 2000, larger > faster
+                            float mMovingSpeed = 2000.0f;
+                            CircularListView.MoveAccumulator += (diff_x + diff_y) / mMovingSpeed;
+
+                            // calculate new position around circle
+                            for (int i = 0; i < ((CircularListView) v).itemViewList.size(); i++) {
+                                final int idx = i;
+                                final View itemView = ((CircularListView) v).itemViewList.get(i);
+                                itemView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
+                                                itemView.getLayoutParams();
+                                        params.setMargins(
+                                                (int) (((CircularListView) v).layoutCenter_x - (((CircularListView) v).itemWith / 2) +
+                                                        (((CircularListView) v).radius * Math.cos(idx * ((CircularListView) v).getIntervalAngle() +
+                                                                CircularListView.MoveAccumulator * Math.PI * 2))),
+                                                (int) (((CircularListView) v).layoutCenter_y - (((CircularListView) v).itemHeight / 2) +
+                                                        (((CircularListView) v).radius * Math.sin(idx * ((CircularListView) v).getIntervalAngle() +
+                                                                CircularListView.MoveAccumulator * Math.PI * 2))),
+                                                0,
+                                                0);
+                                        itemView.setLayoutParams(params);
+                                        itemView.requestLayout();
+                                    }
+                                });
+                            }
+                        }
+
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+
+                        // it is an click action if move distance < min distance
+                        moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
+                        if (moveDistance < minClickDistance && !isCircularMoving) {
+                            for (int i = 0; i < ((CircularListView) v).itemViewList.size(); i++) {
+                                View view = ((CircularListView) v).itemViewList.get(i);
+                                if (isTouchInsideView(cur_x, cur_y, view)) {
+                                    can_rotate = false;
+                                    float curr_size = view.getScaleX();
+                                    max = getMaxValue(children);
+                                    if(curr_size == (float) 1) {
+                                        view.setScaleX((float) 1.5);
+                                        view.setScaleY((float) 1.5);
+                                        circularListView.addView(new PaintText( c , i,
+                                                view.getLeft()-60, view.getTop()-60,view.getRight()+60, view.getBottom()+60,
+                                                -145,135) );
+                                        children[i] = max + 1;
+                                        interests_selected.put(Text[i], true);
+                                    } else {
+                                        view.setScaleX((float) 1);
+                                        view.setScaleY((float) 1);
+                                        circularListView.removeViewAt(children[i]);
+                                        for (int elem = 0; elem < children.length; elem++) {
+                                            if (children[elem] > children[i]) {
+                                                children[elem] -= 1;
+                                            }
+                                        }
+                                        children[i] = 6;
+                                        interests_selected.remove(Text[i]);
+                                        interests_selected.put(Text[i], false);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        isCircularMoving = false; // reset moving state when event ACTION_UP
+                        return true;
+                }
+                return false;
+            }
+
+            private boolean isTouchInsideView(float x, float y, View view){
+                float left = view.getX();
+                float top  = view.getY();
+                float wid = view.getWidth();
+                float h = view.getHeight();
+                return (x > left && x < left + wid && y > top && y < top+h);
+            }
+
+        });
+
+        ok_categories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(CreateNewPostActivity.this, "Chosen " + interests_selected, Toast.LENGTH_SHORT).show();
+                //popChooseCategories.dismiss();
+                popChooseCategories.cancel();
+                setCategories();
+
+            }
+        });
+    }
+
+    private void setCategories(){
+        String cat= new String();
+        for (Map.Entry<String, Object> entry : interests_selected.entrySet()) {
+            String k = entry.getKey();
+            boolean value = (boolean) entry.getValue();
+            if(value){
+
+                cat+="#"+k;
+                cat+=" ";
+            }
+        }
+
+        if(cat.length()>0){
+            cat =  cat.substring(0, cat.length() - 1);
+            choose.setText(cat);
+        }
+        //Toast.makeText(CreateNewPostActivity.this, "Chosen " + cat, Toast.LENGTH_SHORT).show();
+    }
+
+    public static int getMaxValue(int[] numbers){
+        int maxValue = numbers[0];
+        for(int i=1;i < numbers.length;i++){
+            if(numbers[i] > maxValue){
+                maxValue = numbers[i];
+            }
+        }
+        return maxValue;
+    }
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_post);
         db = FirebaseFirestore.getInstance();
         Button buttonCreateP=(Button)findViewById(R.id.postBtn);
+        iniPopup();
         imageView = (ImageButton) findViewById(R.id.imageBtn);
         //button = (Button)findViewById(R.id.buttonLoadPicture);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +355,16 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 openGallery();
             }
         });
+
+            show_cat = findViewById(R.id.cat_selected);
+
+        choose = findViewById(R.id.choose);
+            choose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popChooseCategories.show();
+                }
+            });
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -314,9 +543,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Intent i = new Intent(this, Homepage.class);
         startActivity(i);
         finish();
+
     }
+
 }
