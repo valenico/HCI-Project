@@ -206,7 +206,7 @@
         android:layout_height="@dimen/_30sdp"
         android:maxHeight="@dimen/_30sdp"
         android:maxWidth="@dimen/_30sdp"
-
+        android:tint="@color/textColor"
         android:layout_marginEnd="@dimen/_17sdp"
         android:layout_marginRight="@dimen/_18sdp"
         android:layout_marginTop="@dimen/_10sdp"
