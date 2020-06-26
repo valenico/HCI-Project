@@ -13,14 +13,15 @@
         android:title="package"
         app:actionViewClass="android.widget.Switch"
         android:id="@+id/menu_switch"
-        app:showAsAction="always"
-        />
-    <item
         app:showAsAction="ifRoom"
-        android:title="Filter"
+        />
+
+    <item
+        app:showAsAction="always"
+        android:title="slide"
+        app:actionViewClass="android.widget.ImageButton"
         android:icon="@drawable/ic_filter"
-        android:id="@+id/menu_filter"
-        app:actionViewClass="android.widget.Spinner"
+        android:id="@+id/menu_slide"
         />
 
 </menu>

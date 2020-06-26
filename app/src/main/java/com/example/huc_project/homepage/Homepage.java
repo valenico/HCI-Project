@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -18,13 +19,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -43,6 +48,7 @@ import com.example.huc_project.profile.Profile_main_page;
 import com.example.huc_project.settings.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -94,11 +100,21 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     private SwipeRefreshLayout swipeContainer;
     private FloatingActionMenu actionMenu;
 
+
+
+
+    DrawerLayout mDrawerLayout;
+    NavigationView navView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        setContentView(R.layout.activity_slide);
         Intent i = getIntent();
+
+
+        mDrawerLayout = findViewById(R.id.drawer);
+        navView = findViewById(R.id.navView);
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
@@ -201,8 +217,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 setUpHomepage();
             }
         });
-        SpinnerAdapter sa = new SpinnerAdapter(getApplicationContext(), mylist, list_check ,"" , recyclerViewAdapter);
-        spinner_filter.setAdapter(sa);
+        //SpinnerAdapter sa = new SpinnerAdapter(getApplicationContext(), mylist, list_check ,"" , recyclerViewAdapter);
+        //spinner_filter.setAdapter(sa);
     }
 
 
@@ -283,23 +299,106 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             }
         });
 
-        MenuItem filter = menu.findItem(R.id.menu_filter);
-        spinner_filter = (Spinner) filter.getActionView();
-        mylist = new ArrayList<>();
-        mylist.add("Nature");
-        mylist.add("Sport"); // "Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature"
-        mylist.add("Fashion");
-        mylist.add("Food");
-        mylist.add("Music");
-        mylist.add("Science & IT");
 
-        list_check = new ArrayList<>();
-        list_check.add(false);
-        list_check.add(false);
-        list_check.add(false);
-        list_check.add(false);
-        list_check.add(false);
-        list_check.add(false);
+
+        MenuItem sliding = menu.findItem(R.id.menu_slide);
+        Drawable myDrawable = getResources().getDrawable(R.drawable.ic_filter);
+        ImageButton slidebutton = (ImageButton) sliding.getActionView();
+        slidebutton.setImageDrawable(myDrawable);
+        slidebutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // your handler code here
+                mDrawerLayout.openDrawer(Gravity.RIGHT);
+            }
+        });
+
+        CheckBox science=(CheckBox) findViewById(R.id.checkScience);
+        CheckBox nature=(CheckBox) findViewById(R.id.checkNature);
+        CheckBox sport=(CheckBox) findViewById(R.id.checkSport);
+        CheckBox fashion=(CheckBox) findViewById(R.id.checkFashion);
+        CheckBox food=(CheckBox) findViewById(R.id.checkFood);
+        CheckBox movies=(CheckBox) findViewById(R.id.checkMovies);
+        CheckBox music=(CheckBox) findViewById(R.id.checkMusic);
+
+        science.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Science");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
+
+
+        nature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Nature");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
+
+        sport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Sport");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
+
+        fashion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Fashion");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
+
+        food.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Food");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                    recyclerViewAdapter.
+                }
+            }
+        });
+
+        movies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Movies");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
+
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    recyclerViewAdapter.getFilter().filter("Music");
+                } else {
+                    recyclerViewAdapter.getFilter().filter("");
+                }
+            }
+        });
+
 
         MenuItem search_package = menu.findItem(R.id.menu_switch);
         Switch switch_package = (Switch) search_package.getActionView();
