@@ -1,21 +1,35 @@
 package com.example.huc_project.profile;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.huc_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +50,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.zip.Inflater;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class Profile_photo_frag extends Fragment {
 
@@ -45,6 +62,7 @@ public class Profile_photo_frag extends Fragment {
 
     final String TAG = "TAG";
     GridView gridView;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
     SwipeRefreshLayout swipeRefresh;
     ArrayList<String> l = new ArrayList<>();
     ArrayList<String> list = new ArrayList<>();
@@ -92,13 +110,37 @@ public class Profile_photo_frag extends Fragment {
                         Collections.reverse(list);
                     }
 
-
                     gridAdapter = new ImageAdapter(getContext(), list);
                     gridView.setAdapter(gridAdapter);
+                    final Context c = getActivity().getApplicationContext();
                     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Toast.makeText(getContext(),"Clicked Image " + position, Toast.LENGTH_LONG).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View popupView = inflater.inflate(R.layout.popup_image, null);
+                            // create the popup window
+                            int width = LinearLayout.LayoutParams.MATCH_PARENT;
+                            int height = LinearLayout.LayoutParams.MATCH_PARENT;
+                            boolean focusable = true; // lets taps outside the popup also dismiss it
+                            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+                            String name_pic = (String) gridAdapter.getItem(position);
+                            StorageReference storageRef = storage.getReference();
+                            StorageReference islandRef = (StorageReference) storageRef.child("images/" + name_pic);
+                            ImageView imageView = popupView.findViewById(R.id.big_image);
+                            Glide.with(Profile_photo_frag.this)
+                                    .load(islandRef)
+                                    .into(imageView);
+
+                            // show the popup window
+                            // which view you pass in doesn't matter, it is only used for the window tolken
+                            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                            popupView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    popupWindow.dismiss();
+                                }
+                            });
                         }
                     });
 
