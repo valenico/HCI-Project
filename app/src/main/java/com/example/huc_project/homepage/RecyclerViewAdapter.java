@@ -162,34 +162,56 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music"};
 
+                Boolean isitfiltered=false;
+
+                for (int i = 1; i < words.length ; i++) {
+                    String w = words[i];
+                    w = w.toLowerCase().trim();
+                    String onetry="1";
+                    onetry= onetry.toLowerCase().trim();
+                    if (w.equals(onetry)) {
+                        isitfiltered=true;
+                    }
+
+                }
                 for (int i = 1; i < words.length ; i++) {
                     String w = words[i];
                     w = w.toLowerCase().trim();
                     String onetry="1";
                     onetry= onetry.toLowerCase().trim();
                     categories[i]=categories[i].toLowerCase().trim();
-                    Log.e("TAGGU", w);
                     if (w.equals(onetry)) {
                         for (PostRow s : itemsListFull) {
                             if (s.post.categories.contains(categories[i])) {
-                                filteredListCategories.add(s);
-                                Log.e("TAGGU", "CIAOOOOOOOOOO NON FUNZIONA QUALCOSA 11111");
+                                if (!filteredListCategories.contains(s)) {
+                                    filteredListCategories.add(s);
+                                }
                             }
                         }
-                        Log.e("TAGGU", "CIAOOOOOOOOOO NON FUNZIONA QUALCOSA 22222");
+
                     }
-                    Log.e("TAGGU", "CIAOOOOOOOOOO NON FUNZIONA QUALCOSA 3333");
+
                 }
 
                 //NON FUNZIONA PERCHè LA RICERCA ADDA ANCHE COSE CHE LE CATEGORIES HANNO ESCLUSO E VICEVERSA SERVONO DELLE FILTERED LIST PER OGNI COSA E POI TUTTE INSIEME SI INTERSECANO
                 String filterPattern = words[0].toString().toLowerCase().trim();
-                for (PostRow s : itemsListFull){
-                    if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern) ){
-                        filteredList.add(s);
+                if (filterPattern.equals("")) {
+                    if (isitfiltered) {
+                        filteredList = filteredListCategories;
+                    }
+                    else {
+                        filteredList.addAll(itemsListFull);
                     }
                 }
+                else {
+                    for (PostRow s : itemsListFull) {
+                        if (s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)) {
+                            filteredList.add(s);
+                        }
+                    }
 
-                filteredList.retainAll(filteredListCategories); //FUNZIONA PER I CASI IN CUI LA STRINGA IN RICERCA è VUOTA?
+                    //filteredList.retainAll(filteredListCategories); //FUNZIONA PER I CASI IN CUI LA STRINGA IN RICERCA è VUOTA?
+                }
 
 
             }

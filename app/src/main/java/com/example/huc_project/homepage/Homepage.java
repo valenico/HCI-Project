@@ -120,15 +120,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         Intent i = getIntent();
 
 
-        filtersCategories.put("science", false);
-        filtersCategories.put("nature", false);
-        filtersCategories.put("sport", false);
-        filtersCategories.put("fashion", false);
-        filtersCategories.put("food", false);
-        filtersCategories.put("movie", false);
-        filtersCategories.put("music", false);
-
-
         mDrawerLayout = findViewById(R.id.drawer);
         navView = findViewById(R.id.navView);
 
