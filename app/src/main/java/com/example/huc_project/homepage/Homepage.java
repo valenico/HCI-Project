@@ -522,7 +522,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
         FloatingActionButton actionButton;
-        if(guest_mode){
+        if(!guest_mode){
             Drawable exit = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_exit);
             final Drawable wrappedDrawable = DrawableCompat.wrap(exit);
             DrawableCompat.setTint(wrappedDrawable, Color.BLACK);

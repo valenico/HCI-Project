@@ -94,13 +94,16 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
         choose = findViewById(R.id.choose);
         categories_selected = findViewById(R.id.categories_selected);
-
-            choose.setOnClickListener(new View.OnClickListener() {
+        choose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     popChooseCategories.show();
                 }
             });
+
+
+        final CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
+        final CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -134,8 +137,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 StorageReference riversRef;
                 UploadTask uploadTask;
                 String role="";
-                CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
-                CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
                 CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
                 if (sponsor.isChecked()) {
                     role="sponsor";
