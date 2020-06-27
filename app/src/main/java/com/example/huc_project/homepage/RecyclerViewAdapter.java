@@ -204,13 +204,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
                 else {
-                    for (PostRow s : itemsListFull) {
-                        if (s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)) {
-                            filteredList.add(s);
+                    if (isitfiltered) {
+                        for (PostRow s : itemsListFull) {
+                            if (s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)) {
+                                filteredList.add(s);
+                            }
+                        }
+
+                        filteredList.retainAll(filteredListCategories);
+                    }
+                    else {
+                        for (PostRow s : itemsListFull) {
+                            if (s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)) {
+                                filteredList.add(s);
+                            }
                         }
                     }
-
-                    //filteredList.retainAll(filteredListCategories); //FUNZIONA PER I CASI IN CUI LA STRINGA IN RICERCA è VUOTA?
+                     //FUNZIONA PER I CASI IN CUI LA STRINGA IN RICERCA è VUOTA?
                 }
 
 
