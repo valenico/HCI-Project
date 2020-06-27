@@ -372,7 +372,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                     recyclerViewAdapter.getFilter().filter("Food");
                 } else {
                     recyclerViewAdapter.getFilter().filter("");
-                    recyclerViewAdapter.
+                    //recyclerViewAdapter.
                 }
             }
         });
