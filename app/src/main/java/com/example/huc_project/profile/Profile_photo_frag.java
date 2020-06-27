@@ -166,6 +166,7 @@ public class Profile_photo_frag extends Fragment {
                                                         db.collection("UTENTI").document(mAuth.getUid()).set(imgs, SetOptions.merge());
                                                         Toast.makeText(c,"The image has been cancelled.", Toast.LENGTH_LONG).show();
                                                         popupWindow.dismiss();
+                                                        setUpGridView();
                                                     }
                                                 }
                                             }
