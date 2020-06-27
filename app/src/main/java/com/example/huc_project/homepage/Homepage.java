@@ -65,12 +65,19 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
+
+    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/";
+    String[] filterArray = totalFilter.toString().split("/-/-/");
+    HashMap<String, Boolean> filtersCategories = new HashMap<String, Boolean>();
+
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SharedPreferences pref;
@@ -124,6 +131,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         setUpHomepage();
 
     }
+
 
     private void populateData() {
         int i = 0;
@@ -294,7 +302,13 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                recyclerViewAdapter.getFilter().filter(newText);
+                filterArray[0]=newText;
+                totalFilter="";
+                for(String w : filterArray){
+                    totalFilter+=w;
+                    totalFilter+="/-/-/";
+                }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
                 return false;
             }
         });
@@ -324,10 +338,21 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Science");
+                    filterArray[1]="1";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
                 } else {
-                    recyclerViewAdapter.getFilter().filter("");
+                    filterArray[1]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 
@@ -336,10 +361,23 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Nature");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
+                    filterArray[2]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[2]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 
@@ -347,10 +385,23 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Sport");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
+                    filterArray[3]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[3]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 
@@ -358,10 +409,23 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Fashion");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
+                    filterArray[4]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[4]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 
@@ -369,33 +433,68 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Food");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
-                    //recyclerViewAdapter.
+                    filterArray[5]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[5]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 
         movies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Movies");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
+                if(((CompoundButton) view).isChecked()){filterArray[6]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[6]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(((CompoundButton) view).isChecked()){
-                    recyclerViewAdapter.getFilter().filter("Music");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
+                if(((CompoundButton) view).isChecked()){filterArray[7]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[7]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
                 }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
 

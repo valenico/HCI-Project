@@ -1,5 +1,6 @@
 package com.example.huc_project.homepage;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
@@ -149,6 +151,112 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<PostRow> filteredList = new ArrayList<>();
+            List<PostRow> filteredListCategories = new ArrayList<>();
+
+            if(constraint.toString().isEmpty()){
+                filteredList.addAll(itemsListFull);
+            }
+            else if (constraint.toString().contains("/-/-/")) {
+                String[] words = constraint.toString().split("/-/-/");
+
+
+                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music"};
+
+                Boolean isitfiltered=false;
+
+                for (int i = 1; i < words.length ; i++) {
+                    String w = words[i];
+                    w = w.toLowerCase().trim();
+                    String onetry="1";
+                    onetry= onetry.toLowerCase().trim();
+                    if (w.equals(onetry)) {
+                        isitfiltered=true;
+                    }
+
+                }
+                for (int i = 1; i < words.length ; i++) {
+                    String w = words[i];
+                    w = w.toLowerCase().trim();
+                    String onetry="1";
+                    onetry= onetry.toLowerCase().trim();
+                    categories[i]=categories[i].toLowerCase().trim();
+                    if (w.equals(onetry)) {
+                        for (PostRow s : itemsListFull) {
+                            if (s.post.categories.contains(categories[i])) {
+                                if (!filteredListCategories.contains(s)) {
+                                    filteredListCategories.add(s);
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+                //NON FUNZIONA PERCHè LA RICERCA ADDA ANCHE COSE CHE LE CATEGORIES HANNO ESCLUSO E VICEVERSA SERVONO DELLE FILTERED LIST PER OGNI COSA E POI TUTTE INSIEME SI INTERSECANO
+                String filterPattern = words[0].toString().toLowerCase().trim();
+                if (filterPattern.equals("")) {
+                    if (isitfiltered) {
+                        filteredList = filteredListCategories;
+                    }
+                    else {
+                        filteredList.addAll(itemsListFull);
+                    }
+                }
+                else {
+                    if (isitfiltered) {
+                        for (PostRow s : itemsListFull) {
+                            if (s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)) {
+                                filteredList.add(s);
+                            }
+                        }
+
+                        filteredList.retainAll(filteredListCategories);
+                    }
+                    else {
+                        for (PostRow s : itemsListFull) {
+                            if (s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern)) {
+                                filteredList.add(s);
+                            }
+                        }
+                    }
+                     //FUNZIONA PER I CASI IN CUI LA STRINGA IN RICERCA è VUOTA?
+                }
+
+
+            }
+
+            else if(constraint.toString().contains("-")){
+                String[] words = constraint.toString().split("-");
+                for(String w : words){
+                    w = w.toLowerCase().trim();
+                    for (PostRow s : itemsListFull){
+                        if(s.post.categories.contains(w)){
+                            filteredList.add(s);
+                        }
+                    }
+                }
+            } else if(constraint.toString().equals("is_package")){
+                for (PostRow s : itemsListFull){
+                    if(s.post.isPackage){
+                        filteredList.add(s);
+                    }
+                }
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (PostRow s : itemsListFull){
+                    if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern) ){
+                        filteredList.add(s);
+                    }
+                }
+            }
+            FilterResults res = new FilterResults();
+            res.values = filteredList;
+            return res;
+        }
+
+        public FilterResults performCategoriesFiltering(CharSequence constraint, HashMap<String, Boolean> filterCategories){
+            List<PostRow> filteredList = new ArrayList<>();
 
             if(constraint.toString().isEmpty()){
                 filteredList.addAll(itemsListFull);
@@ -179,8 +287,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             FilterResults res = new FilterResults();
             res.values = filteredList;
             return res;
-        }
 
+        }
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             itemsList.clear();
