@@ -8,6 +8,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.View;
 
+import com.example.huc_project.R;
+
 public class PaintText extends View {
     public String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
     private int which_one;
@@ -28,7 +30,7 @@ public class PaintText extends View {
         //set style
         mPaintText.setStyle(Paint.Style.FILL_AND_STROKE);
         //set color
-        mPaintText.setColor(Color.BLACK);
+        mPaintText.setColor(getResources().getColor(R.color.textColor));
         //set text Size
         mPaintText.setTextSize(45f);
 

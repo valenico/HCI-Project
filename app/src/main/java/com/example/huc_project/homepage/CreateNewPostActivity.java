@@ -7,13 +7,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
 import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
@@ -24,19 +22,17 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.example.huc_project.profile.Edit_profile;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -74,78 +70,188 @@ public class CreateNewPostActivity extends AppCompatActivity {
     Dialog popChooseCategories ;
     TextView show_cat;
     TextView choose;
+    TextView categories_selected;
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
-    private static final String[] COUNTRIES = new String[] {
-            "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
 
-            "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria",
 
-            "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
+        @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_new_post);
+        db = FirebaseFirestore.getInstance();
+        Button buttonCreateP=(Button)findViewById(R.id.postBtn);
+        iniPopup();
+        imageView = (ImageButton) findViewById(R.id.imageBtn);
+        //button = (Button)findViewById(R.id.buttonLoadPicture);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
 
-            "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana",
+            show_cat = findViewById(R.id.categories_selected);
 
-            "Brazil", "British Indian Ocean Territory", "British Virgin Islands", "Brunei", "Bulgaria",
+        choose = findViewById(R.id.choose);
+        categories_selected = findViewById(R.id.categories_selected);
 
-            "Burkina Faso", "Burma (Myanmar)", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
+            choose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popChooseCategories.show();
+                }
+            });
 
-            "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island",
+        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
-            "Cocos (Keeling) Islands", "Colombia", "Comoros", "Cook Islands", "Costa Rica",
 
-            "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo",
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        final AutoCompleteTextView countryView = (AutoCompleteTextView)
+                findViewById(R.id.countries_list);
+        countryView.setAdapter(adapter);
 
-            "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+        final AutoCompleteTextView cityView = (AutoCompleteTextView)
+                findViewById(R.id.cities_list);
 
-            "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia",
 
-            "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia",
 
-            "Gabon", "Gambia", "Gaza Strip", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece",
+        buttonCreateP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Map<String, Object> post = new HashMap<>();
+                EditText text = (EditText) findViewById(R.id.textDesc);
+                EditText texttitle = (EditText) findViewById(R.id.textTitle);
+                String postDescription = text.getText().toString();
+                String postTitle=texttitle.getText().toString();
+                String country=countryView.getText().toString();
+                String city = cityView.getText().toString();
+                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
-            "Greenland", "Grenada", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+                Boolean isPackage = true;
 
-            "Haiti", "Holy See (Vatican City)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India",
+                StorageReference storageRef = storage.getReference();
+                StorageReference riversRef;
+                UploadTask uploadTask;
+                String role="";
+                CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
+                CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
+                CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
+                if (sponsor.isChecked()) {
+                    role="sponsor";
+                }
+                else if (sponsorship.isChecked()) {
+                    role="sponsorship";
+                }
+                if (checkispackage.isChecked()) {
+                    isPackage = true;
+                }
+                else {
+                    isPackage = false;
+                }
 
-            "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Ivory Coast", "Jamaica",
 
-            "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait",
+                ArrayList<String> categoriesChosen = new ArrayList<String>();
 
-            "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein",
 
-            "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia",
+                if (interests_selected.containsKey("Science & IT")) categoriesChosen.add("science");
+                if (interests_selected.containsKey("Nature")) categoriesChosen.add("nature");
+                if (interests_selected.containsKey("Sport")) categoriesChosen.add("sport");
+                if (interests_selected.containsKey("Fashion")) categoriesChosen.add("fashion");
+                if (interests_selected.containsKey("Food")) categoriesChosen.add("food");
+                if (interests_selected.containsKey("Movies")) categoriesChosen.add("movies");
+                if (interests_selected.containsKey("Music")) categoriesChosen.add("music");
 
-            "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mayotte", "Mexico",
+                post.put("title", postTitle);
+                post.put("postdesc", postDescription);
+                post.put("user", current_user.getUid());
+                post.put("isPackage", isPackage);
+                post.put("categories", categoriesChosen);
+                post.put("role", role);
+                post.put("city", city);
+                post.put("country", country);
 
-            "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco",
 
-            "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia",
+                // Handle unsuccessful uploads
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                if (isTheImageUp==false) {
+                    String stringRef = imageUri.getLastPathSegment()+"_"+ System.currentTimeMillis();
+                    riversRef = storageRef.child("images/" + stringRef);
+                    Log.e("PROVOLA",  stringRef);
+                    post.put("storageref", stringRef);
+                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.add_img);
+                    uploadTask = riversRef.putFile(imageUri);
+                }
+                else {
+                    riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
+                    Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
+                    post.put("storageref", imageUri.getLastPathSegment());
+                    uploadTask = riversRef.putFile(imageUri);
+                }
 
-            "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "North Korea",
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Add a new document with a generated ID
+                        db.collection("posts")
+                                .add(post)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });                    }
+                });
+                Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-            "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama",
+    }
 
-            "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn Islands", "Poland",
+    private void openGallery() {
+        Intent gallery = new Intent();//(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
+        gallery.setType("image/*");
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
 
-            "Portugal", "Puerto Rico", "Qatar", "Republic of the Congo", "Romania", "Russia", "Rwanda",
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -1 && requestCode == PICK_IMAGE && data!=null) {
+            imageUri = data.getData();
+            CropImage.activity(imageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .setRequestedSize(500,500, CropImageView.RequestSizeOptions.RESIZE_EXACT)
+                    .start(this);
 
-            "Saint Barthelemy", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Martin",
+        }
 
-            "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-            "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone",
-
-            "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea",
-
-            "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland",
-
-            "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau",
-
-            "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands",
-
-            "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "US Virgin Islands", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam",
-
-            "Wallis and Futuna", "West Bank", "Yemen", "Zambia", "Zimbabwe"
-    };
+            if(resultCode == -1){
+                isTheImageUp=true;
+                imageUri = result.getUri();
+                imageView.setImageURI(imageUri);
+            }
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void iniPopup() {
@@ -314,6 +420,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
         });
     }
 
+
     private void setCategories(){
         String cat= new String();
         for (Map.Entry<String, Object> entry : interests_selected.entrySet()) {
@@ -328,7 +435,18 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
         if(cat.length()>0){
             cat =  cat.substring(0, cat.length() - 1);
-            choose.setText(cat);
+            categories_selected.setText(cat);
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
+            params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
+            categories_selected.setLayoutParams(params);
+            Log.d("TAAC", String.valueOf(interests_selected.containsKey("Fashion")));
+            Log.d("TAAC", String.valueOf(interests_selected));
+        }else {
+            int margin = getResources().getDimensionPixelSize(R.dimen._1sdp);
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
+            params.height = margin;
+            categories_selected.setLayoutParams(params);
+            categories_selected.setText("");
         }
         //Toast.makeText(CreateNewPostActivity.this, "Chosen " + cat, Toast.LENGTH_SHORT).show();
     }
@@ -343,211 +461,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
         return maxValue;
     }
 
-        @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_post);
-        db = FirebaseFirestore.getInstance();
-        Button buttonCreateP=(Button)findViewById(R.id.postBtn);
-        iniPopup();
-        imageView = (ImageButton) findViewById(R.id.imageBtn);
-        //button = (Button)findViewById(R.id.buttonLoadPicture);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-
-            show_cat = findViewById(R.id.cat_selected);
-
-        choose = findViewById(R.id.choose);
-            choose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popChooseCategories.show();
-                }
-            });
-
-        final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-        final AutoCompleteTextView countryView = (AutoCompleteTextView)
-                findViewById(R.id.countries_list);
-        countryView.setAdapter(adapter);
-
-        final AutoCompleteTextView cityView = (AutoCompleteTextView)
-                findViewById(R.id.cities_list);
-
-
-
-        buttonCreateP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Map<String, Object> post = new HashMap<>();
-                EditText text = (EditText) findViewById(R.id.textDesc);
-                EditText texttitle = (EditText) findViewById(R.id.textTitle);
-                String postDescription = text.getText().toString();
-                String postTitle=texttitle.getText().toString();
-                String country=countryView.getText().toString();
-                String city = cityView.getText().toString();
-                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
-                Boolean isPackage = true;
-
-                StorageReference storageRef = storage.getReference();
-                StorageReference riversRef;
-                UploadTask uploadTask;
-                String role="";
-                CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
-                CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
-                CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
-                if (sponsor.isChecked()) {
-                    role="sponsor";
-                }
-                else if (sponsorship.isChecked()) {
-                    role="sponsorship";
-                }
-                if (checkispackage.isChecked()) {
-                    isPackage = true;
-                }
-                else {
-                    isPackage = false;
-                }
-
-
-                ArrayList<String> categoriesChosen = new ArrayList<String>();
-
-                CheckBox science=(CheckBox) findViewById(R.id.checkBoxScience);
-                CheckBox nature=(CheckBox) findViewById(R.id.checkBoxNature);
-                CheckBox sport=(CheckBox) findViewById(R.id.checkBoxSport);
-                CheckBox fashion=(CheckBox) findViewById(R.id.checkBoxFashion);
-                CheckBox food=(CheckBox) findViewById(R.id.checkBoxFood);
-                CheckBox movies=(CheckBox) findViewById(R.id.checkBoxMovies);
-                CheckBox music=(CheckBox) findViewById(R.id.checkBoxMusic);
-
-                if (science.isChecked()) {
-                    categoriesChosen.add("science");
-
-                }
-                if (nature.isChecked()) {
-                    categoriesChosen.add("nature");
-
-                }
-                if (sport.isChecked()) {
-                    categoriesChosen.add("sport");
-
-                }
-                if (fashion.isChecked()) {
-                    categoriesChosen.add("fashion");
-
-                }
-                if (food.isChecked()) {
-                    categoriesChosen.add("food");
-
-                }
-                if (movies.isChecked()) {
-                    categoriesChosen.add("movies");
-
-                }
-                if (music.isChecked()) {
-                    categoriesChosen.add("music");
-
-                }
-
-                post.put("title", postTitle);
-                post.put("postdesc", postDescription);
-                post.put("user", current_user.getUid());
-                post.put("isPackage", isPackage);
-                post.put("categories", categoriesChosen);
-                post.put("role", role);
-                post.put("city", city);
-                post.put("country", country);
-
-
-                // Handle unsuccessful uploads
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                if (isTheImageUp==false) {
-                    String stringRef = imageUri.getLastPathSegment()+"_"+ System.currentTimeMillis();
-                    riversRef = storageRef.child("images/" + stringRef);
-                    Log.e("PROVOLA",  stringRef);
-                    post.put("storageref", stringRef);
-                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.add_img);
-                    uploadTask = riversRef.putFile(imageUri);
-                }
-                else {
-                    riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
-                    Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
-                    post.put("storageref", imageUri.getLastPathSegment());
-                    uploadTask = riversRef.putFile(imageUri);
-                }
-
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Add a new document with a generated ID
-                        db.collection("posts")
-                                .add(post)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error adding document", e);
-                                    }
-                                });                    }
-                });
-                Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-    }
-
-    private void openGallery() {
-        Intent gallery = new Intent();//(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        gallery.setAction(Intent.ACTION_GET_CONTENT);
-        gallery.setType("image/*");
-        startActivityForResult(gallery, PICK_IMAGE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == -1 && requestCode == PICK_IMAGE && data!=null) {
-            imageUri = data.getData();
-            CropImage.activity(imageUri)
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
-                    .setRequestedSize(500,500, CropImageView.RequestSizeOptions.RESIZE_EXACT)
-                    .start(this);
-
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-            if(resultCode == -1){
-                isTheImageUp=true;
-                imageUri = result.getUri();
-                imageView.setImageURI(imageUri);
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
         Intent i = new Intent(this, Homepage.class);
@@ -555,5 +468,77 @@ public class CreateNewPostActivity extends AppCompatActivity {
         finish();
 
     }
+
+    private static final String[] COUNTRIES = new String[] {
+            "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
+
+            "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria",
+
+            "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
+
+            "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana",
+
+            "Brazil", "British Indian Ocean Territory", "British Virgin Islands", "Brunei", "Bulgaria",
+
+            "Burkina Faso", "Burma (Myanmar)", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
+
+            "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island",
+
+            "Cocos (Keeling) Islands", "Colombia", "Comoros", "Cook Islands", "Costa Rica",
+
+            "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo",
+
+            "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+
+            "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia",
+
+            "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia",
+
+            "Gabon", "Gambia", "Gaza Strip", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece",
+
+            "Greenland", "Grenada", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+
+            "Haiti", "Holy See (Vatican City)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India",
+
+            "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Ivory Coast", "Jamaica",
+
+            "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait",
+
+            "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein",
+
+            "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia",
+
+            "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mayotte", "Mexico",
+
+            "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco",
+
+            "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia",
+
+            "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "North Korea",
+
+            "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama",
+
+            "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn Islands", "Poland",
+
+            "Portugal", "Puerto Rico", "Qatar", "Republic of the Congo", "Romania", "Russia", "Rwanda",
+
+            "Saint Barthelemy", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Martin",
+
+            "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+
+            "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone",
+
+            "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea",
+
+            "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland",
+
+            "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau",
+
+            "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands",
+
+            "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "US Virgin Islands", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam",
+
+            "Wallis and Futuna", "West Bank", "Yemen", "Zambia", "Zimbabwe"
+    };
 
 }
