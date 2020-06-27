@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -45,8 +46,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Edit_profile extends AppCompatActivity {
@@ -54,6 +57,8 @@ public class Edit_profile extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseAuth mAuth;
     private Uri profile_pic_uri;
+    final int PICK_IMAGE_GALLERY = 100;
+    final int MY_NEW_CODE = 110;
 
     TabLayout tabLayout;
 
@@ -173,6 +178,8 @@ public class Edit_profile extends AppCompatActivity {
         });
     }
 
+
+
     private  void SelectImage(){
         CropImage.startPickImageActivity(this);
     }
@@ -224,19 +231,69 @@ public class Edit_profile extends AppCompatActivity {
             profile_pic_uri = CropImage.getPickImageResultUri(this, data);
             startCropImageActivity(profile_pic_uri);
         }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && profile_pic_uri != null){
             CropImage.ActivityResult ar = CropImage.getActivityResult(data);
             Uri filePath = ar.getUri();
+            Log.d("TAG","SIAMO IN PROFILO");
             final ImageView add_pic = findViewById(R.id.profImage);
             try {
                 uploadImage(filePath);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 add_pic.setImageBitmap(bitmap);
+                profile_pic_uri = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && profile_pic_uri == null) {
+            CropImage.ActivityResult ar = CropImage.getActivityResult(data);
+            Log.d("TAG","SIAMO IN GALLERY");
+            final Uri filePath = ar.getUri();
+            db.collection("UTENTI").document(mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            ArrayList<String> list = new ArrayList<>();
+                            if (document.get("images") != null)
+                                list = (ArrayList<String>) document.get("images");
+                            list.add(filePath.getLastPathSegment());
+                            final HashMap<String, ArrayList<String>> imgs = new HashMap<>();
+                            imgs.put("images", list);
+
+                            StorageReference riversRef = storage.getReference().child("images/" + filePath.getLastPathSegment());
+                            UploadTask uploadTask = riversRef.putFile(filePath);
+                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    db.collection("UTENTI").document(mAuth.getUid()).set(imgs, SetOptions.merge());
+                                    Toast t = Toast.makeText(Edit_profile.this,"Your picture has been uploaded! Go see it in your gallery!", Toast.LENGTH_LONG);
+                                    t.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                                    t.show();
+                                }
+                            });
+
+                        }
+                    }
+                }
+            });
+        }
+        if(requestCode == PICK_IMAGE_GALLERY && resultCode == Activity.RESULT_OK){
+            Uri imageUri = data.getData();
+            CropImage.activity(imageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .setRequestedSize(500,500, CropImageView.RequestSizeOptions.RESIZE_EXACT)
+                    .start(this);
+        }
+    }
+
+    public void upload_images(View view) {
+        Intent gallery = new Intent();//(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
+        gallery.setType("image/*");
+        startActivityForResult(gallery, PICK_IMAGE_GALLERY);
     }
 }
 

@@ -56,13 +56,15 @@
         <TextView
             android:id="@+id/mail"
             android:layout_width="match_parent"
+            android:paddingRight="@dimen/_5sdp"
+            android:paddingLeft="@dimen/_5sdp"
             android:layout_height="wrap_content"
             android:gravity="fill_vertical"
             android:text="Mail"
             android:textColor="@color/textColor"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/hidemail"
-            tools:layout_editor_absoluteX="16dp" />
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hidemail" />
 
         <CheckBox
             android:id="@+id/hidemail"
@@ -101,8 +103,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/profImage"
+        <androidx.cardview.widget.CardView
             android:layout_width="@dimen/_160sdp"
             android:layout_height="@dimen/_160sdp"
             android:layout_marginLeft="@dimen/_1sdp"
@@ -111,19 +112,49 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/add_img" />
+            android:id="@+id/cardprofimage"
+            app:cardCornerRadius="@dimen/_160sdp"
+            >
+            <ImageView
+                android:id="@+id/profImage"
+                android:layout_width="@dimen/_160sdp"
+                android:layout_height="@dimen/_160sdp"
+                app:srcCompat="@drawable/add_img" />
+
+        </androidx.cardview.widget.CardView>
 
         <ImageButton
             android:id="@+id/editImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_120sdp"
-            android:layout_marginLeft="@dimen/_120sdp"
-            android:layout_marginTop="@dimen/_120sdp"
+            android:layout_marginStart="@dimen/_140sdp"
+            android:layout_marginLeft="@dimen/_140sdp"
+            android:layout_marginTop="@dimen/_130sdp"
             android:background="#00FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_pencil" />
+
+        <Button
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            android:drawableRight="@drawable/ic_pictures"
+            android:drawableEnd="@drawable/ic_pictures"
+            android:padding="@dimen/_5sdp"
+            android:drawableTint="#FFFFFF"
+            android:text="Upload Images"
+            android:onClick="upload_images"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintBottom_toTopOf="@+id/name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cardprofimage"
+            app:layout_constraintTop_toTopOf="parent"
+             />
 
         <Button
             android:id="@+id/done_button"

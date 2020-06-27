@@ -456,7 +456,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                         totalFilter+=w;
                         totalFilter+="/-/-/";
                     }
-
                 }
                 recyclerViewAdapter.getFilter().filter(totalFilter);
             }

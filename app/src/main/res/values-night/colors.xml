@@ -9,4 +9,5 @@
     <color name="card_color">#363636</color>
     <color name="hint_color">#BBBBBB</color>
     <color name="black_overlay">#66000000</color>
+    <color name="post_fields">#363636</color>
 </resources>
