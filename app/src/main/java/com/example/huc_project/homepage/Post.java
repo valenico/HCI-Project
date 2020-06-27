@@ -33,9 +33,6 @@ public class Post {
     }
     public Post() {}
 
-
-
-
     public String getPostdesc() {
         return postdesc;
     }

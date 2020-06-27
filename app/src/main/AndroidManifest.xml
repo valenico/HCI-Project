@@ -7,8 +7,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".homepage.PostCreatedSuccessfully"></activity>
-        <activity android:name=".settings.BlockedAccounts"></activity>
+        <activity android:name=".posts.edit_post"></activity>
+        <activity android:name=".homepage.PostCreatedSuccessfully" />
+        <activity android:name=".settings.BlockedAccounts" />
         <activity android:name=".settings.Settings" />
         <activity android:name=".chat.ChatView" />
         <activity
@@ -41,9 +42,9 @@
         <activity android:name=".profile.AddNewSocialAccount" />
         <activity android:name=".profile.RemoveSocialAccount" />
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
