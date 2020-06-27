@@ -71,14 +71,14 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_6sdp"
-            android:background="@color/card_color"
+            android:backgroundTint="@color/card_color"
             >
 
             <ImageView
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="35dp"
                 android:layout_marginTop="@dimen/_6sdp"
-                android:background="@color/backgroundColor"
+                android:background="@color/card_color"
                 android:src="@drawable/newtag">
 
             </ImageView>
@@ -89,7 +89,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_40sdp"
                 android:text="Choose Categories"
-                android:background="@color/backgroundColor"
+                android:background="@color/card_color"
                 android:textColor="@color/textColor"
                 android:textSize="20sp"
                 android:textStyle="bold"
