@@ -29,7 +29,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_5sdp"
-            android:background="#D8EFEF"
+            android:background="@color/post_fields"
             android:hint="Post Title"
             android:padding="@dimen/_10sdp"
             android:textColor="@color/textColor"
@@ -43,7 +43,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_5sdp"
-            android:background="#D4EDED"
+            android:background="@color/post_fields"
             android:hint="Post Description"
             android:padding="@dimen/_10sdp"
             android:textColor="@color/textColor"
@@ -52,6 +52,7 @@
         <CheckBox
             android:id="@+id/sponsor"
             android:textColor="@color/textColor"
+            android:buttonTint="@color/textColor"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,6 +61,7 @@
         <CheckBox
             android:id="@+id/sponsorship"
             android:textColor="@color/textColor"
+            android:buttonTint="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="I am proposing a sponsorship" />
@@ -92,7 +94,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#D8EFEF"
+                    android:background="@color/post_fields"
                     android:orientation="vertical">
 
                     <CheckBox
@@ -100,49 +102,63 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Science"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
 
                     <CheckBox
                         android:id="@+id/checkBoxNature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Nature"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
 
                     <CheckBox
                         android:id="@+id/checkBoxSport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Sport"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
 
                     <CheckBox
                         android:id="@+id/checkBoxFashion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Fashion"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
 
                     <CheckBox
                         android:id="@+id/checkBoxFood"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Food"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
 
                     <CheckBox
                         android:id="@+id/checkBoxMovies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Movies"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
 
                     <CheckBox
                         android:id="@+id/checkBoxMusic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Music"
-                        android:textColor="@color/textColor" />
+                        android:textColor="@color/textColor"
+                        android:buttonTint="@color/textColor"
+                        />
                 </LinearLayout>
             </ScrollView>
 
@@ -154,13 +170,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_20sdp"
+            android:textColor="@color/textColor"
+            android:buttonTint="@color/textColor"
             android:text="I want a standard package" />
 
         <AutoCompleteTextView
             android:id="@+id/countries_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D8EFEF"
+            android:background="@color/post_fields"
             android:hint="Choose a Country"
             android:padding="@dimen/_10sdp"
             android:textColor="@color/textColor"
@@ -174,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_21sdp"
-            android:background="#D8EFEF"
+            android:background="@color/post_fields"
             android:hint="Choose a City"
             android:padding="@dimen/_10sdp"
             android:textColor="@color/textColor"
@@ -192,6 +210,7 @@
             android:layout_marginRight="@dimen/_5sdp"
             android:background="@drawable/custom_button"
             android:text="Post"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:textColor="#fff"
             android:textStyle="bold" />
 
