@@ -150,6 +150,36 @@
                 android:textStyle="bold"
                 android:layout_marginLeft="@dimen/_40sdp" />
 
+
+            <LinearLayout
+                android:id="@+id/categories_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:orientation="horizontal"
+                android:background="@drawable/cards_categories">
+
+                <!--
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_minus" >
+
+                </ImageView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/_6sdp"
+                    android:paddingRight="@dimen/_6sdp"
+
+                    android:text="CIAOO"
+                    android:textSize="@dimen/_18sdp" />-->
+            </LinearLayout>
+
+
+
+
             <TextView
                 android:id="@+id/categories_selected"
                 android:layout_width="match_parent"
