@@ -116,7 +116,17 @@ public class postView extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(postView.this, "Non puoi ancora modificarlo STRONZO", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(postView.this, edit_post.class);
+                    intent.putExtra("title", post.getTitle());
+                    intent.putExtra("desc", post.getPostdesc());
+                    intent.putExtra("storageref", post.getStorageref());
+                    intent.putExtra("user", post.getUser());
+                    intent.putExtra("country", post.getCountry());
+                    intent.putExtra("city",post.getCity());
+                    intent.putExtra("categories", post.getCategories());
+                    intent.putExtra("role", post.getRole());
+                    intent.putExtra("isPackage", post.getIsPackage());
+                    startActivity(intent);
                 }
             });
         }
