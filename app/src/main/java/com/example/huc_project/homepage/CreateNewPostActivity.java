@@ -114,6 +114,28 @@ public class CreateNewPostActivity extends AppCompatActivity {
         final CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
         final CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
 
+        CompoundButton.OnCheckedChangeListener sponsorChecker = new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(buttonView.equals(sponsor) && isChecked){
+                        if(sponsorship.isChecked()){
+                            sponsorship.setChecked(false);
+                        }
+                        sponsor.setChecked(true);
+                    }
+                    else if(isChecked){
+                        if(sponsor.isChecked()){
+                            sponsor.setChecked(false);
+                        }
+                        sponsorship.setChecked(true);
+                    }
+                }
+            };
+
+            sponsor.setOnCheckedChangeListener(sponsorChecker);
+            sponsorship.setOnCheckedChangeListener(sponsorChecker);
+
+
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
 
