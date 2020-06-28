@@ -26,12 +26,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,7 +69,18 @@ public class CreateNewPostActivity extends AppCompatActivity {
     Dialog popChooseCategories ;
     TextView choose;
     TextView categories_selected;
+    LinearLayout categoriesCardLayout;
+    final int maxChecked = 3;
+    int countChecked = 0;
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
+
+    CustomCheckbox sportCheck;
+    CustomCheckbox fashionCheck;
+    CustomCheckbox scienceCheck;
+    CustomCheckbox musicCheck;
+    CustomCheckbox moviesCheck;
+    CustomCheckbox foodCheck;
+    CustomCheckbox natureCheck;
 
 
         @Override
@@ -88,9 +101,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
         choose = findViewById(R.id.choose);
         categories_selected = findViewById(R.id.categories_selected);
+        categoriesCardLayout = (LinearLayout) findViewById(R.id.categories_wrapper);
         choose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    checkBoxes();
                     popChooseCategories.show();
                 }
             });
@@ -100,6 +115,8 @@ public class CreateNewPostActivity extends AppCompatActivity {
         final CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -272,21 +289,38 @@ public class CreateNewPostActivity extends AppCompatActivity {
         final Context c = this.getBaseContext();
 
 
-        final CustomCheckbox sportCheck = popChooseCategories.findViewById(R.id.sport);
-        final CustomCheckbox fashionCheck = popChooseCategories.findViewById(R.id.fashion);
-        final CustomCheckbox scienceCheck = popChooseCategories.findViewById(R.id.science);
-        final CustomCheckbox musicCheck = popChooseCategories.findViewById(R.id.music);
-        final CustomCheckbox moviesCheck = popChooseCategories.findViewById(R.id.movies);
-        final CustomCheckbox foodCheck = popChooseCategories.findViewById(R.id.food);
-        final CustomCheckbox natureCheck = popChooseCategories.findViewById(R.id.nature);
 
-        if (interests_selected.containsKey("Science & IT")) scienceCheck.setChecked(true);
-        if (interests_selected.containsKey("Nature")) natureCheck.setChecked(true);
-        if (interests_selected.containsKey("Sport")) sportCheck.setChecked(true);
-        if (interests_selected.containsKey("Fashion")) fashionCheck.setChecked(true);
-        if (interests_selected.containsKey("Food")) foodCheck.setChecked(true);
-        if (interests_selected.containsKey("Movies")) moviesCheck.setChecked(true);
-        if (interests_selected.containsKey("Music")) musicCheck.setChecked(true);
+
+        CompoundButton.OnCheckedChangeListener checker = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(countChecked == maxChecked && isChecked){
+                    buttonView.setChecked(false);
+                    Toast.makeText(getBaseContext(),
+                            "You can't select more than 3 categories!", Toast.LENGTH_SHORT).show();
+                }else if(isChecked){
+                    countChecked++;
+                }else if(!isChecked){
+                    countChecked--;
+                }
+            }
+        };
+        sportCheck = popChooseCategories.findViewById(R.id.sport);
+        sportCheck.setOnCheckedChangeListener(checker);
+        fashionCheck = popChooseCategories.findViewById(R.id.fashion);
+        fashionCheck.setOnCheckedChangeListener(checker);
+        scienceCheck = popChooseCategories.findViewById(R.id.science);
+        scienceCheck.setOnCheckedChangeListener(checker);
+        musicCheck = popChooseCategories.findViewById(R.id.music);
+        musicCheck.setOnCheckedChangeListener(checker);
+        moviesCheck = popChooseCategories.findViewById(R.id.movies);
+        moviesCheck.setOnCheckedChangeListener(checker);
+        foodCheck = popChooseCategories.findViewById(R.id.food);
+        foodCheck.setOnCheckedChangeListener(checker);
+        natureCheck = popChooseCategories.findViewById(R.id.nature);
+        natureCheck.setOnCheckedChangeListener(checker);
+
+        checkBoxes();
 
 
 
@@ -317,21 +351,41 @@ public class CreateNewPostActivity extends AppCompatActivity {
         });
     }
 
+    private void checkBoxes(){
+        if (interests_selected.containsKey("Science & IT") && (boolean)interests_selected.get("Science & IT")) scienceCheck.setChecked(true);
+        else scienceCheck.setChecked(false);
+        if (interests_selected.containsKey("Nature") && (boolean)interests_selected.get("Nature")) natureCheck.setChecked(true);
+        else natureCheck.setChecked(false);
+        if (interests_selected.containsKey("Sport") && (boolean)interests_selected.get("Sport")) sportCheck.setChecked(true);
+        else sportCheck.setChecked(false);
+        if (interests_selected.containsKey("Fashion") && (boolean)interests_selected.get("Fashion")) fashionCheck.setChecked(true);
+        else fashionCheck.setChecked(false);
+        if (interests_selected.containsKey("Food") && (boolean)interests_selected.get("Food")) foodCheck.setChecked(true);
+        else foodCheck.setChecked(false);
+        if (interests_selected.containsKey("Movies") && (boolean)interests_selected.get("Movies")) moviesCheck.setChecked(true);
+        else moviesCheck.setChecked(false);
+        if (interests_selected.containsKey("Music") && (boolean)interests_selected.get("Music")) musicCheck.setChecked(true);
+        else musicCheck.setChecked(false);
+    }
+
 
     private void setCategories(){
         String cat= new String();
+        categoriesCardLayout.removeAllViews(); // clear cards
+
         for (Map.Entry<String, Object> entry : interests_selected.entrySet()) {
             String k = entry.getKey();
             boolean value = (boolean) entry.getValue();
             if(value){
+                createCategoryCard(k);
 
                 cat+="#"+k;
                 cat+=" ";
             }
         }
-
         Log.d("TAAC", String.valueOf(interests_selected));
 
+        /*
         if(cat.length()>0){
             cat =  cat.substring(0, cat.length() - 1);
             categories_selected.setText(cat);
@@ -346,40 +400,43 @@ public class CreateNewPostActivity extends AppCompatActivity {
             params.height = margin;
             categories_selected.setLayoutParams(params);
             categories_selected.setText("");
-        }
-        //Toast.makeText(CreateNewPostActivity.this, "Chosen " + cat, Toast.LENGTH_SHORT).show();
+        }*/
     }
 
-    private void createCategoryCard(String category){
-        LinearLayout layout = (LinearLayout) findViewById(R.id.categories_wrapper);
 
-        LinearLayout parent = new LinearLayout(this);
-        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+    private void createCategoryCard(final String category){
+        final LinearLayout parent = new LinearLayout(this);
+        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen._25sdp)));
         parent.setOrientation(LinearLayout.HORIZONTAL);
-        parent.setBackgroundResource(R.drawable.cards_categories);
+        parent.setBackgroundResource(R.drawable.custom_button);
 
         ImageView minus = new ImageView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(getResources().getDimensionPixelSize(R.dimen._1sdp), getResources().getDimensionPixelSize(R.dimen._1sdp), 0, 0);
         minus.setLayoutParams(params);
-        minus.setImageResource(R.drawable.ic_minus);
+        minus.setImageResource(R.drawable.remove_category);
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                categoriesCardLayout.removeView(parent);
+                interests_selected.put(category, false);
+                Log.d("TAAC", String.valueOf(interests_selected));
             }
         });
 
         TextView categ = new TextView(this);
-        int margin = getResources().getDimensionPixelSize(R.dimen._6sdp);
+        int marginRight = getResources().getDimensionPixelSize(R.dimen._10sdp);
+        int marginLeft = getResources().getDimensionPixelSize(R.dimen._4sdp);
+        int marginTop = getResources().getDimensionPixelSize(R.dimen._4sdp);
         LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params1.setMargins(0, 0, margin, 0);
+        params1.setMargins(marginLeft, marginTop, marginRight, 0);
         categ.setLayoutParams(params1);
         categ.setText(category);
 
         parent.addView(minus);
         parent.addView(categ);
 
-        layout.addView(parent);
+        categoriesCardLayout.addView(parent);
 
     }
 

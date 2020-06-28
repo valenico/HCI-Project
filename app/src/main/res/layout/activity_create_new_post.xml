@@ -156,8 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_40sdp"
-                android:orientation="horizontal"
-                android:background="@drawable/cards_categories">
+                android:orientation="horizontal">
 
                 <!--
                 <ImageView
