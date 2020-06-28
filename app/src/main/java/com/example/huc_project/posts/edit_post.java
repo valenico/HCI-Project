@@ -362,4 +362,9 @@ public class edit_post extends AppCompatActivity {
         }
         return maxValue;
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

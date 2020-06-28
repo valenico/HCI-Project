@@ -302,5 +302,14 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
         intent_user.putExtra("user", suffix);
         startActivity(intent_user);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+        final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        intent.putExtra("user", current_user);
+        startActivity(intent);
+        finish();
+    }
 }
 
