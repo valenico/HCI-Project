@@ -296,12 +296,19 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 //Toast.makeText(CreateNewPostActivity.this, "Chosen " + interests_selected, Toast.LENGTH_SHORT).show();
                 //popChooseCategories.dismiss();
                 if(sportCheck.isChecked()) interests_selected.put((String) sportCheck.getText(), true);
+                else interests_selected.put((String) sportCheck.getText(), false);
                 if(fashionCheck.isChecked()) interests_selected.put((String) fashionCheck.getText(), true);
+                else interests_selected.put((String) fashionCheck.getText(), false);
                 if(scienceCheck.isChecked()) interests_selected.put((String) scienceCheck.getText(), true);
+                else interests_selected.put((String) scienceCheck.getText(), false);
                 if(musicCheck.isChecked()) interests_selected.put((String) musicCheck.getText(), true);
+                else interests_selected.put((String) musicCheck.getText(), false);
                 if(moviesCheck.isChecked()) interests_selected.put((String) moviesCheck.getText(), true);
+                else interests_selected.put((String) moviesCheck.getText(), false);
                 if(foodCheck.isChecked()) interests_selected.put((String) foodCheck.getText(), true);
+                else interests_selected.put((String) foodCheck.getText(), false);
                 if(natureCheck.isChecked()) interests_selected.put((String) natureCheck.getText(), true);
+                else interests_selected.put((String) natureCheck.getText(), false);
 
                 popChooseCategories.cancel();
                 setCategories();
@@ -322,6 +329,8 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 cat+=" ";
             }
         }
+
+        Log.d("TAAC", String.valueOf(interests_selected));
 
         if(cat.length()>0){
             cat =  cat.substring(0, cat.length() - 1);
