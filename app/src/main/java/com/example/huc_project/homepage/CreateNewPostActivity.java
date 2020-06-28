@@ -383,36 +383,22 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 cat+=" ";
             }
         }
-        Log.d("TAAC", String.valueOf(interests_selected));
-
-        /*
-        if(cat.length()>0){
-            cat =  cat.substring(0, cat.length() - 1);
-            categories_selected.setText(cat);
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
-            params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
-            categories_selected.setLayoutParams(params);
-            Log.d("TAAC", String.valueOf(interests_selected.containsKey("Fashion")));
-            Log.d("TAAC", String.valueOf(interests_selected));
-        }else {
-            int margin = getResources().getDimensionPixelSize(R.dimen._1sdp);
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
-            params.height = margin;
-            categories_selected.setLayoutParams(params);
-            categories_selected.setText("");
-        }*/
+        //Log.d("TAAC", String.valueOf(interests_selected));
     }
 
 
     private void createCategoryCard(final String category){
         final LinearLayout parent = new LinearLayout(this);
-        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen._25sdp)));
+        LinearLayout.LayoutParams paramsParent = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        paramsParent.setMargins(getResources().getDimensionPixelSize(R.dimen._5sdp) ,0, 0,0);
+        parent.setLayoutParams(paramsParent);
+
         parent.setOrientation(LinearLayout.HORIZONTAL);
         parent.setBackgroundResource(R.drawable.custom_button);
 
         ImageView minus = new ImageView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(getResources().getDimensionPixelSize(R.dimen._1sdp), getResources().getDimensionPixelSize(R.dimen._1sdp), 0, 0);
+        params.setMargins(0, 0, 0, 0);
         minus.setLayoutParams(params);
         minus.setImageResource(R.drawable.remove_category);
         minus.setOnClickListener(new View.OnClickListener() {
@@ -420,10 +406,8 @@ public class CreateNewPostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 categoriesCardLayout.removeView(parent);
                 interests_selected.put(category, false);
-                Log.d("TAAC", String.valueOf(interests_selected));
             }
         });
-
         TextView categ = new TextView(this);
         int marginRight = getResources().getDimensionPixelSize(R.dimen._10sdp);
         int marginLeft = getResources().getDimensionPixelSize(R.dimen._4sdp);
