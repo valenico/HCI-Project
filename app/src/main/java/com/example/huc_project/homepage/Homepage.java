@@ -600,6 +600,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), CreateNewPostActivity.class);
                     startActivity(intent);
+                    actionMenu.close(true);
                     finish();
                 }
             });
@@ -609,6 +610,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                     Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
                     final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     intent.putExtra("user", current_user);
+                    actionMenu.close(true);
                     startActivity(intent);
                 }
             });
@@ -616,6 +618,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Homepage.this, Chat.class);
+                    actionMenu.close(true);
                     startActivity(i);
                 }
             });
@@ -623,6 +626,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Homepage.this, Settings.class);
+                    actionMenu.close(true);
                     startActivity(i);
                 }
             });
@@ -644,6 +648,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         intent.putExtra("role", post_clicked.getPost().getRole());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
         if(guest_mode) intent.putExtra("guest", true);
+        actionMenu.close(true);
         startActivity(intent);
     }
 }
