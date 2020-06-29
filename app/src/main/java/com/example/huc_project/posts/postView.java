@@ -65,6 +65,7 @@ public class postView extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String current_user;
+    String id;
     boolean guest_mode;
 
     @Override
@@ -78,7 +79,7 @@ public class postView extends AppCompatActivity {
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
                 intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
-
+        this.id = intent.getStringExtra("id");
         this.post_image_view = findViewById(R.id.imageViewplaces);
         this.title_view = findViewById(R.id.postTitle);
         this.desc_view = findViewById(R.id.postDesc);
@@ -121,6 +122,7 @@ public class postView extends AppCompatActivity {
                     intent.putExtra("desc", post.getPostdesc());
                     intent.putExtra("storageref", post.getStorageref());
                     intent.putExtra("user", post.getUser());
+                    intent.putExtra("id", id );
                     intent.putExtra("country", post.getCountry());
                     intent.putExtra("city",post.getCity());
                     intent.putExtra("categories", post.getCategories());
