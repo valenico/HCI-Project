@@ -72,7 +72,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
     LinearLayout categoriesCardLayout;
     final int maxChecked = 3;
     int countChecked = 0;
-    private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
 
     CustomCheckbox sportCheck;
     CustomCheckbox fashionCheck;
@@ -102,14 +101,17 @@ public class CreateNewPostActivity extends AppCompatActivity {
         choose = findViewById(R.id.choose);
         categories_selected = findViewById(R.id.categories_selected);
         categoriesCardLayout = (LinearLayout) findViewById(R.id.categories_wrapper);
-        choose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkBoxes();
-                    popChooseCategories.show();
-                }
-            });
 
+        View.OnClickListener openCategories = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBoxes();
+                popChooseCategories.show();
+            }
+        };
+        choose.setOnClickListener(openCategories);
+        findViewById(R.id.add_category1).setOnClickListener(openCategories);
+        findViewById(R.id.add_category2).setOnClickListener(openCategories);
 
         final CheckBox sponsor=(CheckBox) findViewById(R.id.sponsor);
         final CheckBox sponsorship=(CheckBox) findViewById(R.id.sponsorship);
@@ -188,13 +190,13 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 ArrayList<String> categoriesChosen = new ArrayList<String>();
 
 
-                if (interests_selected.containsKey("Science & IT")) categoriesChosen.add("science");
-                if (interests_selected.containsKey("Nature")) categoriesChosen.add("nature");
-                if (interests_selected.containsKey("Sport")) categoriesChosen.add("sport");
-                if (interests_selected.containsKey("Fashion")) categoriesChosen.add("fashion");
-                if (interests_selected.containsKey("Food")) categoriesChosen.add("food");
-                if (interests_selected.containsKey("Movies")) categoriesChosen.add("movies");
-                if (interests_selected.containsKey("Music")) categoriesChosen.add("music");
+                if (interests_selected.containsKey("Science & IT") && (boolean)interests_selected.get("Science & IT") ) categoriesChosen.add("science");
+                if (interests_selected.containsKey("Nature") && (boolean)interests_selected.get("Nature")) categoriesChosen.add("nature");
+                if (interests_selected.containsKey("Sport") && (boolean)interests_selected.get("Sport")) categoriesChosen.add("sport");
+                if (interests_selected.containsKey("Fashion") && (boolean)interests_selected.get("Fashion")) categoriesChosen.add("fashion");
+                if (interests_selected.containsKey("Food") && (boolean)interests_selected.get("Food")) categoriesChosen.add("food");
+                if (interests_selected.containsKey("Movies") && (boolean)interests_selected.get("Movies")) categoriesChosen.add("movies");
+                if (interests_selected.containsKey("Music") && (boolean)interests_selected.get("Music")) categoriesChosen.add("music");
 
                 post.put("title", postTitle);
                 post.put("postdesc", postDescription);
@@ -205,10 +207,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 post.put("city", city);
                 post.put("country", country);
 
-
-                // Handle unsuccessful uploads
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
                 if (isTheImageUp==false) {
                     String stringRef = imageUri.getLastPathSegment()+"_"+ System.currentTimeMillis();
                     riversRef = storageRef.child("images/" + stringRef);
@@ -273,9 +271,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                     .setAspectRatio(1,1)
                     .setRequestedSize(500,500, CropImageView.RequestSizeOptions.RESIZE_EXACT)
                     .start(this);
-
         }
-
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
@@ -392,18 +388,12 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
 
     private void setCategories(){
-        String cat= new String();
         categoriesCardLayout.removeAllViews(); // clear cards
 
         for (Map.Entry<String, Object> entry : interests_selected.entrySet()) {
             String k = entry.getKey();
             boolean value = (boolean) entry.getValue();
-            if(value){
-                createCategoryCard(k);
-
-                cat+="#"+k;
-                cat+=" ";
-            }
+            if(value) createCategoryCard(k);
         }
         //Log.d("TAAC", String.valueOf(interests_selected));
     }
@@ -443,17 +433,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
         parent.addView(categ);
 
         categoriesCardLayout.addView(parent);
-
-    }
-
-    public static int getMaxValue(int[] numbers){
-        int maxValue = numbers[0];
-        for(int i=1;i < numbers.length;i++){
-            if(numbers[i] > maxValue){
-                maxValue = numbers[i];
-            }
-        }
-        return maxValue;
     }
 
     @Override
