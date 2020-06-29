@@ -153,6 +153,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             List<PostRow> filteredList = new ArrayList<>();
             List<PostRow> filteredListCategories = new ArrayList<>();
             List<PostRow> filteredListRole = new ArrayList<>();
+            List<PostRow> filteredListPackage = new ArrayList<>();
+            List<PostRow> filteredListFilters = new ArrayList<>();
 
             if(constraint.toString().isEmpty()){
                 filteredList.addAll(itemsListFull);
@@ -161,11 +163,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 String[] words = constraint.toString().split("/-/-/");
 
 
-                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music", "sponsorship", "sponsor"};
+                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music", "sponsorship", "sponsor", "is_package"};
 
                 Boolean isitfiltered=false;
                 Boolean roleisasked=false;
                 Boolean categoryisasked=false;
+                Boolean packageisasked=false;
 
                 String onetry="1";
                 onetry= onetry.toLowerCase().trim();
@@ -178,6 +181,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
 
+                //check if there are filters on CATEGORIES (1-7)
                 for (int i = 1; i < 8 ; i++) {
                     String w = words[i];
                     w = w.toLowerCase().trim();
@@ -187,9 +191,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
 
+                //check if there are filters on SPONSOR/SPONSORSHIP (8-9)
                 if (words[8].equals(onetry) || words[9].equals((onetry))) {
                     isitfiltered=true;
                     roleisasked=true;
+
+                }
+
+                //check if there are filters on PACKAGE (10)
+                if (words[10].equals(onetry)) {
+                    isitfiltered=true;
+                    packageisasked=true;
+                    for (PostRow s: itemsListFull) {
+                        if (s.post.isPackage) {
+                            if (!filteredListPackage.contains(s)) {
+                                filteredListPackage.add(s);
+                            }
+                        }
+                    }
 
                 }
 
@@ -209,25 +228,67 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                     filteredListRole.add(s);
                                 }
                             }
+
                         }
 
                     }
 
                 }
-                if (categoryisasked) {
-                    if (roleisasked) {
-                        filteredListRole.retainAll(filteredListCategories);
+
+
+                //HERE I DO THE INTERSECTION BETWEEN ALL THE FILTERS EXCLUDING THE SEARCH BAR FILTER (I LET THE ELSE IF JUST FOR BETTER READING)
+                if (isitfiltered) {
+                    if (categoryisasked) {
+                        filteredListFilters=filteredListCategories;
+                        if (roleisasked) {
+                            filteredListFilters.retainAll(filteredListRole);
+                            if (packageisasked) {
+                                filteredListFilters.retainAll(filteredListPackage);
+                            }
+                            else if (!packageisasked) {
+                                //Do nothing
+                            }
+                        }
+                        else if (!roleisasked){
+                            if (packageisasked) {
+                                filteredListFilters.retainAll(filteredListPackage);
+                            }
+                            else if (!packageisasked) {
+                                //do nothing
+                            }
+                        }
                     }
-                    else {
-                        filteredListRole=filteredListCategories;
+                    else if (!categoryisasked) {
+                        if (roleisasked) {
+                            filteredListFilters=filteredListRole;
+                            if (packageisasked) {
+                                filteredListFilters.retainAll(filteredListPackage);
+                            }
+                            else if (!packageisasked) {
+                                //do nothing
+                            }
+                        }
+                        else if (!roleisasked){
+                            if (packageisasked) {
+                                filteredListFilters=filteredListPackage;
+                            }
+                            else if (!packageisasked) {
+                                //THIS CONDITION SHOULD NEVER BE MET
+                                Log.e("tagg", "NON DOVRESTI ESSERE QUI PERCHè è TUTTO FALSO E QUINDI isitfiltered dovrebbe essere false");
+
+                            }
+                        }
+
                     }
                 }
 
 
+                //HERE I DO THE FILTER WITH THE SEARCH BAR
+
                 String filterPattern = words[0].toString().toLowerCase().trim();
                 if (filterPattern.equals("")) {
                     if (isitfiltered) {
-                        filteredList = filteredListRole;
+                        filteredList = filteredListFilters;
                     }
                     else {
                         filteredList.addAll(itemsListFull);
@@ -241,7 +302,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             }
                         }
 
-                        filteredList.retainAll(filteredListRole);
+                        filteredList.retainAll(filteredListFilters);
                     }
                     else {
                         for (PostRow s : itemsListFull) {
