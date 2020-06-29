@@ -85,6 +85,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
+    ArrayList<String> postDoc = new ArrayList<>();
 
     private boolean unread_messages = true;
     private FirebaseUser usr = mAuth.getCurrentUser();
@@ -106,9 +107,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     private SwipeRefreshLayout swipeContainer;
     private FloatingActionMenu actionMenu;
-
-
-
 
     DrawerLayout mDrawerLayout;
     NavigationView navView;
@@ -160,6 +158,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
                                 rowsPostList.add(post_row);
+                                postDoc.add(document.getId());
                             }
                             populateData();
                             setUp();
@@ -721,6 +720,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         PostRow post_clicked = rowsArrayList.get(position);
         Intent intent = new Intent(Homepage.this, postView.class);
         intent.putExtra("title", post_clicked.getTitle());
+        intent.putExtra("id", postDoc.get(position));
         intent.putExtra("desc", post_clicked.getDesc());
         intent.putExtra("storageref", post_clicked.getPost().getStorageref());
         intent.putExtra("user", post_clicked.getPost().getUser());

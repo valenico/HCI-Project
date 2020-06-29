@@ -1,46 +1,49 @@
 package com.example.huc_project.posts;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.Post;
-import com.example.huc_project.ui.login.CircularItemAdapter;
-import com.example.huc_project.ui.login.PaintText;
+import com.example.huc_project.homepage.PostCreatedSuccessfully;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.jh.circularlist.CircularListView;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,11 +55,25 @@ public class edit_post extends AppCompatActivity {
     Uri imageUri;
     TextView title_view;
     TextView desc_view;
+    String id;
     Dialog popChooseCategories ;
     TextView categories_selected;
     private HashMap<String,Object> interests_selected = new HashMap<>();
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
 
+    LinearLayout categoriesCardLayout;
+    final int maxChecked = 3;
+    int countChecked = 0;
+    boolean isTheImageUp = false;
+
+    CustomCheckbox sportCheck;
+    CustomCheckbox fashionCheck;
+    CustomCheckbox scienceCheck;
+    CustomCheckbox musicCheck;
+    CustomCheckbox moviesCheck;
+    CustomCheckbox foodCheck;
+    CustomCheckbox natureCheck;
+    String storageref;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -70,14 +87,87 @@ public class edit_post extends AppCompatActivity {
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
                 intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
-
+        id = intent.getStringExtra("id");
+        storageref = intent.getStringExtra("storageref");
         Button post_button = findViewById(R.id.postBtn);
         post_button.setText("Save");
         post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: se dalla homepage salviamo id dei document possiamo passarli avanti
-                // cosi quì possiamo fare db.blabla.set() con le merge options
+                final Map<String, Object> post = new HashMap<>();
+                EditText text = (EditText) findViewById(R.id.textDesc);
+                EditText texttitle = (EditText) findViewById(R.id.textTitle);
+                String postDescription = text.getText().toString();
+                String postTitle = texttitle.getText().toString();
+                String country= ((AutoCompleteTextView) findViewById(R.id.countries_list)).getText().toString();
+                String city = ((AutoCompleteTextView) findViewById(R.id.cities_list)).getText().toString();
+                Bitmap bitmap = ((BitmapDrawable)post_image_view.getDrawable()).getBitmap();
+
+                Boolean isPackage = true;
+
+                StorageReference storageRef = storage.getReference();
+                StorageReference riversRef;
+                UploadTask uploadTask;
+                String role="";
+                CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
+                if (((CheckBox)findViewById(R.id.sponsor)).isChecked()) {
+                    role="sponsor";
+                }
+                else if (((CheckBox)findViewById(R.id.sponsorship)).isChecked()) {
+                    role="sponsorship";
+                }
+                if ( checkispackage.isChecked()) {
+                    isPackage = true;
+                }
+                else {
+                    isPackage = false;
+                }
+
+
+                ArrayList<String> categoriesChosen = new ArrayList<String>();
+
+
+                if (interests_selected.containsKey("science") && (boolean)interests_selected.get("science") ) categoriesChosen.add("science");
+                if (interests_selected.containsKey("nature") && (boolean)interests_selected.get("nature")) categoriesChosen.add("nature");
+                if (interests_selected.containsKey("sport") && (boolean)interests_selected.get("sport")) categoriesChosen.add("sport");
+                if (interests_selected.containsKey("fashion") && (boolean)interests_selected.get("fashion")) categoriesChosen.add("fashion");
+                if (interests_selected.containsKey("food") && (boolean)interests_selected.get("food")) categoriesChosen.add("food");
+                if (interests_selected.containsKey("movies") && (boolean)interests_selected.get("movies")) categoriesChosen.add("movies");
+                if (interests_selected.containsKey("music") && (boolean)interests_selected.get("music")) categoriesChosen.add("music");
+
+                post.put("title", postTitle);
+                post.put("postdesc", postDescription);
+                post.put("user", mAuth.getUid());
+                post.put("isPackage", isPackage);
+                post.put("categories", categoriesChosen);
+                post.put("role", role);
+                post.put("city", city);
+                post.put("country", country);
+
+                if (isTheImageUp) {
+                    riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
+                    post.put("storageref", imageUri.getLastPathSegment());
+                    uploadTask = riversRef.putFile(imageUri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Add a new document with a generated ID
+                            db.collection("posts").document(id).set(post);
+                        }
+                    });
+                } else {
+                    post.put("storageref", storageref);
+                    db.collection("posts").document(id).set(post);
+                }
+                Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
+                startActivity(intent);
+                finish();
+
             }
         });
 
@@ -150,12 +240,12 @@ public class edit_post extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if(resultCode == -1){
+                isTheImageUp = true;
                 imageUri = result.getUri();
                 this.post_image_view.setImageURI(imageUri);
             }
         }
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     private void iniPopup() {
@@ -177,151 +267,80 @@ public class edit_post extends AppCompatActivity {
                 return true;
             }});
 
-        final Context c = this.getBaseContext();
-        final int[] children = new int[]{ 6,6,6,6,6,6,6 };
-        final ArrayList<Integer> interests = new ArrayList<>(Arrays.asList(R.drawable.ic_sport , R.drawable.ic_fashion, R.drawable.ic_food, R.drawable.ic_movie, R.drawable.ic_music, R.drawable.ic_technology, R.drawable.ic_nature));
-        final CircularListView circularListView = popChooseCategories.findViewById(R.id.circle_interests_new_post);
         final Button ok_categories = popChooseCategories.findViewById(R.id.ok_categories);
-        circularListView.setRadius(80);
-        CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), interests);
-        circularListView.setAdapter(adapter);
 
-        circularListView.setOnTouchListener(new CircularListView.OnTouchListener() {
-            private float init_x = 0;
-            private float init_y = 0;
-            private float cur_x = 0;
-            private float cur_y = 0;
-            private float move_x = 0;
-            private float move_y = 0;
-            private boolean can_rotate = true;
-            private boolean isCircularMoving = false; // ensure that item click only triggered when it's not moving
-
+        CompoundButton.OnCheckedChangeListener checker = new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public boolean onTouch(final View v, MotionEvent event) {
-                int max = getMaxValue(children);
-                if(max == 6){
-                    can_rotate = true;
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(countChecked == maxChecked && isChecked){
+                    buttonView.setChecked(false);
+                    Toast.makeText(getBaseContext(),
+                            "You can't select more than 3 categories!", Toast.LENGTH_SHORT).show();
+                }else if(isChecked){
+                    countChecked++;
+                }else{
+                    countChecked--;
                 }
-                float minClickDistance = 30.0f;
-                float minMoveDistance = 30.0f;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        cur_x = event.getX();
-                        cur_y = event.getY();
-                        init_x = event.getX();
-                        init_y = event.getY();
-
-                    case MotionEvent.ACTION_MOVE:
-                        float pre_x = cur_x;
-                        float pre_y = cur_y;
-                        cur_x = event.getX();
-                        cur_y = event.getY();
-
-                        float diff_x = cur_x - pre_x;
-                        float diff_y = cur_y - pre_y;
-                        move_x = init_x - cur_x;
-                        move_y = init_y - cur_y;
-                        float moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
-
-
-                        if (cur_y >= ((CircularListView) v).layoutCenter_y) diff_x = -diff_x;
-                        if (cur_x <= ((CircularListView) v).layoutCenter_x) diff_y = -diff_y;
-
-                        // should rotate the layout
-                        if (moveDistance > minMoveDistance && can_rotate) {
-                            isCircularMoving = true;
-                            // default is 2000, larger > faster
-                            float mMovingSpeed = 2000.0f;
-                            CircularListView.MoveAccumulator += (diff_x + diff_y) / mMovingSpeed;
-
-                            // calculate new position around circle
-                            for (int i = 0; i < ((CircularListView) v).itemViewList.size(); i++) {
-                                final int idx = i;
-                                final View itemView = ((CircularListView) v).itemViewList.get(i);
-                                itemView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
-                                                itemView.getLayoutParams();
-                                        params.setMargins(
-                                                (int) (((CircularListView) v).layoutCenter_x - (((CircularListView) v).itemWith / 2) +
-                                                        (((CircularListView) v).radius * Math.cos(idx * ((CircularListView) v).getIntervalAngle() +
-                                                                CircularListView.MoveAccumulator * Math.PI * 2))),
-                                                (int) (((CircularListView) v).layoutCenter_y - (((CircularListView) v).itemHeight / 2) +
-                                                        (((CircularListView) v).radius * Math.sin(idx * ((CircularListView) v).getIntervalAngle() +
-                                                                CircularListView.MoveAccumulator * Math.PI * 2))),
-                                                0,
-                                                0);
-                                        itemView.setLayoutParams(params);
-                                        itemView.requestLayout();
-                                    }
-                                });
-                            }
-                        }
-
-                        return true;
-
-                    case MotionEvent.ACTION_UP:
-
-                        // it is an click action if move distance < min distance
-                        moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
-                        if (moveDistance < minClickDistance && !isCircularMoving) {
-                            for (int i = 0; i < ((CircularListView) v).itemViewList.size(); i++) {
-                                View view = ((CircularListView) v).itemViewList.get(i);
-                                if (isTouchInsideView(cur_x, cur_y, view)) {
-                                    can_rotate = false;
-                                    float curr_size = view.getScaleX();
-                                    max = getMaxValue(children);
-                                    if(curr_size == (float) 1) {
-                                        view.setScaleX((float) 1.5);
-                                        view.setScaleY((float) 1.5);
-                                        circularListView.addView(new PaintText( c , i,
-                                                view.getLeft()-60, view.getTop()-60,view.getRight()+60, view.getBottom()+60,
-                                                -145,135) );
-                                        children[i] = max + 1;
-                                        interests_selected.put(Text[i], true);
-                                    } else {
-                                        view.setScaleX((float) 1);
-                                        view.setScaleY((float) 1);
-                                        circularListView.removeViewAt(children[i]);
-                                        for (int elem = 0; elem < children.length; elem++) {
-                                            if (children[elem] > children[i]) {
-                                                children[elem] -= 1;
-                                            }
-                                        }
-                                        children[i] = 6;
-                                        interests_selected.remove(Text[i]);
-                                        interests_selected.put(Text[i], false);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                        isCircularMoving = false; // reset moving state when event ACTION_UP
-                        return true;
-                }
-                return false;
             }
+        };
+        sportCheck = popChooseCategories.findViewById(R.id.sport);
+        sportCheck.setOnCheckedChangeListener(checker);
+        fashionCheck = popChooseCategories.findViewById(R.id.fashion);
+        fashionCheck.setOnCheckedChangeListener(checker);
+        scienceCheck = popChooseCategories.findViewById(R.id.science);
+        scienceCheck.setOnCheckedChangeListener(checker);
+        musicCheck = popChooseCategories.findViewById(R.id.music);
+        musicCheck.setOnCheckedChangeListener(checker);
+        moviesCheck = popChooseCategories.findViewById(R.id.movies);
+        moviesCheck.setOnCheckedChangeListener(checker);
+        foodCheck = popChooseCategories.findViewById(R.id.food);
+        foodCheck.setOnCheckedChangeListener(checker);
+        natureCheck = popChooseCategories.findViewById(R.id.nature);
+        natureCheck.setOnCheckedChangeListener(checker);
 
-            private boolean isTouchInsideView(float x, float y, View view){
-                float left = view.getX();
-                float top  = view.getY();
-                float wid = view.getWidth();
-                float h = view.getHeight();
-                return (x > left && x < left + wid && y > top && y < top+h);
-            }
-
-        });
+        checkBoxes();
 
         ok_categories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(sportCheck.isChecked()) interests_selected.put((String) sportCheck.getText().toString().toLowerCase() , true);
+                else interests_selected.put((String) sportCheck.getText().toString().toLowerCase(), false);
+                if(fashionCheck.isChecked()) interests_selected.put((String) fashionCheck.getText().toString().toLowerCase(), true);
+                else interests_selected.put((String) fashionCheck.getText().toString().toLowerCase(), false);
+                if(scienceCheck.isChecked()) interests_selected.put("science", true);
+                else interests_selected.put((String) scienceCheck.getText().toString().toLowerCase(), false);
+                if(musicCheck.isChecked()) interests_selected.put((String) musicCheck.getText().toString().toLowerCase(), true);
+                else interests_selected.put((String) musicCheck.getText().toString().toLowerCase(), false);
+                if(moviesCheck.isChecked()) interests_selected.put((String) moviesCheck.getText().toString().toLowerCase(), true);
+                else interests_selected.put((String) moviesCheck.getText().toString().toLowerCase(), false);
+                if(foodCheck.isChecked()) interests_selected.put((String) foodCheck.getText().toString().toLowerCase(), true);
+                else interests_selected.put((String) foodCheck.getText().toString().toLowerCase(), false);
+                if(natureCheck.isChecked()) interests_selected.put((String) natureCheck.getText().toString().toLowerCase(), true);
+                else interests_selected.put((String) natureCheck.getText().toString().toLowerCase(), false);
+
                 popChooseCategories.cancel();
                 setCategories();
+
             }
         });
     }
 
+    private void checkBoxes(){
+        if (interests_selected.containsKey("science & it") && (boolean)interests_selected.get("science & it")) scienceCheck.setChecked(true);
+        else scienceCheck.setChecked(false);
+        if (interests_selected.containsKey("nature") && (boolean)interests_selected.get("nature")) natureCheck.setChecked(true);
+        else natureCheck.setChecked(false);
+        if (interests_selected.containsKey("sport") && (boolean)interests_selected.get("sport")) sportCheck.setChecked(true);
+        else sportCheck.setChecked(false);
+        if (interests_selected.containsKey("fashion") && (boolean)interests_selected.get("fashion")) fashionCheck.setChecked(true);
+        else fashionCheck.setChecked(false);
+        if (interests_selected.containsKey("food") && (boolean)interests_selected.get("food")) foodCheck.setChecked(true);
+        else foodCheck.setChecked(false);
+        if (interests_selected.containsKey("movies") && (boolean)interests_selected.get("movies")) moviesCheck.setChecked(true);
+        else moviesCheck.setChecked(false);
+        if (interests_selected.containsKey("music") && (boolean)interests_selected.get("music")) musicCheck.setChecked(true);
+        else musicCheck.setChecked(false);
+    }
 
     private void setCategories(){
         String cat= new String();
@@ -341,8 +360,6 @@ public class edit_post extends AppCompatActivity {
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
             params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
             categories_selected.setLayoutParams(params);
-            Log.d("TAAC", String.valueOf(interests_selected.containsKey("Fashion")));
-            Log.d("TAAC", String.valueOf(interests_selected));
         }else {
             int margin = getResources().getDimensionPixelSize(R.dimen._1sdp);
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
@@ -353,14 +370,40 @@ public class edit_post extends AppCompatActivity {
         //Toast.makeText(CreateNewPostActivity.this, "Chosen " + cat, Toast.LENGTH_SHORT).show();
     }
 
-    public static int getMaxValue(int[] numbers){
-        int maxValue = numbers[0];
-        for(int i=1;i < numbers.length;i++){
-            if(numbers[i] > maxValue){
-                maxValue = numbers[i];
+    private void createCategoryCard(final String category){
+        final LinearLayout parent = new LinearLayout(this);
+        LinearLayout.LayoutParams paramsParent = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        paramsParent.setMargins(getResources().getDimensionPixelSize(R.dimen._5sdp) ,0, 0,0);
+        parent.setLayoutParams(paramsParent);
+
+        parent.setOrientation(LinearLayout.HORIZONTAL);
+        parent.setBackgroundResource(R.drawable.custom_button);
+
+        ImageView minus = new ImageView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, 0);
+        minus.setLayoutParams(params);
+        minus.setImageResource(R.drawable.remove_category);
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoriesCardLayout.removeView(parent);
+                interests_selected.put(category, false);
             }
-        }
-        return maxValue;
+        });
+        TextView categ = new TextView(this);
+        int marginRight = getResources().getDimensionPixelSize(R.dimen._10sdp);
+        int marginLeft = getResources().getDimensionPixelSize(R.dimen._4sdp);
+        int marginTop = getResources().getDimensionPixelSize(R.dimen._4sdp);
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params1.setMargins(marginLeft, marginTop, marginRight, 0);
+        categ.setLayoutParams(params1);
+        categ.setText(category);
+
+        parent.addView(minus);
+        parent.addView(categ);
+
+        categoriesCardLayout.addView(parent);
     }
 
     @Override
