@@ -308,7 +308,7 @@ public class edit_post extends AppCompatActivity {
                 if(fashionCheck.isChecked()) interests_selected.put((String) fashionCheck.getText().toString().toLowerCase(), true);
                 else interests_selected.put((String) fashionCheck.getText().toString().toLowerCase(), false);
                 if(scienceCheck.isChecked()) interests_selected.put("science", true);
-                else interests_selected.put((String) scienceCheck.getText().toString().toLowerCase(), false);
+                else interests_selected.put((String) "science", false);
                 if(musicCheck.isChecked()) interests_selected.put((String) musicCheck.getText().toString().toLowerCase(), true);
                 else interests_selected.put((String) musicCheck.getText().toString().toLowerCase(), false);
                 if(moviesCheck.isChecked()) interests_selected.put((String) moviesCheck.getText().toString().toLowerCase(), true);
@@ -326,7 +326,7 @@ public class edit_post extends AppCompatActivity {
     }
 
     private void checkBoxes(){
-        if (interests_selected.containsKey("science & it") && (boolean)interests_selected.get("science & it")) scienceCheck.setChecked(true);
+        if (interests_selected.containsKey("science") && (boolean)interests_selected.get("science")) scienceCheck.setChecked(true);
         else scienceCheck.setChecked(false);
         if (interests_selected.containsKey("nature") && (boolean)interests_selected.get("nature")) natureCheck.setChecked(true);
         else natureCheck.setChecked(false);

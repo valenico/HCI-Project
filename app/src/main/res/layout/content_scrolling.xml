@@ -40,6 +40,7 @@
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:scaleType="fitCenter"
+                android:id="@+id/postlocationimage"
                 app:srcCompat="@drawable/ic_location"
                 android:tint="@color/textColor"
                 android:padding="@dimen/_2sdp"

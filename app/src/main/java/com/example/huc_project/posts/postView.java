@@ -238,7 +238,10 @@ public class postView extends AppCompatActivity {
         if(post.getCountry().trim().length() > 0 && post.getCity().trim().length() > 0) place_view.setText(post.getCountry() + ", " + post.getCity());
         else if(post.getCountry().trim().length() > 0) place_view.setText(post.getCountry());
         else if(post.getCity().trim().length() > 0) place_view.setText(post.getCity());
-        else place_view.setText("There is no location provided for this advertisement.");
+        else {
+            ((ImageView) findViewById(R.id.postlocationimage)).setImageResource(R.drawable.ic_nolocation);
+            place_view.setText("There is no location provided for this advertisement.");
+        }
 
         int i;
         LinearLayout ll = findViewById(R.id.tags);
