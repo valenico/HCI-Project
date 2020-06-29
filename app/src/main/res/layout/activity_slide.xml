@@ -38,7 +38,7 @@
                     android:id="@+id/textView14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="100dp"
+                    android:layout_marginTop="@dimen/_80sdp"
                     android:textColor="@color/textColor"
                     android:text="Categories"
                     android:textSize="18sp" />
@@ -127,6 +127,46 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
+                <TextView
+                    android:id="@+id/filterSponsorSponsorship"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:textColor="@color/textColor"
+                    android:text="I'm looking for:"
+                    android:textSize="18sp" />
+
+                <CheckBox
+                    android:id="@+id/checkSponsor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sponsor"
+                    android:textColor="@color/textColor"
+                    android:buttonTint="@color/textColor"
+                    app:layout_constraintTop_toTopOf="@id/filterSponsorSponsorship"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/checkSponsorship"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sponsorship"
+                    android:textColor="@color/textColor"
+                    android:buttonTint="@color/textColor"
+                    app:layout_constraintTop_toTopOf="@id/checkSponsor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <Switch
+                    android:id="@+id/switchpackagefilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Need a Package?"
+                    android:layout_marginTop="@dimen/_25sdp"
+                    android:textSize="18sp"/>
 
 
             </LinearLayout>
