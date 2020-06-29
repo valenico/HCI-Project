@@ -152,6 +152,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         protected FilterResults performFiltering(CharSequence constraint) {
             List<PostRow> filteredList = new ArrayList<>();
             List<PostRow> filteredListCategories = new ArrayList<>();
+            List<PostRow> filteredListRole = new ArrayList<>();
 
             if(constraint.toString().isEmpty()){
                 filteredList.addAll(itemsListFull);
@@ -160,25 +161,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 String[] words = constraint.toString().split("/-/-/");
 
 
-                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music"};
+                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music", "sponsorship", "sponsor"};
 
                 Boolean isitfiltered=false;
+                Boolean roleisasked=false;
+                Boolean categoryisasked=false;
+
+                String onetry="1";
+                onetry= onetry.toLowerCase().trim();
 
                 for (int i = 1; i < words.length ; i++) {
                     String w = words[i];
                     w = w.toLowerCase().trim();
-                    String onetry="1";
-                    onetry= onetry.toLowerCase().trim();
                     if (w.equals(onetry)) {
                         isitfiltered=true;
                     }
+                }
+
+                for (int i = 1; i < 8 ; i++) {
+                    String w = words[i];
+                    w = w.toLowerCase().trim();
+                    if (w.equals(onetry)) {
+                        isitfiltered=true;
+                        categoryisasked=true;
+                    }
+                }
+
+                if (words[8].equals(onetry) || words[9].equals((onetry))) {
+                    isitfiltered=true;
+                    roleisasked=true;
 
                 }
+
                 for (int i = 1; i < words.length ; i++) {
                     String w = words[i];
                     w = w.toLowerCase().trim();
-                    String onetry="1";
-                    onetry= onetry.toLowerCase().trim();
                     categories[i]=categories[i].toLowerCase().trim();
                     if (w.equals(onetry)) {
                         for (PostRow s : itemsListFull) {
@@ -187,17 +204,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                     filteredListCategories.add(s);
                                 }
                             }
+                            else if (s.post.role.equals(categories[i])) {
+                                if (!filteredListRole.contains(s)) {
+                                    filteredListRole.add(s);
+                                }
+                            }
                         }
 
                     }
 
                 }
+                if (categoryisasked) {
+                    if (roleisasked) {
+                        filteredListRole.retainAll(filteredListCategories);
+                    }
+                    else {
+                        filteredListRole=filteredListCategories;
+                    }
+                }
 
-                //NON FUNZIONA PERCHè LA RICERCA ADDA ANCHE COSE CHE LE CATEGORIES HANNO ESCLUSO E VICEVERSA SERVONO DELLE FILTERED LIST PER OGNI COSA E POI TUTTE INSIEME SI INTERSECANO
+
                 String filterPattern = words[0].toString().toLowerCase().trim();
                 if (filterPattern.equals("")) {
                     if (isitfiltered) {
-                        filteredList = filteredListCategories;
+                        filteredList = filteredListRole;
                     }
                     else {
                         filteredList.addAll(itemsListFull);
@@ -211,7 +241,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             }
                         }
 
-                        filteredList.retainAll(filteredListCategories);
+                        filteredList.retainAll(filteredListRole);
                     }
                     else {
                         for (PostRow s : itemsListFull) {

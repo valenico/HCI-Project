@@ -74,7 +74,7 @@ import java.util.List;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
-    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/";
+    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/";
     String[] filterArray = totalFilter.toString().split("/-/-/");
     HashMap<String, Boolean> filtersCategories = new HashMap<String, Boolean>();
 
@@ -332,6 +332,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         CheckBox food=(CheckBox) findViewById(R.id.checkFood);
         CheckBox movies=(CheckBox) findViewById(R.id.checkMovies);
         CheckBox music=(CheckBox) findViewById(R.id.checkMusic);
+        final CheckBox sponsorship=(CheckBox) findViewById(R.id.checkSponsorship);
+        final CheckBox sponsor=(CheckBox) findViewById(R.id.checkSponsor);
 
         science.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -496,6 +498,60 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 recyclerViewAdapter.getFilter().filter(totalFilter);
             }
         });
+
+        sponsorship.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    sponsor.setChecked(false);
+                    filterArray[8]="1";
+                    filterArray[9]="0";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[8]="0";
+                    filterArray[9]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
+                }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
+            }
+        });
+        sponsor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    sponsorship.setChecked(false);
+                    filterArray[8]="0";
+                    filterArray[9]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }else {
+                    filterArray[8]="0";
+                    filterArray[9]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
+                }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
+            }
+        });
+
 
 
         MenuItem search_package = menu.findItem(R.id.menu_switch);
