@@ -74,7 +74,7 @@ import java.util.List;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
-    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/";
+    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/";
     String[] filterArray = totalFilter.toString().split("/-/-/");
     HashMap<String, Boolean> filtersCategories = new HashMap<String, Boolean>();
 
@@ -335,6 +335,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         CheckBox music=(CheckBox) findViewById(R.id.checkMusic);
         final CheckBox sponsorship=(CheckBox) findViewById(R.id.checkSponsorship);
         final CheckBox sponsor=(CheckBox) findViewById(R.id.checkSponsor);
+        Switch packagefilterswitch=(Switch) findViewById(R.id.switchpackagefilter);
+
 
         science.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -553,6 +555,30 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             }
         });
 
+        packagefilterswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    filterArray[10]="1";
+                    totalFilter="";
+                    for(String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+
+                }
+                else {
+                    filterArray[10]="0";
+                    totalFilter="";
+                    for(String w : filterArray){
+                        totalFilter+=w;
+                        totalFilter+="/-/-/";
+                    }
+
+                }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
+            }
+        });
 
 
         MenuItem search_package = menu.findItem(R.id.menu_switch);
