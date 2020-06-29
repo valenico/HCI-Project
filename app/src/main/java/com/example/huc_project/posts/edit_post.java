@@ -127,13 +127,13 @@ public class edit_post extends AppCompatActivity {
                 ArrayList<String> categoriesChosen = new ArrayList<String>();
 
 
-                if (interests_selected.containsKey("Science & IT") && (boolean)interests_selected.get("Science & IT") ) categoriesChosen.add("science");
-                if (interests_selected.containsKey("Nature") && (boolean)interests_selected.get("Nature")) categoriesChosen.add("nature");
-                if (interests_selected.containsKey("Sport") && (boolean)interests_selected.get("Sport")) categoriesChosen.add("sport");
-                if (interests_selected.containsKey("Fashion") && (boolean)interests_selected.get("Fashion")) categoriesChosen.add("fashion");
-                if (interests_selected.containsKey("Food") && (boolean)interests_selected.get("Food")) categoriesChosen.add("food");
-                if (interests_selected.containsKey("Movies") && (boolean)interests_selected.get("Movies")) categoriesChosen.add("movies");
-                if (interests_selected.containsKey("Music") && (boolean)interests_selected.get("Music")) categoriesChosen.add("music");
+                if (interests_selected.containsKey("science") && (boolean)interests_selected.get("science") ) categoriesChosen.add("science");
+                if (interests_selected.containsKey("nature") && (boolean)interests_selected.get("nature")) categoriesChosen.add("nature");
+                if (interests_selected.containsKey("sport") && (boolean)interests_selected.get("sport")) categoriesChosen.add("sport");
+                if (interests_selected.containsKey("fashion") && (boolean)interests_selected.get("fashion")) categoriesChosen.add("fashion");
+                if (interests_selected.containsKey("food") && (boolean)interests_selected.get("food")) categoriesChosen.add("food");
+                if (interests_selected.containsKey("movies") && (boolean)interests_selected.get("movies")) categoriesChosen.add("movies");
+                if (interests_selected.containsKey("music") && (boolean)interests_selected.get("music")) categoriesChosen.add("music");
 
                 post.put("title", postTitle);
                 post.put("postdesc", postDescription);
@@ -307,7 +307,7 @@ public class edit_post extends AppCompatActivity {
                 else interests_selected.put((String) sportCheck.getText().toString().toLowerCase(), false);
                 if(fashionCheck.isChecked()) interests_selected.put((String) fashionCheck.getText().toString().toLowerCase(), true);
                 else interests_selected.put((String) fashionCheck.getText().toString().toLowerCase(), false);
-                if(scienceCheck.isChecked()) interests_selected.put((String) scienceCheck.getText().toString().toLowerCase(), true);
+                if(scienceCheck.isChecked()) interests_selected.put("science", true);
                 else interests_selected.put((String) scienceCheck.getText().toString().toLowerCase(), false);
                 if(musicCheck.isChecked()) interests_selected.put((String) musicCheck.getText().toString().toLowerCase(), true);
                 else interests_selected.put((String) musicCheck.getText().toString().toLowerCase(), false);
