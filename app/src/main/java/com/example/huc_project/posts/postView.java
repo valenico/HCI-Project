@@ -31,6 +31,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,9 @@ public class postView extends AppCompatActivity {
     TextView title_view;
     TextView desc_view;
     TextView owner_name;
+    TextView place_view;
+    TextView is_sponsor_view;
+    TextView is_package_view;
     ImageView owner_img;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -85,6 +89,9 @@ public class postView extends AppCompatActivity {
         this.desc_view = findViewById(R.id.postDesc);
         owner_name = findViewById(R.id.owner_name);
         owner_img = findViewById(R.id.owner_img);
+        place_view = findViewById(R.id.postLocation);
+        is_sponsor_view = findViewById(R.id.viewsponsor);
+        is_package_view = findViewById(R.id.viewpackage);
 
         if(!guest_mode){
             owner_img.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +230,22 @@ public class postView extends AppCompatActivity {
         title_view.setText(post.getTitle());
         desc_view.setText(post.getPostdesc());
 
+        if(post.getRole().equals("sponsor")) is_sponsor_view.setText("\u2713 Sponsor");
+        else is_sponsor_view.setText("\u2713 Sponsorship");
+
+        if(post.getIsPackage()) is_package_view.setText("\u2713 Package");
+
+        if(post.getCountry().trim().length() > 0 && post.getCity().trim().length() > 0) place_view.setText(post.getCountry() + ", " + post.getCity());
+        else if(post.getCountry().trim().length() > 0) place_view.setText(post.getCountry());
+        else if(post.getCity().trim().length() > 0) place_view.setText(post.getCity());
+        else place_view.setText("There is no location provided for this advertisement.");
+
+        int i;
+        LinearLayout ll = findViewById(R.id.tags);
+        ArrayList<String> mytags = post.getCategories();
+        for(i=0; i < mytags.size(); i++) ((TextView) ll.getChildAt(i)).setText(switchText(mytags.get(i)));
+        for(; i < 3; i++) ((TextView) ll.getChildAt(i)).setVisibility(View.INVISIBLE);
+
         if(post.getStorageref() != null){
             StorageReference storageRef = storage.getReference();
             StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
@@ -245,6 +268,22 @@ public class postView extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String switchText(String tag){
+
+        String res = "#";
+
+        switch (tag) {
+            case "nature": return res+"Nature";
+            case "science": return res+"Science&IT";
+            case "food": return res+"Food";
+            case "fashion": return res+"Fashion";
+            case "sport": return res+"Sport";
+            case "movies": return res+"Movies";
+            default: return res+"Music";
+        }
+
     }
 
     @Override
