@@ -37,6 +37,8 @@
             android:layout_marginRight="@dimen/_120sdp"
             android:layout_marginBottom="@dimen/_130sdp"
             android:background="@drawable/custom_button"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
             android:text="Homepage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

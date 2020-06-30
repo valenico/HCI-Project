@@ -45,6 +45,7 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
     RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<PostRow> rowsArrayList = new ArrayList<>();
     ArrayList<PostRow> rowPostList = new ArrayList<>();
+    ArrayList<String> idDocs  = new ArrayList<>();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -81,6 +82,7 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_pack_frag.this));
                                 rowPostList.add(post_row);
+                                idDocs.add(document.getId());
                             }
                             populateData();
                             setUpRecyclerView();
@@ -148,6 +150,11 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
         Intent intent = new Intent(getContext(), postView.class);
         intent.putExtra("title", post_clicked.getTitle());
         intent.putExtra("desc", post_clicked.getDesc());
+        intent.putExtra("role", post_clicked.getPost().getRole());
+        intent.putExtra("city", post_clicked.getPost().getCity());
+        intent.putExtra("country", post_clicked.getPost().getCountry());
+        intent.putExtra("categories", post_clicked.getPost().getCategories());
+        intent.putExtra("id", idDocs.get(position));
         intent.putExtra("storageref", post_clicked.getPost().getStorageref());
         intent.putExtra("user", post_clicked.getPost().getUser());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
