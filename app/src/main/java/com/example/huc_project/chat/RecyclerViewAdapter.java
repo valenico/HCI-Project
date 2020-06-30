@@ -28,6 +28,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
@@ -40,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public List<ChatMessage> itemsList;
     public List<ChatMessage> itemsListFull;
     private OnItemListener onItemListener;
+    private HashMap<ChatMessage, String> user_chat = new HashMap<>();
 
     public RecyclerViewAdapter() {}
 
@@ -137,6 +139,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         String name = (String) document.get("Name");
+                        user_chat.put(item, name);
                         TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(1);
                         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
                         ImageView view = (ImageView) ((CardView)viewHolder.tvItem.getChildAt(0)).getChildAt(0);
@@ -171,7 +174,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (ChatMessage s : itemsListFull){
-                    if(s.getMessageText().toLowerCase().contains(filterPattern)){
+                    if(s.getMessageText().toLowerCase().contains(filterPattern) || user_chat.get(s).toLowerCase().contains(filterPattern)){
                         filteredList.add(s);
                     }
                 }
