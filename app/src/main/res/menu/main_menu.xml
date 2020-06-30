@@ -10,13 +10,6 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView">
     </item>
     <item
-        android:title="package"
-        app:actionViewClass="android.widget.Switch"
-        android:id="@+id/menu_switch"
-        app:showAsAction="ifRoom"
-        />
-
-    <item
         app:showAsAction="always"
         android:title="slide"
         app:actionViewClass="android.widget.ImageButton"

@@ -161,10 +161,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         });
 
         MenuItem filteritem = menu.findItem(R.id.menu_slide);
-        filteritem.setVisible(true);
-        MenuItem switchitem = menu.findItem(R.id.menu_switch);
-        switchitem.setVisible(false);
-
+        filteritem.setVisible(false);
         return true;
     }
 

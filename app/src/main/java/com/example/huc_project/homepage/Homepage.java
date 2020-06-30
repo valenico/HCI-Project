@@ -645,21 +645,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             }
         });
 
-        MenuItem search_package = menu.findItem(R.id.menu_switch);
-        Switch switch_package = (Switch) search_package.getActionView();
-        switch_package.setText("Packages");
-        switch_package.setTextSize(10);
-        switch_package.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    recyclerViewAdapter.getFilter().filter("is_package");
-                } else {
-                    recyclerViewAdapter.getFilter().filter("");
-                }
-            }
-        });
-
         return true;
     }
 
