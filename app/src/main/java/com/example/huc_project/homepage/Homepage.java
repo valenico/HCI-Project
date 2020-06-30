@@ -18,6 +18,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -74,8 +77,8 @@ import java.util.List;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
-    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/";
-    String[] filterArray = totalFilter.toString().split("/-/-/");
+    String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-//-/-//-/-/";
+    String[] filterArray = totalFilter.toString().split("/-/-/", -1);
     HashMap<String, Boolean> filtersCategories = new HashMap<String, Boolean>();
 
 
@@ -579,6 +582,68 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             }
         });
 
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, CreateNewPostActivity.COUNTRIES);
+        final AutoCompleteTextView countryView = (AutoCompleteTextView)
+                findViewById(R.id.countryfiltering);
+        countryView.setAdapter(adapter);
+
+        countryView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                filterArray[11]=s.toString();
+                totalFilter="";
+                for(String w : filterArray){
+                    totalFilter+=w;
+                    totalFilter+="/-/-/";
+                }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int
+                    after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        final AutoCompleteTextView cityView = (AutoCompleteTextView)
+                findViewById(R.id.cityfiltering);
+
+        cityView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                filterArray[12]=s.toString();
+                totalFilter="";
+                for(String w : filterArray){
+                    totalFilter+=w;
+                    totalFilter+="/-/-/";
+                }
+                recyclerViewAdapter.getFilter().filter(totalFilter);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int
+                    after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         MenuItem search_package = menu.findItem(R.id.menu_switch);
         Switch switch_package = (Switch) search_package.getActionView();
