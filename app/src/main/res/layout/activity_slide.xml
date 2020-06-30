@@ -34,11 +34,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <AutoCompleteTextView
+                    android:id="@+id/countryfiltering"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Country"
+                    android:layout_marginTop="@dimen/_80sdp"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/cityfiltering"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="City" />
+
                 <TextView
                     android:id="@+id/textView14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_80sdp"
                     android:textColor="@color/textColor"
                     android:text="Categories"
                     android:textSize="18sp" />

@@ -154,21 +154,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             List<PostRow> filteredListCategories = new ArrayList<>();
             List<PostRow> filteredListRole = new ArrayList<>();
             List<PostRow> filteredListPackage = new ArrayList<>();
+            List<PostRow> filteredListCountries = new ArrayList<>();
+            List<PostRow> filteredListCities = new ArrayList<>();
             List<PostRow> filteredListFilters = new ArrayList<>();
 
             if(constraint.toString().isEmpty()){
                 filteredList.addAll(itemsListFull);
             }
             else if (constraint.toString().contains("/-/-/")) {
-                String[] words = constraint.toString().split("/-/-/");
+                String[] words = constraint.toString().split("/-/-/", -1);
 
 
-                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music", "sponsorship", "sponsor", "is_package"};
+                String[] categories={"niente","science", "nature", "sport", "fashion", "food", "movie", "music", "sponsorship", "sponsor", "is_package", "country"};
 
                 Boolean isitfiltered=false;
                 Boolean roleisasked=false;
                 Boolean categoryisasked=false;
                 Boolean packageisasked=false;
+                Boolean countryisasked=false;
+                Boolean cityisasked=false;
 
                 String onetry="1";
                 onetry= onetry.toLowerCase().trim();
@@ -212,7 +216,54 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 }
 
-                for (int i = 1; i < words.length ; i++) {
+
+                String filterPatternCountry = words[11].toString().toLowerCase().trim();
+                if (!(filterPatternCountry.equals(("")))) {
+                    isitfiltered=true;
+                    countryisasked=true;
+                    Log.e("tagg", "OK RICONOSCE CHE NON è VUOTA");
+                    Log.e("insidefilter", filterPatternCountry);
+                    for (PostRow s: itemsListFull) {
+                        Log.e("countryinpost", filterPatternCountry);
+                        Log.e("countryinpost", s.post.country);
+                        if (s.post.country.toLowerCase().contains(filterPatternCountry)) {
+                            if (!filteredListCountries.contains(s)) {
+                                filteredListCountries.add(s);
+                            }
+                        }
+                    }
+                    if (!packageisasked) {
+                        filteredListPackage=filteredListCountries;
+                        packageisasked=true;
+                    }
+                    else {
+                        filteredListPackage.retainAll((filteredListCountries));
+                    }
+                }
+
+                //check if there are filters on CITY (12) and join the post obtained with that of package
+                String filterPatternCity = words[12].toString().toLowerCase().trim();
+                if (!(filterPatternCity.equals(("")))) {
+                    isitfiltered=true;
+                    cityisasked=true;
+                    for (PostRow s: itemsListFull) {
+                        if (s.post.city.toLowerCase().contains(filterPatternCity)) {
+                            if (!filteredListCities.contains(s)) {
+                                filteredListCities.add(s);
+                            }
+                        }
+                    }
+                    if (!packageisasked) {
+                        filteredListPackage=filteredListCities;
+                        packageisasked=true;
+                    }
+                    else {
+                        filteredListPackage.retainAll((filteredListCities));
+                    }
+                }
+
+
+                for (int i = 1; i < 10 ; i++) {
                     String w = words[i];
                     w = w.toLowerCase().trim();
                     categories[i]=categories[i].toLowerCase().trim();
