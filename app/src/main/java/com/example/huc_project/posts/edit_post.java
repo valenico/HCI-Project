@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -31,6 +33,7 @@ import android.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostCreatedSuccessfully;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -198,6 +201,27 @@ public class edit_post extends AppCompatActivity {
             ( (CheckBox) findViewById(R.id.sponsorship)).setChecked(true);
         }
 
+        CompoundButton.OnCheckedChangeListener sponsorChecker = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.equals(( (CheckBox) findViewById(R.id.sponsor))) && isChecked){
+                    if(( (CheckBox) findViewById(R.id.sponsorship)).isChecked()){
+                        ( (CheckBox) findViewById(R.id.sponsorship)).setChecked(false);
+                    }
+                    ( (CheckBox) findViewById(R.id.sponsor)).setChecked(true);
+                }
+                else if(isChecked){
+                    if(( (CheckBox) findViewById(R.id.sponsor)).isChecked()){
+                        ( (CheckBox) findViewById(R.id.sponsor)).setChecked(false);
+                    }
+                    ( (CheckBox) findViewById(R.id.sponsorship)).setChecked(true);
+                }
+            }
+        };
+
+        ( (CheckBox) findViewById(R.id.sponsor)).setOnCheckedChangeListener(sponsorChecker);
+        ( (CheckBox) findViewById(R.id.sponsorship)).setOnCheckedChangeListener(sponsorChecker);
+
         ArrayList<String> categories = post.getCategories();
         for(int u = 0 ; u < categories.size(); u++){
             interests_selected.put(categories.get(u),true);
@@ -213,6 +237,43 @@ public class edit_post extends AppCompatActivity {
             }
         });
         setCategories();
+
+        LinearLayout lay = findViewById(R.id.layout_post);
+        final Button cancel = new Button(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int left = (int) getResources().getDimension(R.dimen._5sdp);
+        int top = - (int) getResources().getDimension(R.dimen._10sdp);
+        params.setMargins(left,top,left,-top*2);
+        cancel.setLayoutParams(params);
+        cancel.setMaxHeight( post_button.getHeight() );
+        cancel.setBackgroundResource(R.drawable.custom_button);
+        cancel.setGravity(Gravity.CENTER);
+        cancel.setTypeface(Typeface.DEFAULT_BOLD);
+        cancel.setTextColor(Color.WHITE);
+        cancel.setText("Cancel");
+        cancel.setId(lay.getChildCount() + 1);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel.setEnabled(false);
+                db.collection("posts").document(id).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(edit_post.this, "Post deleted succesfully.", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(edit_post.this, Homepage.class);
+                                startActivity(i);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(edit_post.this, "Post couldn't be deleted, try later.", Toast.LENGTH_LONG).show();
+                        cancel.setEnabled(true);
+                    }
+                });
+            }
+        });
+        lay.addView(cancel);
 
     }
 
