@@ -174,6 +174,9 @@ public class RecyclerViewAdapterSocial2 extends RecyclerView.Adapter<RecyclerVie
             case "reddit":
                 Profile_prof_frag.glideTask(item.glide, R.drawable.ic_reddit, view);
                 break;
+            case "website":
+                Profile_prof_frag.glideTask(item.glide, R.drawable.ic_internet, view);
+                break;
             default:
                 Profile_prof_frag.glideTask(item.glide, R.drawable.ic_vk, view);
                 break;
