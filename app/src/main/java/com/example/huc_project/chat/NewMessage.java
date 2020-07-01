@@ -54,7 +54,9 @@ public class NewMessage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
+
         setUp();
+        final Intent i = getIntent();
 
         final AutoCompleteTextView av = findViewById(R.id.autoCompleteTextView);
         db.collection("UTENTI").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -64,6 +66,9 @@ public class NewMessage extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             nomi.add(document.get("Name").toString());
                             uid.add(document.getId());
+                            if(i.hasExtra("to") && document.getId().equals(i.getStringExtra("to"))){
+                                av.setText(document.get("Name").toString());
+                            }
                         }
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, nomi );
                         av.setAdapter(adapter);

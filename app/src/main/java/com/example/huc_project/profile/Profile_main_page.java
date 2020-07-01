@@ -20,7 +20,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.huc_project.R;
 import com.example.huc_project.chat.Chat;
+import com.example.huc_project.chat.ChatMessage;
+import com.example.huc_project.chat.ChatView;
 import com.example.huc_project.chat.Conversation;
+import com.example.huc_project.chat.NewMessage;
 import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.homepage.RecyclerViewAdapter;
 import com.example.huc_project.settings.Settings;
@@ -61,7 +64,8 @@ public class Profile_main_page extends AppCompatActivity {
 
     private FirebaseUser usr = mAuth.getCurrentUser();
     private boolean unread_messages = true;
-
+    private boolean old_message_user = false;
+    private ChatMessage myconvo;
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
 
@@ -240,6 +244,31 @@ public class Profile_main_page extends AppCompatActivity {
 
                                 }
                             });
+
+                            favorite.setVisibility(View.VISIBLE);
+                            Drawable send = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_send_text);
+                            final Drawable wrappedSend = DrawableCompat.wrap(send);
+                            DrawableCompat.setTint(wrappedSend, getResources().getColor(R.color.textColor));
+                            favorite.setImageDrawable(wrappedSend);
+                            favorite.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                   if(old_message_user){
+                                       Intent intent = new Intent(getBaseContext(), ChatView.class);
+                                       intent.putExtra("user", current_user);
+                                       intent.putStringArrayListExtra("messages", (ArrayList<String>) myconvo.getMessages() );
+                                       intent.putExtra("who", myconvo.getI_am_0());
+                                       intent.putExtra("document", myconvo.getDocument());
+                                       startActivity(intent);
+                                       finish();
+                                   } else {
+                                       Intent i = new Intent(getBaseContext(), NewMessage.class);
+                                       i.putExtra("to", current_user);
+                                       startActivity(i);
+                                   }
+                                }
+                            });
+
                         }
 
                         if (country == null) user_country.setText("Unknown");
@@ -283,10 +312,18 @@ public class Profile_main_page extends AppCompatActivity {
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
                                     if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
+                                    if(convo.getUser2().equals(current_user)){
+                                        old_message_user = true;
+                                        myconvo = new ChatMessage( Glide.with(getBaseContext()) , last_message, current_user,  all_messages, true, document.getId() , unread_messages );
+                                    }
                                 } else if (convo.getUser2().equals(usr.getUid())) {
                                     final String last_message = convo.getLastMessage();
                                     final List<String> all_messages = convo.getMessages();
                                     if(unread_messages) unread_messages = convo.isRead2();
+                                    if(convo.getUser1().equals(current_user)){
+                                        old_message_user = true;
+                                        myconvo = new ChatMessage( Glide.with(getBaseContext()) , last_message, current_user,  all_messages, false, document.getId() , unread_messages );
+                                    }
                                 }
                             }
 
