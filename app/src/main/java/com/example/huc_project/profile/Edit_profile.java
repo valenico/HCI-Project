@@ -222,6 +222,8 @@ public class Edit_profile extends AppCompatActivity {
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image

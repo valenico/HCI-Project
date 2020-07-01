@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_100sdp"
+    android:layout_height="@dimen/_130sdp"
     app:cardElevation="@dimen/_2sdp"
     app:cardUseCompatPadding="true"
     android:id="@+id/cardItem">
@@ -13,13 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_color"
-        android:padding="@dimen/_4sdp"
+        android:padding="@dimen/_2sdp"
         android:id="@+id/relative">
 
         <ImageView
             android:id="@+id/post_image"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_width="@dimen/_110sdp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/_12sdp"
@@ -44,13 +44,83 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_53sdp"
             android:id="@+id/desc_preview"
             android:textColor="@color/textColor"
             android:layout_toRightOf="@+id/post_image"
             android:layout_below="@+id/tvItem"
             android:textSize="@dimen/_11sdp"
             android:layout_toEndOf="@+id/post_image" />
+
+        <LinearLayout
+            android:id="@+id/position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/post_image"
+            android:layout_below="@id/desc_preview"
+            android:layout_marginTop="@dimen/_2sdp"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:scaleType="fitCenter"
+                android:id="@+id/postlocationimage"
+                app:srcCompat="@drawable/ic_location"
+                android:tint="@color/textColor"
+                android:padding="@dimen/_2sdp"
+                android:layout_gravity="center_vertical"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/postLocation"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:textSize="@dimen/_8sdp"
+                android:textColor="@color/textColor"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_5sdp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:orientation="horizontal"
+            android:id="@+id/tags"
+            android:layout_toRightOf="@id/post_image"
+            android:layout_below="@id/position">
+
+            <TextView
+                android:background="@drawable/my_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_3sdp"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_6sdp"/>
+
+            <TextView
+                android:background="@drawable/my_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_8sdp"
+                android:padding="@dimen/_3sdp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_6sdp"/>
+
+            <TextView
+                android:background="@drawable/my_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_8sdp"
+                android:padding="@dimen/_3sdp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_6sdp"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

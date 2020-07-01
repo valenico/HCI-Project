@@ -9,7 +9,10 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.huc_project.chat.ChatMessage;
 import com.example.huc_project.chat.ChatView;
+import com.example.huc_project.chat.Conversation;
+import com.example.huc_project.chat.NewMessage;
 import com.example.huc_project.homepage.DataGettingActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
@@ -30,6 +33,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ import android.widget.Toast;
 
 import com.example.huc_project.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,6 +58,7 @@ import com.google.protobuf.StringValueOrBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class postView extends AppCompatActivity {
 
@@ -68,9 +74,14 @@ public class postView extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private FirebaseUser usr = mAuth.getCurrentUser();
+
     String current_user;
     String id;
     boolean guest_mode;
+    boolean old_message_user = false;
+    Button contact_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +103,16 @@ public class postView extends AppCompatActivity {
         place_view = findViewById(R.id.postLocation);
         is_sponsor_view = findViewById(R.id.viewsponsor);
         is_package_view = findViewById(R.id.viewpackage);
+        contact_user = findViewById(R.id.contact_user);
+
+        contact_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(old_message_user){
+                } else {
+                }
+            }
+        });
 
         if(!guest_mode){
             owner_img.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +292,32 @@ public class postView extends AppCompatActivity {
                 }
             }
         });
+
+        CollectionReference mess = db.collection("Chat");
+        mess.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                final Conversation convo = document.toObject(Conversation.class);
+                                if(convo.getUser1().equals(usr.getUid())){
+                                    if(convo.getUser2().equals(current_user)){
+                                        old_message_user = true;
+                                    }
+                                } else if (convo.getUser2().equals(usr.getUid())) {
+                                    if(convo.getUser1().equals(current_user)){
+                                        old_message_user = true;
+                                    }
+                                }
+                            }
+
+                        } else {
+                            Log.w("Tag", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     private String switchText(String tag){

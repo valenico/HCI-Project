@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -125,17 +126,52 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(1);
         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
-        tv1.setText(title);
+        tv1.setText(title.trim());
         if(desc.length()>70){
             String long_desc = desc.substring(0, Math.min(desc.length(), 70)) + " ... ";
-            tv2.setText(long_desc);
+            tv2.setText(long_desc.trim());
         } else {
-            tv2.setText(desc);
+            tv2.setText(desc.trim());
         }
         if(img_ref!=null ) Homepage.glideTask(item.glide, img_ref, view);
         else {
             //default image
             view.setImageResource(R.drawable.ic_no_image);
+        }
+        int i = 0;
+        LinearLayout tag_cards = (LinearLayout) viewHolder.tvItem.getChildAt(4);
+        ArrayList<String> mytags = item.post.getCategories();
+        for(i=0; i < mytags.size(); i++) ((TextView) tag_cards.getChildAt(i)).setText(switchText(mytags.get(i)));
+        for(; i < 3; i++) ((TextView) tag_cards.getChildAt(i)).setVisibility(View.INVISIBLE);
+
+        TextView pos = (TextView) ((LinearLayout) viewHolder.tvItem.getChildAt(3)).getChildAt(1);
+        if(!item.post.country.trim().equals("") && !item.post.city.trim().equals("")){
+            pos.setText(item.post.country+ ", "+item.post.city);
+        }
+        else if(!item.post.country.trim().equals("")){
+            pos.setText(item.post.country);
+        }
+        else if(!item.post.city.trim().equals("")){
+            pos.setText(item.post.city);
+        }
+        else{
+            pos.setVisibility(View.INVISIBLE);
+            ((LinearLayout) viewHolder.tvItem.getChildAt(3)).getChildAt(0).setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private String switchText(String tag){
+
+        String res = "#";
+
+        switch (tag) {
+            case "nature": return res+"Nature";
+            case "science": return res+"Science&IT";
+            case "food": return res+"Food";
+            case "fashion": return res+"Fashion";
+            case "sport": return res+"Sport";
+            case "movies": return res+"Movies";
+            default: return res+"Music";
         }
 
     }
