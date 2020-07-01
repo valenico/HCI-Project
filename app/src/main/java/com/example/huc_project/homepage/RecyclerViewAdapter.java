@@ -126,9 +126,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView tv1 = (TextView) viewHolder.tvItem.getChildAt(1);
         TextView tv2 = (TextView) viewHolder.tvItem.getChildAt(2);
         ImageView view = (ImageView) viewHolder.tvItem.getChildAt(0);
-        tv1.setText(title.trim());
+
+        if(title.length()>30){
+            String longtitle = title.trim().substring(0, Math.min(title.length(), 30)) + " ... ";
+            tv1.setText(longtitle.trim());
+        } else {
+            tv1.setText(title.trim());
+        }
+
         if(desc.length()>70){
-            String long_desc = desc.substring(0, Math.min(desc.length(), 70)) + " ... ";
+            String long_desc = desc.trim().substring(0, Math.min(desc.length(), 70)) + " ... ";
             tv2.setText(long_desc.trim());
         } else {
             tv2.setText(desc.trim());

@@ -35,16 +35,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvItem"
+            android:maxHeight="@dimen/_33sdp"
             android:layout_toRightOf="@+id/post_image"
             android:textColor="@color/textColor"
             android:layout_alignParentTop="true"
-            android:textSize="@dimen/_15sdp"
+            android:textSize="@dimen/_14sdp"
             android:layout_toEndOf="@+id/post_image" />
 
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_53sdp"
+            android:layout_height="@dimen/_40sdp"
             android:id="@+id/desc_preview"
             android:textColor="@color/textColor"
             android:layout_toRightOf="@+id/post_image"
@@ -89,7 +90,9 @@
             android:orientation="horizontal"
             android:id="@+id/tags"
             android:layout_toRightOf="@id/post_image"
-            android:layout_below="@id/position">
+            android:layout_below="@id/position"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_1sdp">
 
             <TextView
                 android:background="@drawable/my_message"
@@ -97,8 +100,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_3sdp"
                 android:textColor="#ffffff"
-                android:textSize="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_6sdp"/>
+                android:textSize="@dimen/_8sdp"/>
 
             <TextView
                 android:background="@drawable/my_message"
@@ -107,7 +109,6 @@
                 android:textSize="@dimen/_8sdp"
                 android:padding="@dimen/_3sdp"
                 android:textColor="#ffffff"
-                android:layout_marginTop="@dimen/_6sdp"
                 android:layout_marginLeft="@dimen/_6sdp"/>
 
             <TextView
@@ -117,7 +118,6 @@
                 android:textSize="@dimen/_8sdp"
                 android:padding="@dimen/_3sdp"
                 android:textColor="#ffffff"
-                android:layout_marginTop="@dimen/_6sdp"
                 android:layout_marginLeft="@dimen/_6sdp"/>
 
         </LinearLayout>
