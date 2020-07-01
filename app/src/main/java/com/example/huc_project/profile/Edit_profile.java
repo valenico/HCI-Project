@@ -297,5 +297,10 @@ public class Edit_profile extends AppCompatActivity {
         gallery.setType("image/*");
         startActivityForResult(gallery, PICK_IMAGE_GALLERY);
     }
+
+    public void manage_socials(View view) {
+        Intent intent = new Intent(this, RemoveSocialAccount.class);
+        startActivity(intent);
+    }
 }
 

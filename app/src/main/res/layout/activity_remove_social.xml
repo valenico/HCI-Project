@@ -17,15 +17,34 @@
 
     <Button
         android:id="@+id/delete_all_accounts"
-        android:layout_marginTop="@dimen/_18sdp"
-        android:text="Go back to my profile"
         android:layout_width="@dimen/_170sdp"
         android:layout_height="@dimen/_35sdp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/custom_button"
+        android:text="Go back to my profile"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/custom_button"
+        android:drawableTint="#FFFFFF"
+        android:onClick="add_social"
+        android:padding="@dimen/_5sdp"
+        android:text="Add social account"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/riciclamino" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

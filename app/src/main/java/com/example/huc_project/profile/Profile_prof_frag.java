@@ -96,38 +96,6 @@ public class Profile_prof_frag extends Fragment {
 
                     }
                 }
-
-                if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    ImageButton addSocial = getView().findViewById(R.id.addSocial);
-                    ImageButton remSocial = getView().findViewById(R.id.remove_account);
-                    TextView t1 = getView().findViewById(R.id.textView6);
-                    TextView t2 = getView().findViewById(R.id.textView9);
-
-                    addSocial.setVisibility(View.VISIBLE);
-                    remSocial.setVisibility(View.VISIBLE);
-                    t1.setVisibility(View.VISIBLE);
-                    t2.setVisibility(View.VISIBLE);
-
-                    addSocial.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), AddNewSocialAccount.class);
-                            startActivity(intent);
-                        }
-                    });
-
-                    remSocial.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), RemoveSocialAccount.class);
-                            startActivity(intent);
-                        }
-                    });
-                }
-
-                else {
-
-                }
             }
         });
 

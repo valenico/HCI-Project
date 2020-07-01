@@ -135,4 +135,9 @@ public class RemoveSocialAccount extends AppCompatActivity {
             }
         });
     }
+
+    public void add_social(View view) {
+        Intent intent = new Intent(this, AddNewSocialAccount.class);
+        startActivity(intent);
+    }
 }
