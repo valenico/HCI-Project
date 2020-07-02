@@ -71,6 +71,7 @@ public class postView extends AppCompatActivity {
     TextView is_sponsor_view;
     TextView is_package_view;
     ImageView owner_img;
+    private ChatMessage mymessage;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -109,7 +110,18 @@ public class postView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(old_message_user){
+                    Intent intent = new Intent(getBaseContext(), ChatView.class);
+                    intent.putExtra("user", post.getUser());
+                    intent.putStringArrayListExtra("messages", (ArrayList<String>) mymessage.getMessages() );
+                    intent.putExtra("who", mymessage.getI_am_0());
+                    intent.putExtra("document", mymessage.getDocument());
+                    startActivity(intent);
+                    finish();
                 } else {
+                    Intent i = new Intent(getBaseContext(), NewMessage.class);
+                    i.putExtra("to", current_user);
+                    startActivity(i);
+                    finish();
                 }
             }
         });
@@ -251,8 +263,8 @@ public class postView extends AppCompatActivity {
         title_view.setText(post.getTitle());
         desc_view.setText(post.getPostdesc());
 
-        if(post.getRole().equals("sponsor")) is_sponsor_view.setText("\u2713 Sponsor");
-        else is_sponsor_view.setText("\u2713 Sponsorship");
+        if(post.getRole().equals("sponsor")) is_sponsor_view.setText("\u2713 Looking for Sponsor");
+        else is_sponsor_view.setText("\u2713 Looking for Sponsorship");
 
         if(post.getIsPackage()) is_package_view.setText("\u2713 Package");
 
@@ -303,12 +315,14 @@ public class postView extends AppCompatActivity {
 
                                 final Conversation convo = document.toObject(Conversation.class);
                                 if(convo.getUser1().equals(usr.getUid())){
-                                    if(convo.getUser2().equals(current_user)){
+                                    if(convo.getUser2().equals(post.getUser())){
                                         old_message_user = true;
+                                        mymessage = new ChatMessage(Glide.with(getBaseContext()) , convo.getLastMessage() , post.getUser(), convo.getMessages() , true, document.getId() , convo.isRead1());
                                     }
                                 } else if (convo.getUser2().equals(usr.getUid())) {
-                                    if(convo.getUser1().equals(current_user)){
+                                    if(convo.getUser1().equals(post.getUser())){
                                         old_message_user = true;
+                                        mymessage = new ChatMessage(Glide.with(getBaseContext()) , convo.getLastMessage() , post.getUser(), convo.getMessages() , false, document.getId() , convo.isRead2());
                                     }
                                 }
                             }

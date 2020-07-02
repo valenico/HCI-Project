@@ -38,6 +38,9 @@
                     android:id="@+id/countryfiltering"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hint_color"
+                    android:backgroundTint="@color/textColor"
                     android:hint="Country"
                     android:layout_marginTop="@dimen/_80sdp"/>
 
@@ -45,6 +48,9 @@
                     android:id="@+id/cityfiltering"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hint_color"
+                    android:backgroundTint="@color/textColor"
                     android:hint="City" />
 
                 <TextView
@@ -176,6 +182,7 @@
                     android:id="@+id/switchpackagefilter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
                     android:text="Need a Package?"
                     android:layout_marginTop="@dimen/_25sdp"
                     android:textSize="18sp"/>
