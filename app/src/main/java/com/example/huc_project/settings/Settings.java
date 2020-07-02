@@ -293,23 +293,10 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         inflater.inflate(R.menu.main_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.search_icon);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchItem.setVisible(false);
 
         MenuItem filter = menu.findItem(R.id.menu_slide);
         filter.setVisible(false);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //recyclerViewAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
 
         return true;
     }
