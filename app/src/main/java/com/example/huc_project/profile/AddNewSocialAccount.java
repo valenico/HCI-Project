@@ -34,7 +34,7 @@ public class AddNewSocialAccount extends AppCompatActivity {
     //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
     private String[] Text = {"facebook", "instagram", "twitter", "youtube",
                             "github", "linkedin", "reddit", "snapchat",
-                            "twitch", "vimeo", "spotify", "tumblr", "vk"};
+                            "twitch", "vimeo", "spotify", "tumblr", "vk", "website"};
     String social_selected;
     Integer icon_selected;
 
@@ -79,11 +79,11 @@ public class AddNewSocialAccount extends AppCompatActivity {
         });
 
         final Context c = this.getBaseContext();
-        final int[] children = new int[]{ 6,6,6,6,6,6,6,6,6,6,6,6 };
+        final int[] children = new int[]{ 6,6,6,6,6,6,6,6,6,6,6,6,6 };
         final ArrayList<Integer> socials = new ArrayList<>(Arrays.asList(R.drawable.ic_facebook, R.drawable.ic_instagram, R.drawable.ic_twitter, R.drawable.ic_youtube,
                                                                         R.drawable.ic_github, R.drawable.ic_linkedin, R.drawable.ic_reddit, R.drawable.ic_snapchat,
                                                                         R.drawable.ic_twitch, R.drawable.ic_vimeo, R.drawable.ic_spotify, R.drawable.ic_tumblr,
-                                                                        R.drawable.ic_vk));
+                                                                        R.drawable.ic_vk, R.drawable.ic_internet));
         final CircularListView circularListView = findViewById(R.id.circle_socials);
         circularListView.setRadius(100);
         CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), socials);
