@@ -1,7 +1,9 @@
 package com.example.huc_project.chat;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -47,6 +49,8 @@ public class NewMessage extends AppCompatActivity {
     final ArrayList<String> nomi = new ArrayList<>();
     final ArrayList<String> uid = new ArrayList<>();
 
+    private SharedPreferences pref;
+    private int rtl;
     private FirebaseUser usr = mAuth.getCurrentUser();
     private boolean unread_messages = true;
 
@@ -55,6 +59,8 @@ public class NewMessage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
 
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        rtl = pref.getInt("rtl", 4);
         setUp();
         final Intent i = getIntent();
 
@@ -165,7 +171,7 @@ public class NewMessage extends AppCompatActivity {
         final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
         icon.setImageDrawable(menu_ic_id);
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).setPosition(rtl).build();
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
@@ -192,12 +198,17 @@ public class NewMessage extends AppCompatActivity {
         ImageView addItem = new ImageView(this);
         addItem.setImageDrawable(add_ic_id);
         SubActionButton addButton = itemBuilder.setContentView(addItem).build();
-
+        int end = 360;
+        if(rtl == 4){
+            end = 270;
+        }
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(settingsButton)
                 .addSubActionView(chatButton)
                 .addSubActionView(profButton)
                 .addSubActionView(addButton)
+                .setStartAngle(rtl*45)
+                .setEndAngle(end)
                 .setRadius(470)
                 .attachTo(actionButton)
                 .build();

@@ -55,15 +55,21 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     ArrayList<ChatMessage> rowsChatList = new ArrayList<>();
     private boolean unread_messages = true;
     static com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton;
-
+    private int rtl;
+    SharedPreferences pref;
     private RecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        rtl = pref.getInt("rtl", 4);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        if(rtl==6){
+            fab.setTranslationX(getResources().getDimension(R.dimen._225sdp));
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,7 +182,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
         icon.setImageDrawable(menu_ic_id);
 
-        actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this).setContentView(icon).build();
+        actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this).setContentView(icon).setPosition(rtl).build();
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.LayoutParams params=new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.LayoutParams(220,220);
@@ -203,12 +209,17 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         ImageView addItem = new ImageView(this);
         addItem.setImageDrawable(add_ic_id);
         SubActionButton addButton = itemBuilder.setContentView(addItem).build();
-
+        int end = 360;
+        if(rtl == 4){
+            end = 270;
+        }
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(settingsButton)
                 .addSubActionView(chatButton)
                 .addSubActionView(profButton)
                 .addSubActionView(addButton)
+                .setStartAngle(rtl*45)
+                .setEndAngle(end)
                 .setRadius(470)
                 .attachTo(actionButton)
                 .build();

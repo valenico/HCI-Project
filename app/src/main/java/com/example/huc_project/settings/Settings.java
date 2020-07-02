@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 
 import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
+import com.example.huc_project.chat.Chat;
+import com.example.huc_project.homepage.Homepage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,10 +90,12 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         if(clicked.equals("General") && !mylist.contains("Change Email")){
             listItems.add(position+1,"Change Email"); // done
             listItems.add(position+2,"Log Out"); // done
+            listItems.add(position+3, "Left-Handed Layout");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("General")){
             listItems.remove("Change Email"); // done
             listItems.remove("Log Out"); // done
+            listItems.remove("Left-Handed Layout");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
             listItems.add(position+1,"Report a Problem"); // done
@@ -251,6 +256,18 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
                 }
             });
 
+        } else if(clicked.equals("Left-Handed Layout")){
+            int rtl = pref.getInt("rtl", 4);
+            if(rtl == 4){
+                editor.putInt("rtl", 6);
+                Toast.makeText( Settings.this, "Left-Handed Mode activated.", Toast.LENGTH_SHORT).show();
+            } else {
+                editor.putInt("rtl", 4);
+                Toast.makeText( Settings.this, "Left-Handed Mode de-activated.", Toast.LENGTH_SHORT).show();
+            }
+            Log.d("RTLLL", String.valueOf(rtl));
+            editor.commit();
+
         }
     }
 
@@ -278,6 +295,9 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         MenuItem searchItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        MenuItem filter = menu.findItem(R.id.menu_slide);
+        filter.setVisible(false);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -294,6 +314,12 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent back = new Intent(this, Homepage.class);
+        startActivity(back);
+        finish();
+    }
 
 
 }

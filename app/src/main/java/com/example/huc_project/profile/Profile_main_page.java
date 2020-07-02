@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -68,7 +70,8 @@ public class Profile_main_page extends AppCompatActivity {
     private ChatMessage myconvo;
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
-
+    private SharedPreferences pref;
+    private int rtl;
     TabLayout tabLayout;
 
     @Override
@@ -79,7 +82,8 @@ public class Profile_main_page extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         current_user = bundle. getString("user");
-
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        rtl = pref.getInt("rtl", 4);
         final Boolean guest_user;
         tabLayout = findViewById(R.id.tabLayout);
         final ViewPager viewPager = findViewById(R.id.pager);
@@ -346,7 +350,7 @@ public class Profile_main_page extends AppCompatActivity {
         final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
         icon.setImageDrawable(menu_ic_id);
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this).setContentView(icon).setPosition(rtl).build();
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
@@ -373,12 +377,17 @@ public class Profile_main_page extends AppCompatActivity {
         ImageView addItem = new ImageView(this);
         addItem.setImageDrawable(add_ic_id);
         SubActionButton addButton = itemBuilder.setContentView(addItem).build();
-
+        int end = 360;
+        if(rtl == 4){
+            end = 270;
+        }
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(settingsButton)
                 .addSubActionView(chatButton)
                 .addSubActionView(profButton)
                 .addSubActionView(addButton)
+                .setStartAngle(rtl*45)
+                .setEndAngle(end)
                 .setRadius(470)
                 .attachTo(actionButton)
                 .build();

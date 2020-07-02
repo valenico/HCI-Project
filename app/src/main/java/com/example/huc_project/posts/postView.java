@@ -150,6 +150,7 @@ public class postView extends AppCompatActivity {
 
         if(guest_mode){
             fab.setVisibility(View.INVISIBLE);
+            contact_user.setVisibility(View.INVISIBLE);
         } else if (current_user.equals(post.getUser())) {
             Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_pencil);
             final Drawable wrappedDrawable = DrawableCompat.wrap(like);
@@ -171,6 +172,7 @@ public class postView extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+            contact_user.setVisibility(View.INVISIBLE);
         }
         else {
 

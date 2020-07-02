@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -74,6 +75,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
@@ -92,7 +94,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     private boolean unread_messages = true;
     private FirebaseUser usr = mAuth.getCurrentUser();
-
+    private int rtl = 4;
     final int numItems = 10;
 
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
@@ -120,12 +122,13 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         setContentView(R.layout.activity_slide);
         Intent i = getIntent();
 
-
         mDrawerLayout = findViewById(R.id.drawer);
         navView = findViewById(R.id.navView);
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
+        rtl = pref.getInt("rtl", 4);
+
         guest_mode = i.getBooleanExtra("guest",false);
 
         recyclerView=null;
@@ -677,8 +680,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             final Drawable add_ic_id = getResources().getDrawable(R.drawable.ic_add);
             icon.setImageDrawable(menu_ic_id);
 
-            actionButton = new FloatingActionButton.Builder(this).setContentView(icon).build();
-
+            actionButton = new FloatingActionButton.Builder(this).setContentView(icon).setPosition( rtl ).build();
             SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
             FloatingActionButton.LayoutParams params=new FloatingActionButton.LayoutParams(220,220);
             itemBuilder.setLayoutParams(params);
@@ -705,11 +707,18 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             addItem.setImageDrawable(add_ic_id);
             SubActionButton addButton = itemBuilder.setContentView(addItem).build();
 
+            int end = 360;
+            if(rtl == 4){
+                end = 270;
+            }
+
             actionMenu = new FloatingActionMenu.Builder(this)
                     .addSubActionView(settingsButton)
                     .addSubActionView(chatButton)
                     .addSubActionView(profButton)
                     .addSubActionView(addButton)
+                    .setStartAngle(rtl*45)
+                    .setEndAngle(end)
                     .setRadius(470)
                     .attachTo(actionButton)
                     .build();
@@ -761,6 +770,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                     Intent i = new Intent(Homepage.this, Settings.class);
                     actionMenu.close(true);
                     startActivity(i);
+                    finish();
                 }
             });
         }
