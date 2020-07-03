@@ -329,8 +329,17 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         slidebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // your handler code here
-                mDrawerLayout.openDrawer(Gravity.RIGHT);
+                if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+                else {
+                    mDrawerLayout.openDrawer(Gravity.RIGHT);
+                }
+
             }
+
+
+
         });
 
         CheckBox science=(CheckBox) findViewById(R.id.checkScience);
