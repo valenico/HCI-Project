@@ -16,6 +16,7 @@ import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.util.Log;
@@ -246,9 +247,12 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                     }
                                 });                    }
                 });
-                Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
+               // Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
+                Toast.makeText(getApplicationContext(), "Post created successfully.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), Homepage.class);
                 startActivity(intent);
                 finish();
+
             }
         });
 
@@ -324,18 +328,25 @@ public class CreateNewPostActivity extends AppCompatActivity {
             }
         };
         sportCheck = popChooseCategories.findViewById(R.id.sport);
+        sportCheck.setTextColor(getResources().getColor(R.color.textColor));
         sportCheck.setOnCheckedChangeListener(checker);
         fashionCheck = popChooseCategories.findViewById(R.id.fashion);
+        fashionCheck.setTextColor(getResources().getColor(R.color.textColor));
         fashionCheck.setOnCheckedChangeListener(checker);
         scienceCheck = popChooseCategories.findViewById(R.id.science);
+        scienceCheck.setTextColor(getResources().getColor(R.color.textColor));
         scienceCheck.setOnCheckedChangeListener(checker);
         musicCheck = popChooseCategories.findViewById(R.id.music);
+        musicCheck.setTextColor(getResources().getColor(R.color.textColor));
         musicCheck.setOnCheckedChangeListener(checker);
         moviesCheck = popChooseCategories.findViewById(R.id.movies);
+        moviesCheck.setTextColor(getResources().getColor(R.color.textColor));
         moviesCheck.setOnCheckedChangeListener(checker);
         foodCheck = popChooseCategories.findViewById(R.id.food);
+        foodCheck.setTextColor(getResources().getColor(R.color.textColor));
         foodCheck.setOnCheckedChangeListener(checker);
         natureCheck = popChooseCategories.findViewById(R.id.nature);
+        natureCheck.setTextColor(getResources().getColor(R.color.textColor));
         natureCheck.setOnCheckedChangeListener(checker);
 
         checkBoxes();

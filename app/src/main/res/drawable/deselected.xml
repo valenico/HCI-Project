@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <solid android:color="#ffffff" >
+    <solid android:color="@color/card_color" >
     </solid>
 
     <stroke
         android:width="2dp"
-        android:color="#000000" >
+        android:color="@color/textColor" >
     </stroke>
-    <corners android:radius="5dp" />
+    <corners android:radius="20dp" />
 
     <padding
         android:bottom="4dp"
