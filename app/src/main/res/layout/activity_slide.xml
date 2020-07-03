@@ -32,7 +32,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_10sdp">
+
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:text="Filter By:"
+                    android:layout_marginTop="@dimen/_80sdp"
+                    android:textSize="25sp" />
 
                 <AutoCompleteTextView
                     android:id="@+id/countryfiltering"
@@ -41,8 +52,8 @@
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/hint_color"
                     android:backgroundTint="@color/textColor"
-                    android:hint="Country"
-                    android:layout_marginTop="@dimen/_80sdp"/>
+                    android:hint="Country" />
+
 
                 <AutoCompleteTextView
                     android:id="@+id/cityfiltering"
@@ -61,11 +72,13 @@
                     android:text="Categories"
                     android:textSize="18sp" />
 
+
                 <CheckBox
                     android:id="@+id/checkScience"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Science"
+                    android:text="Science &amp; IT "
+
                     android:textColor="@color/textColor"
                     android:buttonTint="@color/textColor"
                     app:layout_constraintBottom_toBottomOf="parent"

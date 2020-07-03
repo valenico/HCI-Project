@@ -415,23 +415,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             }
 
-            else if(constraint.toString().contains("-")){
-                String[] words = constraint.toString().split("-");
-                for(String w : words){
-                    w = w.toLowerCase().trim();
-                    for (PostRow s : itemsListFull){
-                        if(s.post.categories.contains(w)){
-                            filteredList.add(s);
-                        }
-                    }
-                }
-            } else if(constraint.toString().equals("is_package")){
-                for (PostRow s : itemsListFull){
-                    if(s.post.isPackage){
-                        filteredList.add(s);
-                    }
-                }
-            } else {
+
+
+
+            else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (PostRow s : itemsListFull){
                     if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern) ){
@@ -439,45 +426,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             }
+
+
             FilterResults res = new FilterResults();
             res.values = filteredList;
             return res;
         }
 
-        public FilterResults performCategoriesFiltering(CharSequence constraint, HashMap<String, Boolean> filterCategories){
-            List<PostRow> filteredList = new ArrayList<>();
-
-            if(constraint.toString().isEmpty()){
-                filteredList.addAll(itemsListFull);
-            } else if(constraint.toString().contains("-")){
-                String[] words = constraint.toString().split("-");
-                for(String w : words){
-                    w = w.toLowerCase().trim();
-                    for (PostRow s : itemsListFull){
-                        if(s.post.categories.contains(w)){
-                            filteredList.add(s);
-                        }
-                    }
-                }
-            } else if(constraint.toString().equals("is_package")){
-                for (PostRow s : itemsListFull){
-                    if(s.post.isPackage){
-                        filteredList.add(s);
-                    }
-                }
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-                for (PostRow s : itemsListFull){
-                    if(s.post.title.toLowerCase().contains(filterPattern) || s.post.postdesc.toLowerCase().contains(filterPattern) || s.post.categories.contains(filterPattern) ){
-                        filteredList.add(s);
-                    }
-                }
-            }
-            FilterResults res = new FilterResults();
-            res.values = filteredList;
-            return res;
-
-        }
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             itemsList.clear();
