@@ -94,8 +94,6 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Post post = document.toObject(Post.class);
                         StorageReference storageRef = storage.getReference();
-
-
                         StorageReference islandRef = null;
                         if(post.getStorageref() != null){
                             islandRef = storageRef.child("images/" + post.getStorageref());
@@ -285,9 +283,9 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
     public void onItemClick(int position) {
         PostRow post_clicked = rowsArrayList.get(position);
         Intent intent = new Intent(getBaseContext(), postView.class);
-        intent.putExtra("title", post_clicked.getTitle());
+        intent.putExtra("title", post_clicked.getPost().getTitle());
         intent.putExtra("id", postDoc.get(position));
-        intent.putExtra("desc", post_clicked.getDesc());
+        intent.putExtra("desc", post_clicked.getPost().getPostdesc());
         intent.putExtra("storageref", post_clicked.getPost().getStorageref());
         intent.putExtra("user", post_clicked.getPost().getUser());
         intent.putExtra("country", post_clicked.getPost().getCountry());

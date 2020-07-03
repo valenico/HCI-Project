@@ -222,6 +222,10 @@ public class postView extends AppCompatActivity {
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("title", intent.getStringExtra("title"));
                         data.put("user", intent.getStringExtra("user"));
+                        data.put("city", intent.getStringExtra("city"));
+                        data.put("country", intent.getStringExtra("country"));
+                        data.put("categories", intent.getStringArrayListExtra("city"));
+                        data.put("role", intent.getStringExtra("role"));
                         data.put("postdesc", intent.getStringExtra("desc"));
                         data.put("isPackage", intent.getBooleanExtra("isPackage", false));
                         data.put("storageref", intent.getStringExtra("storageref"));
@@ -265,8 +269,12 @@ public class postView extends AppCompatActivity {
         title_view.setText(post.getTitle());
         desc_view.setText(post.getPostdesc());
 
-        if(post.getRole().equals("sponsor")) is_sponsor_view.setText("\u2713 Looking for Sponsor");
-        else is_sponsor_view.setText("\u2713 Looking for Sponsorship");
+        try {
+            if(post.getRole().equals("sponsor")) is_sponsor_view.setText("\u2713 Looking for Sponsor");
+            else is_sponsor_view.setText("\u2713 Looking for Sponsorship");
+        } catch(Exception e){
+            Log.d("POSTVIEW", "sto stronzo non ha messo il ruolo");
+        }
 
         if(post.getIsPackage()) is_package_view.setText("\u2713 Package");
 
@@ -278,11 +286,15 @@ public class postView extends AppCompatActivity {
             place_view.setText("There is no location provided for this advertisement.");
         }
 
-        int i;
+        int i = 0;
         LinearLayout ll = findViewById(R.id.tags);
-        ArrayList<String> mytags = post.getCategories();
-        for(i=0; i < mytags.size(); i++) ((TextView) ll.getChildAt(i)).setText(switchText(mytags.get(i)));
-        for(; i < 3; i++) ((TextView) ll.getChildAt(i)).setVisibility(View.INVISIBLE);
+        try {
+            ArrayList<String> mytags = post.getCategories();
+            for( ; i < mytags.size(); i++) ((TextView) ll.getChildAt(i)).setText(switchText(mytags.get(i)));
+            for( ; i < 3; i++) ((TextView) ll.getChildAt(i)).setVisibility(View.INVISIBLE);
+        } catch(Exception e){
+            for( ; i < 3; i++) ((TextView) ll.getChildAt(i)).setVisibility(View.INVISIBLE);
+        }
         if(post.getStorageref() != null){
             StorageReference storageRef = storage.getReference();
             StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
