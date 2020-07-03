@@ -148,17 +148,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int i = 0;
         LinearLayout tag_cards = (LinearLayout) viewHolder.tvItem.getChildAt(4);
         ArrayList<String> mytags = item.post.getCategories();
-        for(i=0; i < mytags.size(); i++) ((TextView) tag_cards.getChildAt(i)).setText(switchText(mytags.get(i)));
-        for(; i < 3; i++) ((TextView) tag_cards.getChildAt(i)).setVisibility(View.INVISIBLE);
+        try {
+            for(i=0; i < mytags.size(); i++) ((TextView) tag_cards.getChildAt(i)).setText(switchText(mytags.get(i)));
+            for(; i < 3; i++) ((TextView) tag_cards.getChildAt(i)).setVisibility(View.INVISIBLE);
+        } catch(Exception e) {
+            for(; i < 3; i++) ((TextView) tag_cards.getChildAt(i)).setVisibility(View.INVISIBLE);
+        }
 
         TextView pos = (TextView) ((LinearLayout) viewHolder.tvItem.getChildAt(3)).getChildAt(1);
-        if(!item.post.country.trim().equals("") && !item.post.city.trim().equals("")){
+        if(item.getPost().getCountry()!= null && !item.post.country.trim().equals("") && item.getPost().getCity()!= null && !item.post.city.trim().equals("")){
             pos.setText(item.post.country+ ", "+item.post.city);
         }
-        else if(!item.post.country.trim().equals("")){
+        else if(item.getPost().getCountry()!= null && !item.post.country.trim().equals("")){
             pos.setText(item.post.country);
         }
-        else if(!item.post.city.trim().equals("")){
+        else if(item.getPost().getCity()!= null && !item.post.city.trim().equals("")){
             pos.setText(item.post.city);
         }
         else{
