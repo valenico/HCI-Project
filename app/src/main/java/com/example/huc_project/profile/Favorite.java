@@ -63,6 +63,7 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
     ArrayList<PostRow> rowsPostList = new ArrayList<>();
     ArrayList<UserRow> rowsArrayList_user = new ArrayList<>();
     ArrayList<UserRow> rowsUserList = new ArrayList<>();
+    ArrayList<String> postDoc = new ArrayList<>();
 
     boolean isLoading = false;
 
@@ -102,6 +103,7 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
 
                         PostRow post_row = new PostRow(post, islandRef, Glide.with(Favorite.this));
                         rowsPostList.add(post_row);
+                        postDoc.add(document.getId());
                     }
                     populateData();
                     setUpRecyclerView();
@@ -282,11 +284,16 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
     @Override
     public void onItemClick(int position) {
         PostRow post_clicked = rowsArrayList.get(position);
-        Intent intent = new Intent(Favorite.this, postView.class);
+        Intent intent = new Intent(getBaseContext(), postView.class);
         intent.putExtra("title", post_clicked.getTitle());
+        intent.putExtra("id", postDoc.get(position));
         intent.putExtra("desc", post_clicked.getDesc());
         intent.putExtra("storageref", post_clicked.getPost().getStorageref());
         intent.putExtra("user", post_clicked.getPost().getUser());
+        intent.putExtra("country", post_clicked.getPost().getCountry());
+        intent.putExtra("city",post_clicked.getPost().getCity());
+        intent.putExtra("categories", post_clicked.getPost().getCategories());
+        intent.putExtra("role", post_clicked.getPost().getRole());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
         startActivity(intent);
     }

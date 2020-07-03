@@ -283,7 +283,6 @@ public class postView extends AppCompatActivity {
         ArrayList<String> mytags = post.getCategories();
         for(i=0; i < mytags.size(); i++) ((TextView) ll.getChildAt(i)).setText(switchText(mytags.get(i)));
         for(; i < 3; i++) ((TextView) ll.getChildAt(i)).setVisibility(View.INVISIBLE);
-
         if(post.getStorageref() != null){
             StorageReference storageRef = storage.getReference();
             StorageReference islandRef = storageRef.child("images/" + post.getStorageref());
