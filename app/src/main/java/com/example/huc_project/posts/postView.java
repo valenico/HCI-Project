@@ -106,25 +106,30 @@ public class postView extends AppCompatActivity {
         is_package_view = findViewById(R.id.viewpackage);
         contact_user = findViewById(R.id.contact_user);
 
-        contact_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(old_message_user){
-                    Intent intent = new Intent(getBaseContext(), ChatView.class);
-                    intent.putExtra("user", post.getUser());
-                    intent.putStringArrayListExtra("messages", (ArrayList<String>) mymessage.getMessages() );
-                    intent.putExtra("who", mymessage.getI_am_0());
-                    intent.putExtra("document", mymessage.getDocument());
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Intent i = new Intent(getBaseContext(), NewMessage.class);
-                    i.putExtra("to", current_user);
-                    startActivity(i);
-                    finish();
+        if(!guest_mode){
+            contact_user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(old_message_user){
+                        Intent intent = new Intent(getBaseContext(), ChatView.class);
+                        intent.putExtra("user", post.getUser());
+                        intent.putStringArrayListExtra("messages", (ArrayList<String>) mymessage.getMessages() );
+                        intent.putExtra("who", mymessage.getI_am_0());
+                        intent.putExtra("document", mymessage.getDocument());
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent i = new Intent(getBaseContext(), NewMessage.class);
+                        i.putExtra("to", current_user);
+                        startActivity(i);
+                        finish();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            contact_user.setVisibility(View.INVISIBLE);
+        }
+
 
         if(!guest_mode){
             owner_img.setOnClickListener(new View.OnClickListener() {
@@ -317,34 +322,37 @@ public class postView extends AppCompatActivity {
                 }
             }
         });
+        if(!guest_mode){
+            CollectionReference mess = db.collection("Chat");
+            mess.get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
 
-        CollectionReference mess = db.collection("Chat");
-        mess.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                final Conversation convo = document.toObject(Conversation.class);
-                                if(convo.getUser1().equals(usr.getUid())){
-                                    if(convo.getUser2().equals(post.getUser())){
-                                        old_message_user = true;
-                                        mymessage = new ChatMessage(Glide.with(getBaseContext()) , convo.getLastMessage() , post.getUser(), convo.getMessages() , true, document.getId() , convo.isRead1());
-                                    }
-                                } else if (convo.getUser2().equals(usr.getUid())) {
-                                    if(convo.getUser1().equals(post.getUser())){
-                                        old_message_user = true;
-                                        mymessage = new ChatMessage(Glide.with(getBaseContext()) , convo.getLastMessage() , post.getUser(), convo.getMessages() , false, document.getId() , convo.isRead2());
+                                    final Conversation convo = document.toObject(Conversation.class);
+                                    if(convo.getUser1().equals(usr.getUid())){
+                                        if(convo.getUser2().equals(post.getUser())){
+                                            old_message_user = true;
+                                            mymessage = new ChatMessage(Glide.with(getBaseContext()) , convo.getLastMessage() , post.getUser(), convo.getMessages() , true, document.getId() , convo.isRead1());
+                                        }
+                                    } else if (convo.getUser2().equals(usr.getUid())) {
+                                        if(convo.getUser1().equals(post.getUser())){
+                                            old_message_user = true;
+                                            mymessage = new ChatMessage(Glide.with(getBaseContext()) , convo.getLastMessage() , post.getUser(), convo.getMessages() , false, document.getId() , convo.isRead2());
+                                        }
                                     }
                                 }
-                            }
 
-                        } else {
-                            Log.w("Tag", "Error getting documents.", task.getException());
+                            } else {
+                                Log.w("Tag", "Error getting documents.", task.getException());
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
+
     }
 
     private String switchText(String tag){

@@ -176,36 +176,46 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                     }
                 });
     }
-    private void setUp(){
-        db = FirebaseFirestore.getInstance();
-        CollectionReference mess = db.collection("Chat");
-        mess.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                final Conversation convo = document.toObject(Conversation.class);
-                                if(convo.getUser1().equals(usr.getUid())){
-                                    final String last_message = convo.getLastMessage();
-                                    final List<String> all_messages = convo.getMessages();
-                                    if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
-                                } else if (convo.getUser2().equals(usr.getUid())) {
-                                    final String last_message = convo.getLastMessage();
-                                    final List<String> all_messages = convo.getMessages();
-                                    if(unread_messages) unread_messages = convo.isRead2();
+
+    private void setUp(){
+        if (!guest_mode) {
+            db = FirebaseFirestore.getInstance();
+            CollectionReference mess = db.collection("Chat");
+            mess.get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                    final Conversation convo = document.toObject(Conversation.class);
+                                    if(convo.getUser1().equals(usr.getUid())){
+                                        final String last_message = convo.getLastMessage();
+                                        final List<String> all_messages = convo.getMessages();
+                                        if(unread_messages) unread_messages = convo.isRead1(); // isread is false when you haven't read,
+                                    } else if (convo.getUser2().equals(usr.getUid())) {
+                                        final String last_message = convo.getLastMessage();
+                                        final List<String> all_messages = convo.getMessages();
+                                        if(unread_messages) unread_messages = convo.isRead2();
+                                    }
                                 }
+                                setUpRecyclerView();
+                                setUpCircularMenu();
+                                initScrollListener();
+                                swipeContainer.setRefreshing(false);
+                            } else {
+                                Log.w("Tag", "Error getting documents.", task.getException());
                             }
-                            setUpRecyclerView();
-                            setUpCircularMenu();
-                            initScrollListener();
-                            swipeContainer.setRefreshing(false);
-                        } else {
-                            Log.w("Tag", "Error getting documents.", task.getException());
                         }
-                    }
-                });
+                    });
+        } else {
+            setUpRecyclerView();
+            setUpCircularMenu();
+            initScrollListener();
+            swipeContainer.setRefreshing(false);
+        }
+
     }
 
     public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){
@@ -230,8 +240,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 setUpHomepage();
             }
         });
-        //SpinnerAdapter sa = new SpinnerAdapter(getApplicationContext(), mylist, list_check ,"" , recyclerViewAdapter);
-        //spinner_filter.setAdapter(sa);
     }
 
 
@@ -801,7 +809,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         intent.putExtra("role", post_clicked.getPost().getRole());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
         if(guest_mode) intent.putExtra("guest", true);
-        actionMenu.close(true);
+        if(!guest_mode) actionMenu.close(true);
         startActivity(intent);
     }
 }
