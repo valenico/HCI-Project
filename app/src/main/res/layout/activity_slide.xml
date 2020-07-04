@@ -48,7 +48,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/countryfiltering"
                     android:ellipsize="end"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_150sdp"
                     android:maxLines="1"
                     android:lines="1"
                     android:singleLine="true"
@@ -61,11 +61,11 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/cityfiltering"
+                    android:layout_width="@dimen/_150sdp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:lines="1"
                     android:singleLine="true"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/hint_color"
@@ -208,7 +208,15 @@
                     android:layout_marginTop="@dimen/_25sdp"
                     android:textSize="18sp"/>
 
-
+                <TextView
+                    android:id="@+id/remove_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/remove_filters"
+                    android:textSize="15sp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:textColor="@color/textColor"
+                    />
             </LinearLayout>
         </ScrollView>
 

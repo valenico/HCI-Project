@@ -60,6 +60,7 @@ You acknowledge that you have read this Agreement and agree to all its terms and
 If you would like to contact us to understand more about this Agreement or wish to contact us concerning any matter relating to it, you may send an email to progettohumanci@gmail.com \n \nThis document was last updated on June 16, 2020</string>
     <string name="type_message">Type your message here...</string>
     <string name="about_app">This app has been developed as final project for the Human-Computer Interaction course, La Sapienza, year 2019/2020, by \n \nCarlini Tommaso, Lo Iudice Davide, Nicolanti Valerio and Roggiolani Gianmarco</string>
+    <string name="remove_filters"><u>Remove filters</u></string>
     <string-array name="countries_array">
         <item>Australia</item>
         <item>Belgium</item>

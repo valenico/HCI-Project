@@ -31,6 +31,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -341,6 +342,15 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         sponsorship=(CheckBox) findViewById(R.id.checkSponsorship);
         sponsor=(CheckBox) findViewById(R.id.checkSponsor);
         packagefilterswitch=(Switch) findViewById(R.id.switchpackagefilter);
+
+        TextView remove_filters = findViewById(R.id.remove_filters);
+        remove_filters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeAllFilters();
+                recyclerViewAdapter.getFilter().filter(totalFilter);
+            }
+        });
 
 
         science.setOnClickListener(new View.OnClickListener() {
