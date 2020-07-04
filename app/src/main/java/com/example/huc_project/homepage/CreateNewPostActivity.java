@@ -2,7 +2,6 @@ package com.example.huc_project.homepage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,8 +15,6 @@ import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
@@ -287,7 +284,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void iniPopup() {
 
         popChooseCategories = new Dialog(this);

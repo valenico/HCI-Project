@@ -147,8 +147,7 @@ public class NewMessage extends AppCompatActivity {
         to_put.put("read1", true);
         to_put.put("read2", false);
         db.collection("Chat").document(UUID.randomUUID().toString()).set(to_put);
-        Intent i = new Intent(getBaseContext(), Chat.class);
-        startActivity(i);
+        finish();
     }
 
     @Override
@@ -259,4 +258,8 @@ public class NewMessage extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

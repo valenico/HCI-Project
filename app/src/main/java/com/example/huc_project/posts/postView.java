@@ -1,7 +1,6 @@
 package com.example.huc_project.posts;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,22 +12,14 @@ import com.example.huc_project.chat.ChatMessage;
 import com.example.huc_project.chat.ChatView;
 import com.example.huc_project.chat.Conversation;
 import com.example.huc_project.chat.NewMessage;
-import com.example.huc_project.homepage.DataGettingActivity;
-import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
-import com.example.huc_project.homepage.PostRow;
-import com.example.huc_project.profile.Favorite;
 import com.example.huc_project.profile.Profile_main_page;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.util.Log;
@@ -50,15 +41,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.protobuf.StringValue;
-import com.google.protobuf.StringValueOrBuilder;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class postView extends AppCompatActivity {
 
@@ -117,12 +102,12 @@ public class postView extends AppCompatActivity {
                         intent.putExtra("who", mymessage.getI_am_0());
                         intent.putExtra("document", mymessage.getDocument());
                         startActivity(intent);
-                        finish();
+                        //finish();
                     } else {
                         Intent i = new Intent(getBaseContext(), NewMessage.class);
-                        i.putExtra("to", current_user);
+                        i.putExtra("to", post.getUser());
                         startActivity(i);
-                        finish();
+                        //finish();
                     }
                 }
             });

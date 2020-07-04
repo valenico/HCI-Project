@@ -43,7 +43,6 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Chat extends AppCompatActivity implements com.example.huc_project.chat.RecyclerViewAdapter.OnItemListener {
@@ -289,6 +288,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     public void onBackPressed() {
         Intent back = new Intent(Chat.this, Homepage.class);
         startActivity(back);
+        finish();
     }
 
 }

@@ -324,6 +324,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 }
                 else {
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
+                    actionMenu.close(true);
                 }
 
             }
