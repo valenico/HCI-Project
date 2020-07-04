@@ -2,7 +2,6 @@ package com.example.huc_project.homepage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -14,11 +13,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,25 +24,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
-import com.example.huc_project.Signup;
-import com.example.huc_project.Start;
 import com.example.huc_project.chat.Chat;
-import com.example.huc_project.chat.ChatMessage;
 import com.example.huc_project.chat.Conversation;
 import com.example.huc_project.posts.postView;
 import com.example.huc_project.profile.Profile_main_page;
@@ -63,25 +53,19 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.internal.bind.ArrayTypeAdapter;
-import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 
-import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
 
     String totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-//-/-//-/-/";
     String[] filterArray = totalFilter.toString().split("/-/-/", -1);
-    HashMap<String, Boolean> filtersCategories = new HashMap<String, Boolean>();
 
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -95,23 +79,30 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     private boolean unread_messages = true;
     private FirebaseUser usr = mAuth.getCurrentUser();
     private int rtl = 4;
-    final int numItems = 10;
 
     private FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mdatabaseReference = mdatabase.getReference();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     ArrayList<PostRow> rowsPostList = new ArrayList<>();
-    Spinner spinner_filter;
-    List<String> mylist;
-    List<Boolean> list_check;
-    final private String pattern = Integer.toString(R.string.pattern);
 
     boolean guest_mode = false;
     boolean isLoading = false;
 
     private SwipeRefreshLayout swipeContainer;
     private FloatingActionMenu actionMenu;
+    CheckBox science;
+    CheckBox nature;
+    CheckBox sport;
+    CheckBox fashion;
+    CheckBox food;
+    CheckBox movies;
+    CheckBox music;
+    CheckBox sponsorship;
+    CheckBox sponsor;
+    Switch packagefilterswitch;
+    AutoCompleteTextView countryView;
+    AutoCompleteTextView cityView;
 
     DrawerLayout mDrawerLayout;
     NavigationView navView;
@@ -234,6 +225,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                removeAllFilters();
                 rowsArrayList.clear();
                 rowsPostList.clear();
                 recyclerViewAdapter.notifyDataSetChanged();
@@ -269,32 +261,21 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     }
 
-    private void loadMore() {
-        rowsArrayList.add(null);
-        recyclerViewAdapter.notifyItemInserted(rowsArrayList.size() - 1);
-
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rowsArrayList.remove(rowsArrayList.size() - 1);
-                int scrollPosition = rowsArrayList.size();
-                recyclerViewAdapter.notifyItemRemoved(scrollPosition);
-                int currentSize = scrollPosition;
-                int nextLimit = currentSize + 10;
-
-                while (currentSize - 1 < nextLimit) {
-                    //rowsArrayList.add("Item " + currentSize);
-                    currentSize++;
-                }
-
-                recyclerViewAdapter.notifyDataSetChanged();
-                isLoading = false;
-            }
-        }, 2000);
-
-
+    private void removeAllFilters(){
+        science.setChecked(false);
+        nature.setChecked(false);
+        sport.setChecked(false);
+        movies.setChecked(false);
+        music.setChecked(false);
+        food.setChecked(false);
+        fashion.setChecked(false);
+        sponsor.setChecked(false);
+        sponsorship.setChecked(false);
+        packagefilterswitch.setChecked(false);
+        countryView.setText("");
+        cityView.setText("");
+        totalFilter="/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-/0/-/-//-/-//-/-/";
+        filterArray = totalFilter.toString().split("/-/-/", -1);
     }
 
 
@@ -350,16 +331,16 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
         });
 
-        CheckBox science=(CheckBox) findViewById(R.id.checkScience);
-        CheckBox nature=(CheckBox) findViewById(R.id.checkNature);
-        CheckBox sport=(CheckBox) findViewById(R.id.checkSport);
-        CheckBox fashion=(CheckBox) findViewById(R.id.checkFashion);
-        CheckBox food=(CheckBox) findViewById(R.id.checkFood);
-        CheckBox movies=(CheckBox) findViewById(R.id.checkMovies);
-        CheckBox music=(CheckBox) findViewById(R.id.checkMusic);
-        final CheckBox sponsorship=(CheckBox) findViewById(R.id.checkSponsorship);
-        final CheckBox sponsor=(CheckBox) findViewById(R.id.checkSponsor);
-        Switch packagefilterswitch=(Switch) findViewById(R.id.switchpackagefilter);
+        science=(CheckBox) findViewById(R.id.checkScience);
+        nature=(CheckBox) findViewById(R.id.checkNature);
+        sport=(CheckBox) findViewById(R.id.checkSport);
+        fashion=(CheckBox) findViewById(R.id.checkFashion);
+        food=(CheckBox) findViewById(R.id.checkFood);
+        movies=(CheckBox) findViewById(R.id.checkMovies);
+        music=(CheckBox) findViewById(R.id.checkMusic);
+        sponsorship=(CheckBox) findViewById(R.id.checkSponsorship);
+        sponsor=(CheckBox) findViewById(R.id.checkSponsor);
+        packagefilterswitch=(Switch) findViewById(R.id.switchpackagefilter);
 
 
         science.setOnClickListener(new View.OnClickListener() {
@@ -607,8 +588,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, CreateNewPostActivity.COUNTRIES);
-        final AutoCompleteTextView countryView = (AutoCompleteTextView)
-                findViewById(R.id.countryfiltering);
+        countryView = (AutoCompleteTextView) findViewById(R.id.countryfiltering);
         countryView.setAdapter(adapter);
 
         countryView.addTextChangedListener(new TextWatcher() {
@@ -638,8 +618,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         });
 
 
-        final AutoCompleteTextView cityView = (AutoCompleteTextView)
-                findViewById(R.id.cityfiltering);
+        cityView = (AutoCompleteTextView) findViewById(R.id.cityfiltering);
 
         cityView.addTextChangedListener(new TextWatcher() {
 
