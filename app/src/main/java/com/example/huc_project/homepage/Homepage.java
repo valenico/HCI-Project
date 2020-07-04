@@ -596,13 +596,15 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                filterArray[11]=s.toString();
-                totalFilter="";
-                for(String w : filterArray){
-                    totalFilter+=w;
-                    totalFilter+="/-/-/";
+                if (!(s.toString().equals(""))) {
+                    filterArray[11] = s.toString();
+                    totalFilter = "";
+                    for (String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+                    recyclerViewAdapter.getFilter().filter(totalFilter);
                 }
-                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
 
             @Override
@@ -625,13 +627,15 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                filterArray[12]=s.toString();
-                totalFilter="";
-                for(String w : filterArray){
-                    totalFilter+=w;
-                    totalFilter+="/-/-/";
+                if (!(s.toString().equals(""))) {
+                    filterArray[12] = s.toString();
+                    totalFilter = "";
+                    for (String w : filterArray) {
+                        totalFilter += w;
+                        totalFilter += "/-/-/";
+                    }
+                    recyclerViewAdapter.getFilter().filter(totalFilter);
                 }
-                recyclerViewAdapter.getFilter().filter(totalFilter);
             }
 
             @Override

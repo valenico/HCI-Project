@@ -266,6 +266,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 String filterPatternCountry = words[11].toString().toLowerCase().trim();
                 if (!(filterPatternCountry.equals(("")))) {
+                    Log.e("provacountry", "CIAO NON DOVREI ESSERE QUI PORCO DIO");
                     isitfiltered=true;
                     countryisasked=true;
                     Log.e("tagg", "OK RICONOSCE CHE NON è VUOTA");
@@ -287,6 +288,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         filteredListPackage.retainAll((filteredListCountries));
                     }
                 }
+
 
                 //check if there are filters on CITY (12) and join the post obtained with that of package
                 String filterPatternCity = words[12].toString().toLowerCase().trim();
