@@ -22,7 +22,7 @@
             android:layout_marginRight="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_18sdp"
-            android:background="@drawable/custom_button"
+            style="@style/CustomButton"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/_14sdp"

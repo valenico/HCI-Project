@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
         android:layout_marginStart="@dimen/_20sdp"
-        android:background="@drawable/custom_button"
+        style="@style/CustomButton"
         android:onClick="block_this_user"
         android:textColor="#FFFFFF"
         android:text="Block"

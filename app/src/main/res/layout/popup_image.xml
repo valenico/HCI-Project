@@ -18,7 +18,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_button"
+        style="@style/CustomButton"
         android:padding="@dimen/_10sdp"
         android:id="@+id/delete_pic"
         android:text="Delete Picture"

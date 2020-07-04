@@ -213,7 +213,7 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_5sdp"
-            android:background="@drawable/custom_button"
+            style="@style/CustomButton"
             android:text="Post"
             android:layout_marginBottom="@dimen/_20sdp"
             android:textColor="#fff"

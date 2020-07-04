@@ -2,6 +2,7 @@ package com.example.huc_project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.TextViewCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -110,7 +111,7 @@ public class Signup extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     sign_up_button.setEnabled(true);
-                    sign_up_button.setBackgroundResource(R.drawable.custom_button);
+                    sign_up_button.setBackgroundResource(R.drawable.custom_button_selector);
                     sign_up_button.setTextColor(Color.WHITE);
                 } else {
                     sign_up_button.setEnabled(false);

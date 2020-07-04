@@ -64,7 +64,7 @@
         android:id="@+id/send_new_text"
         app:srcCompat="@drawable/ic_send_text"
         android:onClick="send_text"
-        android:background="@drawable/custom_button"
+        style="@style/CustomButton"
         android:tint="#FFFFFF"
         android:layout_marginBottom="@dimen/_40sdp"
         android:layout_marginLeft="@dimen/_40sdp"

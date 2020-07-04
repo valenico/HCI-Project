@@ -424,7 +424,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
         parent.setLayoutParams(paramsParent);
 
         parent.setOrientation(LinearLayout.HORIZONTAL);
-        parent.setBackgroundResource(R.drawable.custom_button);
+        parent.setBackgroundResource(R.drawable.custom_button_selector);
 
         ImageView minus = new ImageView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

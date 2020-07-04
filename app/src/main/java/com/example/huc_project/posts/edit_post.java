@@ -249,7 +249,7 @@ public class edit_post extends AppCompatActivity {
         params.setMargins(left,top,left,-top*2);
         cancel.setLayoutParams(params);
         cancel.setMaxHeight( post_button.getHeight() );
-        cancel.setBackgroundResource(R.drawable.custom_button);
+        cancel.setBackgroundResource(R.drawable.custom_button_selector);
         cancel.setGravity(Gravity.CENTER);
         cancel.setTypeface(Typeface.DEFAULT_BOLD);
         cancel.setTextColor(Color.WHITE);
@@ -455,7 +455,7 @@ public class edit_post extends AppCompatActivity {
         parent.setLayoutParams(paramsParent);
 
         parent.setOrientation(LinearLayout.HORIZONTAL);
-        parent.setBackgroundResource(R.drawable.custom_button);
+        parent.setBackgroundResource(R.drawable.custom_button_selector);
 
         ImageView minus = new ImageView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

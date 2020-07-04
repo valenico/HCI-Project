@@ -179,7 +179,7 @@
                 android:id="@+id/contact_user"
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/custom_button"
+                style="@style/CustomButton"
                 android:textSize="@dimen/_11sdp"
                 android:textColor="#FFF"
                 android:text="Contact the user"

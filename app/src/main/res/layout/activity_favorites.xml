@@ -35,7 +35,7 @@
         android:text="Go back to my profile"
         android:layout_width="@dimen/_170sdp"
         android:layout_height="@dimen/_35sdp"
-        android:background="@drawable/custom_button"
+        style="@style/CustomButton"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_14sdp"
