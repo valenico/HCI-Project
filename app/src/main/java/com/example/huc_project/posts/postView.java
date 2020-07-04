@@ -102,12 +102,12 @@ public class postView extends AppCompatActivity {
                         intent.putExtra("who", mymessage.getI_am_0());
                         intent.putExtra("document", mymessage.getDocument());
                         startActivity(intent);
-                        //finish();
+                        finish();
                     } else {
                         Intent i = new Intent(getBaseContext(), NewMessage.class);
                         i.putExtra("to", post.getUser());
                         startActivity(i);
-                        //finish();
+                        finish();
                     }
                 }
             });
