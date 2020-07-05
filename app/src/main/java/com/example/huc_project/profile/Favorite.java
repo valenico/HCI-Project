@@ -294,6 +294,7 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
         intent.putExtra("role", post_clicked.getPost().getRole());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -306,6 +307,7 @@ public class Favorite extends AppCompatActivity implements RecyclerViewAdapter.O
         Intent intent_user = new Intent(Favorite.this, Profile_main_page.class);
         intent_user.putExtra("user", suffix);
         startActivity(intent_user);
+        finish();
     }
 
     @Override
