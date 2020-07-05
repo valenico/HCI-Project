@@ -193,7 +193,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                                     }
                                 }
                                 setUpRecyclerView();
-                                setUpCircularMenu();
+                                if(actionMenu==null) setUpCircularMenu();
                                 initScrollListener();
                                 swipeContainer.setRefreshing(false);
                             } else {
