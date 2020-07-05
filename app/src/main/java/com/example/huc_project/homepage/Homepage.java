@@ -92,6 +92,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     private SwipeRefreshLayout swipeContainer;
     private FloatingActionMenu actionMenu;
+    FloatingActionButton actionButton;
     CheckBox science;
     CheckBox nature;
     CheckBox sport;
@@ -193,7 +194,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                                     }
                                 }
                                 setUpRecyclerView();
-                                if(actionMenu==null) setUpCircularMenu();
+                                setUpCircularMenu();
                                 initScrollListener();
                                 swipeContainer.setRefreshing(false);
                             } else {
@@ -230,6 +231,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 rowsArrayList.clear();
                 rowsPostList.clear();
                 recyclerViewAdapter.notifyDataSetChanged();
+                actionMenu.close(true);
                 setUpHomepage();
             }
         });
@@ -668,7 +670,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
     private void setUpCircularMenu(){
         final ImageView icon = new ImageView(this);
-        FloatingActionButton actionButton;
         if(guest_mode){
             Drawable exit = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_exit);
             final Drawable wrappedDrawable = DrawableCompat.wrap(exit);
