@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.huc_project.Signup;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -163,6 +164,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 String country=countryView.getText().toString();
                 String city = cityView.getText().toString();
                 Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+                if(postTitle.trim().equals("") || postDescription.trim().equals("")){
+                    Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 Boolean isPackage = true;
 
