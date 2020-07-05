@@ -85,6 +85,7 @@ public class Signup extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference ref = storage.getReference();
     private FirebaseFirestore db;
+    Button sign_up_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,7 @@ public class Signup extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         final CheckBox age_check = findViewById(R.id.age_check);
-        final Button sign_up_button = findViewById(R.id.signup);
+        sign_up_button = findViewById(R.id.signup);
 
         age_check.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
@@ -121,6 +122,7 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
+
 
         EditText mail_view = findViewById(R.id.email);
         EditText pass = findViewById(R.id.password_signup);
@@ -217,6 +219,7 @@ public class Signup extends AppCompatActivity {
         editor.putString("mail",mail_view.getText().toString());
         editor.commit();
         if(!stop){
+            sign_up_button.setEnabled(false);
             SCREEN = 2;
             mAuth.createUserWithEmailAndPassword(mail_view.getText().toString().trim() , pass.getText().toString().trim())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
