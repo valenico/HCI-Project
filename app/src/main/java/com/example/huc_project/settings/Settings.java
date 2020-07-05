@@ -29,9 +29,10 @@ import android.widget.Toast;
 
 import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
-import com.example.huc_project.chat.Chat;
 import com.example.huc_project.homepage.Homepage;
+import com.facebook.login.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -90,12 +91,14 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         if(clicked.equals("General") && !mylist.contains("Change Email")){
             listItems.add(position+1,"Change Email"); // done
             listItems.add(position+2,"Log Out"); // done
-            listItems.add(position+3, "Left-Handed Layout");
+            listItems.add(position+3, "Left-Handed Layout"); // done
+            listItems.add(position+4,"Delete Account");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("General")){
             listItems.remove("Change Email"); // done
             listItems.remove("Log Out"); // done
-            listItems.remove("Left-Handed Layout");
+            listItems.remove("Left-Handed Layout"); // done
+            listItems.remove("Delete Account");
             adapter.notifyDataSetChanged();
         } else if(clicked.equals("Help & About") && !mylist.contains("Report a Problem")){
             listItems.add(position+1,"Report a Problem"); // done
@@ -267,7 +270,32 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             }
             Log.d("RTLLL", String.valueOf(rtl));
             editor.commit();
-
+        } else if(clicked.equals("Delete Account")){
+            final Context c = Settings.this;
+            final TextView taskEditText = new TextView(c);
+            taskEditText.setText("Are you sure you want to delete your account? \nThis action is not reversible.");
+            AlertDialog dialog = new AlertDialog.Builder(c)
+                    .setTitle("Delete Account")
+                    .setView(taskEditText)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAuth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(c, "Your account has been deleted.", Toast.LENGTH_LONG).show();
+                                    editor.clear();
+                                    editor.commit();
+                                    Intent i = new Intent(c, Login.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .create();
+            dialog.show();
         }
     }
 
