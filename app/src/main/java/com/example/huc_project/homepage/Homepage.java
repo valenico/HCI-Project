@@ -230,7 +230,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 rowsArrayList.clear();
                 rowsPostList.clear();
                 recyclerViewAdapter.notifyDataSetChanged();
-                actionMenu.close(true);
+                if(actionMenu!=null) actionMenu.close(true);
                 setUpHomepage();
             }
         });
@@ -325,7 +325,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                 }
                 else {
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
-                    actionMenu.close(true);
+                    if(actionMenu!=null) actionMenu.close(true);
                 }
 
             }
