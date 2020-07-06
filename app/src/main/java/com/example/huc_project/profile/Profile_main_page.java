@@ -132,7 +132,7 @@ public class Profile_main_page extends AppCompatActivity {
                         TextView user_mail = findViewById(R.id.user_mail);
                         ImageView profile_img = findViewById(R.id.profile_image);
 
-                        RequestOptions options = new RequestOptions().error(R.drawable.add_img); //if load gets error bc image does not exist, load default image
+                        RequestOptions options = new RequestOptions().error(R.drawable.ic_user); //if load gets error bc image does not exist, load default image
                         StorageReference ref = storage.getReference().child("users/" + current_user);
                         Glide.with(Profile_main_page.this).load(ref).apply(options).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
 
@@ -276,7 +276,7 @@ public class Profile_main_page extends AppCompatActivity {
 
                         }
 
-                        if (country.length() != 0 ) {
+                        if (country!= null && country.length() != 0 ) {
                             if (city.length() == 0) user_country.setText(country);
                             else user_country.setText(country + ", " + city);
                         }

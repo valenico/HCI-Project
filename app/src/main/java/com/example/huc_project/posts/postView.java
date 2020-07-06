@@ -300,7 +300,10 @@ public class postView extends AppCompatActivity {
                     final DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         owner_name.setText((String) document.get("Name"));
-                        RequestOptions options = new RequestOptions().error(R.drawable.add_img);
+                        Drawable user_ic = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.user_default);
+                        final Drawable wrappedDrawable = DrawableCompat.wrap(user_ic);
+                        DrawableCompat.setTint(wrappedDrawable, getResources().getColor(R.color.textColor));
+                        RequestOptions options = new RequestOptions().error(wrappedDrawable);
                         StorageReference ref = storage.getReference().child("users/" + post.getUser());
                         Glide.with(postView.this).load(ref).apply(options).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(owner_img);
                     }
