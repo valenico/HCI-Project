@@ -126,11 +126,9 @@ public class Edit_profile extends AppCompatActivity {
                             }
                         });
 
-                        if (country == null) user_country.setText("Unknown");
-                        else user_country.setText(country);
+                        if (country != null) user_country.setText(country);
 
-                        if (city == null) user_city.setText("Unknown");
-                        else user_city.setText(city);
+                        if (city != null) user_city.setText(city);
 
                         Button done_button = findViewById(R.id.done_button);
                         done_button.setOnClickListener(new View.OnClickListener() {
@@ -139,8 +137,8 @@ public class Edit_profile extends AppCompatActivity {
                                 HashMap<String, String> upd = new HashMap<>();
                                 HashMap<String, Boolean> upd2 = new HashMap<>();
                                 upd.put("Name", user_name.getText().toString());
-                                if (user_country.getText().toString() != "Unknown") upd.put("Country", user_country.getText().toString());
-                                if (user_city.getText().toString() != "Unknown") upd.put("City", user_city.getText().toString());
+                                upd.put("Country", user_country.getText().toString());
+                                upd.put("City", user_city.getText().toString());
                                 upd.put("Description", user_description.getText().toString());
                                 upd2.put("Hidemail", h_mail.isChecked());
                                 db.collection("UTENTI").document(current_user).set(upd, SetOptions.merge());
@@ -156,10 +154,8 @@ public class Edit_profile extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 user_name.setText((String) document.get("Name"));
-                                if (document.get("Country") == null) user_country.setText("Unknown");
-                                else user_country.setText((String) document.get("Country"));
-                                if (document.get("City") == null) user_city.setText("Unknown");
-                                else user_city.setText((String) document.get("City"));
+                                if (document.get("Country") != null) user_country.setText((String) document.get("Country"));
+                                if (document.get("City") != null) user_city.setText((String) document.get("City"));
                                 user_description.setText((String) document.get("Description"));
                                 h_mail.setChecked(hidden_mail);
                             }

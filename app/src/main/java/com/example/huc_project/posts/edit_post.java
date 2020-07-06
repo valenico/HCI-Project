@@ -15,6 +15,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -93,8 +95,55 @@ public class edit_post extends AppCompatActivity {
                 intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
         id = intent.getStringExtra("id");
         storageref = intent.getStringExtra("storageref");
-        Button post_button = findViewById(R.id.postBtn);
+        final Button post_button = findViewById(R.id.postBtn);
         post_button.setText("Save");
+
+        ((EditText) findViewById(R.id.textDesc)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() == 0){
+                    post_button.setEnabled(false);
+                    post_button.setBackgroundResource(R.drawable.custom_button_disabled);
+                    post_button.setTextColor(getResources().getColor(R.color.colorAccent));
+                } else if( ((EditText) findViewById(R.id.textTitle)).getText().toString().length() > 0) {
+                    post_button.setEnabled(true);
+                    post_button.setBackgroundResource(R.drawable.custom_button);
+                    post_button.setTextColor(Color.WHITE);
+                }
+            }
+        });
+
+        ((EditText) findViewById(R.id.textDesc)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() == 0){
+                    post_button.setEnabled(false);
+                    post_button.setBackgroundResource(R.drawable.custom_button_disabled);
+                    post_button.setTextColor(getResources().getColor(R.color.colorAccent));
+                } else if( ((EditText) findViewById(R.id.textTitle)).getText().toString().length() > 0) {
+                    post_button.setEnabled(true);
+                    post_button.setBackgroundResource(R.drawable.custom_button);
+                    post_button.setTextColor(Color.WHITE);
+                }
+            }
+        });
+
         post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

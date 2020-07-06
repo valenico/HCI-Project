@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -16,6 +17,8 @@ import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -86,7 +89,10 @@ public class CreateNewPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_post);
         db = FirebaseFirestore.getInstance();
-        Button buttonCreateP=(Button)findViewById(R.id.postBtn);
+        final Button buttonCreateP=(Button)findViewById(R.id.postBtn);
+        buttonCreateP.setEnabled(false);
+        buttonCreateP.setBackgroundResource(R.drawable.custom_button_disabled);
+        buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
         iniPopup();
         imageView = (ImageButton) findViewById(R.id.imageBtn);
         //button = (Button)findViewById(R.id.buttonLoadPicture);
@@ -139,9 +145,6 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
         final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         final AutoCompleteTextView countryView = (AutoCompleteTextView)
@@ -151,7 +154,51 @@ public class CreateNewPostActivity extends AppCompatActivity {
         final AutoCompleteTextView cityView = (AutoCompleteTextView)
                 findViewById(R.id.cities_list);
 
+        ((EditText) findViewById(R.id.textDesc)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() == 0){
+                    buttonCreateP.setEnabled(false);
+                    buttonCreateP.setBackgroundResource(R.drawable.custom_button_disabled);
+                    buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
+                } else if( ((EditText) findViewById(R.id.textTitle)).getText().toString().length() > 0) {
+                    buttonCreateP.setEnabled(true);
+                    buttonCreateP.setBackgroundResource(R.drawable.custom_button);
+                    buttonCreateP.setTextColor(Color.WHITE);
+                }
+            }
+        });
+
+            ((EditText) findViewById(R.id.textTitle)).addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.length() == 0){
+                        buttonCreateP.setEnabled(false);
+                        buttonCreateP.setBackgroundResource(R.drawable.custom_button_disabled);
+                        buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
+                    } else if( ((EditText) findViewById(R.id.textDesc)).getText().toString().length() > 0) {
+                        buttonCreateP.setEnabled(true);
+                        buttonCreateP.setBackgroundResource(R.drawable.custom_button);
+                        buttonCreateP.setTextColor(Color.WHITE);
+                    }
+                }
+            });
 
         buttonCreateP.setOnClickListener(new View.OnClickListener() {
             @Override

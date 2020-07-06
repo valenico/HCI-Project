@@ -269,15 +269,15 @@ public class Profile_main_page extends AppCompatActivity {
                                        Intent i = new Intent(getBaseContext(), NewMessage.class);
                                        i.putExtra("to", current_user);
                                        startActivity(i);
+                                       finish();
                                    }
                                 }
                             });
 
                         }
 
-                        if (country == null) user_country.setText("Unknown");
-                        else {
-                            if (city == null) user_country.setText(country);
+                        if (country.length() != 0 ) {
+                            if (city.length() == 0) user_country.setText(country);
                             else user_country.setText(country + ", " + city);
                         }
 
@@ -427,7 +427,7 @@ public class Profile_main_page extends AppCompatActivity {
                     final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     intent.putExtra("user", current_user);
                     startActivity(intent);
-
+                    finish();
                 }
             }
         });
@@ -437,6 +437,7 @@ public class Profile_main_page extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(Profile_main_page.this, Chat.class);
                 startActivity(i);
+                finish();
             }
         });
 

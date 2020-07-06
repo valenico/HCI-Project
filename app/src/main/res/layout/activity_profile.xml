@@ -45,7 +45,6 @@
         android:layout_height="wrap_content"
         android:textColor="@color/textColor"
         android:layout_marginTop="68dp"
-        android:text="Altro"
         app:layout_constraintStart_toStartOf="@+id/user_name"
         app:layout_constraintTop_toTopOf="parent" />
 
