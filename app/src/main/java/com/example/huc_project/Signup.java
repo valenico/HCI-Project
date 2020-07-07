@@ -591,10 +591,12 @@ public class Signup extends AppCompatActivity {
             case 1:
                 i = new Intent(this , OurLogin.class);
                 startActivity(i);
+                finish();
                 break;
             case 2:
                 i = new Intent(this , Signup.class);
                 startActivity(i);
+                finish();
                 break;
             case 3:
                 complete_profile1(null);
