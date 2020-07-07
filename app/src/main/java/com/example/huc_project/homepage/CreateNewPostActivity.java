@@ -40,6 +40,7 @@ import android.widget.Toolbar;
 import com.example.huc_project.Signup;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -66,7 +67,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     private HashMap<String,Object>  interests_selected = new HashMap<>();
     boolean isTheImageUp=false;
-    Uri imageUri= Uri.parse("android.resource://com.example.project/"+R.drawable.error);
+    Uri imageUri= Uri.parse("android.resource://com.example.project/"+R.drawable.no_imag);
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Dialog popChooseCategories ;
     TextView choose;
@@ -95,13 +96,15 @@ public class CreateNewPostActivity extends AppCompatActivity {
         buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
         iniPopup();
         imageView = (ImageButton) findViewById(R.id.imageBtn);
-        //button = (Button)findViewById(R.id.buttonLoadPicture);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab_add = findViewById(R.id.fab_add);
+        View.OnClickListener add_image = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
             }
-        });
+        };
+        imageView.setOnClickListener(add_image);
+        fab_add.setOnClickListener(add_image);
 
         choose = findViewById(R.id.choose);
         categories_selected = findViewById(R.id.categories_selected);
@@ -263,7 +266,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                     riversRef = storageRef.child("images/" + stringRef);
                     Log.e("PROVOLA",  stringRef);
                     post.put("storageref", stringRef);
-                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.add_img);
+                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.no_imag);
                     uploadTask = riversRef.putFile(imageUri);
                 }
                 else {

@@ -14,14 +14,29 @@
         android:background="@color/backgroundColor"
         tools:context="com.example.huc_project.homepage.CreateNewPostActivity">
 
-        <ImageButton
-            android:id="@+id/imageBtn"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_250sdp"
-            android:adjustViewBounds="true"
-            android:background="@color/backgroundColor"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/add_img" />
+            android:layout_height="@dimen/_250sdp">
+            <ImageButton
+                android:id="@+id/imageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_250sdp"
+                android:adjustViewBounds="true"
+                android:background="@color/backgroundColor"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/no_imag"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_40sdp"
+                app:srcCompat="@drawable/add_a_photo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <EditText
             android:id="@+id/textTitle"
