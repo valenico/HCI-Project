@@ -1,8 +1,11 @@
 package com.example.huc_project.posts;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -13,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,6 +40,7 @@ import android.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
+import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostCreatedSuccessfully;
@@ -147,6 +152,7 @@ public class edit_post extends AppCompatActivity {
         post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final Map<String, Object> post = new HashMap<>();
                 EditText text = (EditText) findViewById(R.id.textDesc);
                 EditText texttitle = (EditText) findViewById(R.id.textTitle);
@@ -307,22 +313,35 @@ public class edit_post extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancel.setEnabled(false);
-                db.collection("posts").document(id).delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(edit_post.this, "Post deleted succesfully.", Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(edit_post.this, Homepage.class);
-                                startActivity(i);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(edit_post.this, "Post couldn't be deleted, try later.", Toast.LENGTH_LONG).show();
-                        cancel.setEnabled(true);
-                    }
-                });
+                Drawable alert = AppCompatResources.getDrawable(getApplicationContext(), android.R.drawable.ic_dialog_alert);
+                final Drawable wrappedDrawable = DrawableCompat.wrap(alert);
+                DrawableCompat.setTint(wrappedDrawable, Color.RED);
+                new AlertDialog.Builder(edit_post.this)
+                        .setTitle("Delete post")
+                        .setMessage("Do you really want to delete this post?")
+                        .setIcon(wrappedDrawable)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                cancel.setEnabled(false);
+                                db.collection("posts").document(id).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(edit_post.this, "Post deleted succesfully.", Toast.LENGTH_LONG).show();
+                                                Intent i = new Intent(edit_post.this, Homepage.class);
+                                                startActivity(i);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(edit_post.this, "Post couldn't be deleted, try later.", Toast.LENGTH_LONG).show();
+                                        cancel.setEnabled(true);
+                                    }
+                                });
+                            }})
+                        .setNegativeButton("No", null).show();
+
             }
         });
         lay.addView(cancel);

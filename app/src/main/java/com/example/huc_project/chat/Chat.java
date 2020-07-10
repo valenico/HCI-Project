@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.profile.Profile_main_page;
@@ -125,7 +126,8 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
     }
 
     public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){
-        glide.load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(view);
+        RequestOptions options = new RequestOptions().error(R.drawable.user);
+        glide.load(ref).apply(options).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(view);
     }
 
     private void initScrollListener() {

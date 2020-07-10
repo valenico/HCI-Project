@@ -346,6 +346,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         packagefilterswitch=(Switch) findViewById(R.id.switchpackagefilter);
 
         TextView remove_filters = findViewById(R.id.remove_filters);
+        remove_filters.setTextColor(Color.RED);
         remove_filters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

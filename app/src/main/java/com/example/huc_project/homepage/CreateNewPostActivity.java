@@ -1,5 +1,6 @@
 package com.example.huc_project.homepage;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -91,7 +92,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_post);
         db = FirebaseFirestore.getInstance();
         final Button buttonCreateP=(Button)findViewById(R.id.postBtn);
-        buttonCreateP.setEnabled(false);
+        buttonCreateP.setActivated(false);
         buttonCreateP.setBackgroundResource(R.drawable.custom_button_disabled);
         buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
         iniPopup();
@@ -169,11 +170,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() == 0){
-                    buttonCreateP.setEnabled(false);
+                    buttonCreateP.setActivated(false);
                     buttonCreateP.setBackgroundResource(R.drawable.custom_button_disabled);
                     buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
                 } else if( ((EditText) findViewById(R.id.textTitle)).getText().toString().length() > 0) {
-                    buttonCreateP.setEnabled(true);
+                    buttonCreateP.setActivated(true);
                     buttonCreateP.setBackgroundResource(R.drawable.custom_button);
                     buttonCreateP.setTextColor(Color.WHITE);
                 }
@@ -192,11 +193,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if(s.length() == 0){
-                        buttonCreateP.setEnabled(false);
+                        buttonCreateP.setActivated(false);
                         buttonCreateP.setBackgroundResource(R.drawable.custom_button_disabled);
                         buttonCreateP.setTextColor(getResources().getColor(R.color.colorAccent));
                     } else if( ((EditText) findViewById(R.id.textDesc)).getText().toString().length() > 0) {
-                        buttonCreateP.setEnabled(true);
+                        buttonCreateP.setActivated(true);
                         buttonCreateP.setBackgroundResource(R.drawable.custom_button);
                         buttonCreateP.setTextColor(Color.WHITE);
                     }
@@ -206,6 +207,11 @@ public class CreateNewPostActivity extends AppCompatActivity {
         buttonCreateP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!buttonCreateP.isActivated()){
+                    Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 final Map<String, Object> post = new HashMap<>();
                 EditText text = (EditText) findViewById(R.id.textDesc);
                 EditText texttitle = (EditText) findViewById(R.id.textTitle);
