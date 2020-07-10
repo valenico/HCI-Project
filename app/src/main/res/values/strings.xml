@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HCI-Project</string>
+    <string name="app_name">SponsorBoard</string>
     <string name="pattern">-__-</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>

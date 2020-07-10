@@ -3,7 +3,9 @@ package com.example.huc_project.settings;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +15,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -30,8 +34,10 @@ import android.widget.Toast;
 import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.Homepage;
+import com.example.huc_project.posts.edit_post;
 import com.facebook.login.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -271,31 +277,29 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
             Log.d("RTLLL", String.valueOf(rtl));
             editor.commit();
         } else if(clicked.equals("Delete Account")){
-            final Context c = Settings.this;
-            final TextView taskEditText = new TextView(c);
-            taskEditText.setText("Are you sure you want to delete your account? \nThis action is not reversible.");
-            AlertDialog dialog = new AlertDialog.Builder(c)
-                    .setTitle("Delete Account")
-                    .setView(taskEditText)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+            Drawable alert = AppCompatResources.getDrawable(getApplicationContext(), android.R.drawable.ic_dialog_alert);
+            final Drawable wrappedDrawable = DrawableCompat.wrap(alert);
+            DrawableCompat.setTint(wrappedDrawable, Color.RED);
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Delete account")
+                    .setMessage("Do you really want to delete your account?")
+                    .setIcon(wrappedDrawable)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
                             mAuth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(c, "Your account has been deleted.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Settings.this, "Your account has been deleted.", Toast.LENGTH_LONG).show();
                                     editor.clear();
                                     editor.commit();
-                                    Intent i = new Intent(c, Login.class);
+                                    Intent i = new Intent(Settings.this, Login.class);
                                     startActivity(i);
                                     finish();
                                 }
                             });
-                        }
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .create();
-            dialog.show();
+                        }})
+                    .setNegativeButton("Cancel", null).show();
         }
     }
 

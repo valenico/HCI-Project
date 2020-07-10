@@ -281,7 +281,7 @@ public class Profile_main_page extends AppCompatActivity {
                             else user_country.setText(country + ", " + city);
                         }
 
-                        if (hidden_mail.equals(true)) user_mail.setText("Hidden");
+                        if (hidden_mail.equals(true)) user_mail.setText("");
                         else if(mail.length() > 18  && !guest_user){
                             user_mail.setText( mail.substring(0 , mail.indexOf('@') ) + '\n' + mail.substring(mail.indexOf('@')) );
                         } else if (!guest_user) user_mail.setText(mail);
