@@ -77,7 +77,7 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
                                 }
 
                                 PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_post_frag.this));
-                                rowsPostList.add(post_row);
+                                if(!post_row.getPost().getIsPackage()) rowsPostList.add(post_row);
                                 idDocs.add(document.getId());
                             }
                             populateData();
