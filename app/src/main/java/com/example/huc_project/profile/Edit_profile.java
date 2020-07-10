@@ -59,6 +59,7 @@ public class Edit_profile extends AppCompatActivity {
     private Uri profile_pic_uri;
     final int PICK_IMAGE_GALLERY = 100;
     final int MY_NEW_CODE = 110;
+    String current_user;
 
     TabLayout tabLayout;
 
@@ -70,7 +71,7 @@ public class Edit_profile extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         final Boolean guest_user;
-        final String current_user = Profile_main_page.getCurrent_user();
+        current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (current_user != null) guest_user = false;
@@ -146,6 +147,7 @@ public class Edit_profile extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
                                 intent.putExtra("user", current_user);
                                 startActivity(intent);
+                                finish();
                             }
                         });
 
@@ -158,6 +160,10 @@ public class Edit_profile extends AppCompatActivity {
                                 if (document.get("City") != null) user_city.setText((String) document.get("City"));
                                 user_description.setText((String) document.get("Description"));
                                 h_mail.setChecked(hidden_mail);
+                                Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                                intent.putExtra("user", current_user);
+                                startActivity(intent);
+                                finish();
                             }
                         });
 
@@ -297,6 +303,14 @@ public class Edit_profile extends AppCompatActivity {
     public void manage_socials(View view) {
         Intent intent = new Intent(this, RemoveSocialAccount.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+        intent.putExtra("user",current_user);
+        startActivity(intent);
+        finish();
     }
 }
 
