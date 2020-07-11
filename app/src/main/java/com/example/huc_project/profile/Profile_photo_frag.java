@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -99,6 +100,11 @@ public class Profile_photo_frag extends Fragment {
         setUpGridView();
 
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if(isVisibleToUser) setUpGridView();
     }
 
     public void setUpGridView(){
@@ -182,7 +188,13 @@ public class Profile_photo_frag extends Fragment {
                         });
                     }
                     else {
-                        view.findViewById(R.id.no_image).setVisibility(View.VISIBLE);
+                        TextView no_im = view.findViewById(R.id.no_image);
+                        if(current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                            no_im.setText("No image uploaded, press the top-right button to edit your profile and upload your first photo!");
+                        } else {
+                            no_im.setText("The user did not upload any photo yet!");
+                        }
+                        no_im.setVisibility(View.VISIBLE);
                         view.findViewById(R.id.swipeContainerPhotos).setVisibility(View.INVISIBLE);
                     }
 
