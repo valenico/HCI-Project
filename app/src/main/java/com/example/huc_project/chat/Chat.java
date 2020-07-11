@@ -118,11 +118,28 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
 
     private void setUpRecyclerView() {
         recyclerView = findViewById(R.id.recyclerViewChat);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsChatList, this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        if(rowsChatList.size() > 0){
+            recyclerView.setVisibility(View.VISIBLE);
+            findViewById(R.id.messtext).setVisibility(View.VISIBLE);
+            findViewById(R.id.textView1).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textView2).setVisibility(View.INVISIBLE);
+            findViewById(R.id.arrowLeft).setVisibility(View.INVISIBLE);
+            findViewById(R.id.arrowRight).setVisibility(View.INVISIBLE);
+            recyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            recyclerViewAdapter = new RecyclerViewAdapter(rowsChatList, this);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(recyclerViewAdapter);
+        }
+        else{
+            recyclerView.setVisibility(View.INVISIBLE);
+            findViewById(R.id.messtext).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textView1).setVisibility(View.VISIBLE);
+            findViewById(R.id.textView2).setVisibility(View.VISIBLE);
+            if(rtl==6) findViewById(R.id.arrowRight).setVisibility(View.VISIBLE);
+            else findViewById(R.id.arrowLeft).setVisibility(View.VISIBLE);
+        }
+
     }
 
     public static void glideTask(RequestManager glide, StorageReference ref, ImageView view){

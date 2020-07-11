@@ -763,10 +763,11 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
             profButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    actionMenu.close(true);
                     Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
                     final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     intent.putExtra("user", current_user);
-                    actionMenu.close(true);
+
                     startActivity(intent);
                 }
             });

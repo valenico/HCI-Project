@@ -217,7 +217,7 @@
             android:layout_marginBottom="@dimen/_20sdp"
             android:textColor="@color/textColor"
             android:buttonTint="@color/textColor"
-            android:text="I want a standard package" />
+            android:text="Sponsor package" />
 
 
 
