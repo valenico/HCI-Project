@@ -68,7 +68,7 @@ public class Profile_prof_frag extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document != null) {
+                    if (document != null && getView()!=null) {
                         String name = (String) document.get("Name");
                         String description = (String) document.get("Description");
                         TextView descrizione = getView().findViewById(R.id.description);
@@ -106,9 +106,11 @@ public class Profile_prof_frag extends Fragment {
                                 rowsSocialList.add(social_row);
                                 }
                             }
-                        populateData();
-                        setUpRecyclerView();
-                        initScrollListener();
+                        if(getView()!=null) {
+                            populateData();
+                            setUpRecyclerView();
+                            initScrollListener();
+                        }
                     }
                 }
         );

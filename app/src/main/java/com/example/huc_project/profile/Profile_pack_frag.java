@@ -17,15 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
-import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
 import com.example.huc_project.homepage.PostRow;
 import com.example.huc_project.homepage.RecyclerViewAdapter;
 import com.example.huc_project.posts.postView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,7 +46,6 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    boolean guest_mode = false;
     boolean isLoading = false;
 
     @Override
@@ -58,7 +54,6 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
 
         rowsArrayList.clear();
         rowPostList.clear();
-
         final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -84,9 +79,11 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
                                 rowPostList.add(post_row);
                                 idDocs.add(document.getId());
                             }
-                            populateData();
-                            setUpRecyclerView();
-                            initScrollListener();
+                            if(getView()!=null){
+                                populateData();
+                                setUpRecyclerView();
+                                initScrollListener();}
+
 
                         } else {
                             Log.w("Tag", "Error getting documents.", task.getException());
@@ -111,11 +108,19 @@ public class Profile_pack_frag extends Fragment implements RecyclerViewAdapter.O
 
     private void setUpRecyclerView() {
         recyclerView = getView().findViewById(R.id.recycleView);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        if(rowPostList.size()>0) {
+            getView().findViewById(R.id.no_packs).setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(recyclerViewAdapter);
+        }
+        else{
+            getView().findViewById(R.id.no_packs).setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void initScrollListener() {

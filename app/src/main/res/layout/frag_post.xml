@@ -8,6 +8,21 @@
     android:background="@color/backgroundColor"
     tools:context="profile.Profile_pack_frag">
 
+        <TextView
+            android:id="@+id/no_posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_70sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/_18sdp"
+            android:layout_marginEnd="@dimen/_18sdp"
+            android:textSize="@dimen/_18sdp"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            android:text="There is no advertisement available here."
+            android:gravity="center_horizontal" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recView"
             android:layout_width="match_parent"

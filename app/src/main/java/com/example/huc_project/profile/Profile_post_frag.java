@@ -80,9 +80,11 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
                                 if(!post_row.getPost().getIsPackage()) rowsPostList.add(post_row);
                                 idDocs.add(document.getId());
                             }
-                            populateData();
-                            setUpRecyclerView();
-                            initScrollListener();
+                            if(getView()!=null){
+                                populateData();
+                                setUpRecyclerView();
+                                initScrollListener();
+                            }
 
                         } else {
                             Log.w("Tag", "Error getting documents.", task.getException());
@@ -107,11 +109,19 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
 
     private void setUpRecyclerView() {
         recyclerView = getView().findViewById(R.id.recView);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        if(rowsArrayList.size()>0) {
+            getView().findViewById(R.id.no_posts).setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            recyclerViewAdapter = new RecyclerViewAdapter(rowsArrayList, this);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(recyclerViewAdapter);
+        }else{
+            getView().findViewById(R.id.no_posts).setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+
+        }
     }
 
     private void initScrollListener() {

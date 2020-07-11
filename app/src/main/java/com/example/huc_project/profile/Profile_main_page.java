@@ -141,6 +141,8 @@ public class Profile_main_page extends AppCompatActivity {
                         final ImageButton edit_profile = findViewById(R.id.edit_profile);
                         ImageButton favorite = findViewById(R.id.favorites);
 
+                        TextView ni = findViewById(R.id.no_image);
+
                         if (current_user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                             edit_profile.setImageResource(R.drawable.ic_pencil);
                             edit_profile.setOnClickListener(new View.OnClickListener() {
@@ -160,8 +162,10 @@ public class Profile_main_page extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             });
+                            ni.setText("No image uploaded, press the top-right button to edit your profile and upload your first photo!");
                         }
                         else {
+                            ni.setText("The user did not upload any photo yet!");
                             Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_heart);
                             final Drawable wrappedDrawable = DrawableCompat.wrap(like);
                             DrawableCompat.setTint(wrappedDrawable, Color.rgb(3,98,86));

@@ -9,11 +9,26 @@
     android:background="@color/backgroundColor"
     tools:context=".profile.Profile_photo_frag">
 
+    <TextView
+        android:id="@+id/no_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_70sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/_18sdp"
+        android:layout_marginEnd="@dimen/_18sdp"
+        android:textSize="@dimen/_18sdp"
+        android:textAlignment="center"
+        android:textColor="@color/textColor"
+        android:text=""
+        android:gravity="center_horizontal" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainerPhotos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="invisible">
 
         <GridView
             android:id="@+id/gridView"
@@ -28,6 +43,8 @@
             android:verticalSpacing="@dimen/_2sdp"
             >
         </GridView>
+
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
