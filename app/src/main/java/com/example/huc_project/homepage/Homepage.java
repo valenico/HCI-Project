@@ -289,6 +289,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
         MenuItem searchItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search...");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -298,6 +299,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(recyclerViewAdapter==null) return false;
                 filterArray[0]=newText;
                 totalFilter="";
                 for(String w : filterArray){

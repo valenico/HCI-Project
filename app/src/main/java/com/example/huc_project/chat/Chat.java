@@ -170,6 +170,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
 
         MenuItem searchItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search...");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -179,6 +180,7 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(recyclerViewAdapter==null) return false;
                 recyclerViewAdapter.getFilter().filter(newText);
                 return false;
             }
