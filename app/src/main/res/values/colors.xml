@@ -10,4 +10,7 @@
     <color name="hint_color">#BBBBBB</color>
     <color name="black_overlay">#66000000</color>
     <color name="post_fields">#D8EFEF</color>
+    <color name="color_button1">#2Af598</color>
+    <color name="color_button2">#009EFD</color>
+    <color name="appcolor">#023e8a</color>
 </resources>

@@ -316,7 +316,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         ImageButton slidebutton = (ImageButton) sliding.getActionView();
         slidebutton.setBackgroundDrawable(null);
         slidebutton.setImageDrawable(myDrawable);
-        slidebutton.setColorFilter( Color.parseColor("#000000"));
+        //slidebutton.setColorFilter( Color.parseColor("#000000"));
         slidebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // your handler code here
