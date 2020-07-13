@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.annotation.SuppressLint;
@@ -40,10 +39,8 @@ import android.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
-import com.example.huc_project.homepage.CreateNewPostActivity;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
-import com.example.huc_project.homepage.PostCreatedSuccessfully;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

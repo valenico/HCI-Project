@@ -104,23 +104,38 @@
         app:layout_constraintTop_toBottomOf="@+id/password"
         android:layout_marginStart="@dimen/_25sdp" />
 
-    <TextView
-        android:id="@+id/textView"
+    <ImageView
+        android:id="@+id/applogo"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_120sdp"
+        android:src="@drawable/logo"
         android:textColor="@color/textColor"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_38sdp"
-        android:layout_marginStart="@dimen/_110sdp"
-        android:layout_marginLeft="@dimen/_110sdp"
-        android:layout_marginTop="@dimen/_100sdp"
-        android:layout_marginEnd="@dimen/_110sdp"
-        android:layout_marginRight="@dimen/_110sdp"
-        android:text="@string/login"
-        android:textSize="@dimen/_23sdp"
+        android:layout_margin="@dimen/_40sdp"
         app:layout_constraintBottom_toTopOf="@id/username"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/anchor"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_100sdp"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_20sdp"
+        android:text="SponsorBoard"
+        android:layout_margin="@dimen/_40sdp"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        app:layout_constraintTop_toBottomOf="@id/anchor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/username"
@@ -128,7 +143,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_18sdp"
         android:layout_marginLeft="@dimen/_18sdp"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:textColor="@color/textColor"
         android:layout_marginEnd="@dimen/_18sdp"
         android:layout_marginRight="@dimen/_18sdp"
@@ -140,7 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/app_name" />
 
     <EditText
         android:id="@+id/password"

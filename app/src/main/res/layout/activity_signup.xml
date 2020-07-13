@@ -7,6 +7,39 @@
     tools:context=".Signup"
     android:background="@color/backgroundColor">
 
+    <ImageView
+        android:id="@+id/applogo"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_120sdp"
+        android:src="@drawable/logo"
+        android:textColor="@color/textColor"
+        android:layout_margin="@dimen/_40sdp"
+        app:layout_constraintBottom_toTopOf="@id/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/anchor"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_100sdp"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_20sdp"
+        android:text="SponsorBoard"
+        android:layout_margin="@dimen/_40sdp"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        app:layout_constraintTop_toBottomOf="@id/anchor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <Button
         android:id="@+id/signup"
         android:layout_width="@dimen/_170sdp"
@@ -130,7 +163,7 @@
         android:layout_marginLeft="@dimen/_38sdp"
         android:layout_marginRight="@dimen/_38sdp"
         android:layout_marginStart="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_120sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:hint="E-mail*"
         android:textColorHint="@color/hint_color"
         android:textColor="@color/textColor"
@@ -139,7 +172,7 @@
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/applogo"/>
 
     <ImageView
         android:id="@+id/show_password"
