@@ -7,9 +7,37 @@
     android:layout_height="match_parent"
     tools:context=".settings.Settings">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        app:titleTextColor="@android:color/white"
+        android:background="?attr/colorPrimary"
+        android:layout_gravity="left"
+        app:collapseIcon="@drawable/white_back"
+        >
+        <ImageView
+            android:id="@+id/yourlogo"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"
+            android:padding="8dp"
+            android:layout_gravity="left"/>
+        <TextView
+            android:id="@+id/appName"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="SponsorBoard"
+            android:textColor="@color/titlecolor" />
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:id="@+id/list_of_settings"
         android:background="@color/backgroundColor"
         android:layout_marginBottom="@dimen/_1sdp"
@@ -18,10 +46,8 @@
         android:layout_marginLeft="@dimen/_1sdp"
         android:layout_marginRight="@dimen/_1sdp"
         android:layout_marginStart="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
