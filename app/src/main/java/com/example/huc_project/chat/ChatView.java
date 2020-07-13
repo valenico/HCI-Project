@@ -1,7 +1,9 @@
 package com.example.huc_project.chat;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,6 +61,9 @@ public class ChatView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_view);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
         Intent this_intent = getIntent();
         Bundle b = this_intent.getExtras();
@@ -89,7 +94,7 @@ public class ChatView extends AppCompatActivity {
                         String name = document.get("Name").toString();
                         StorageReference ref = storage.getReference().child("users/" + usr_uid);
                         Glide.with(ChatView.this).load(ref).into(img_view);
-                        getSupportActionBar().setTitle(name);
+                        toolbar.setTitle(name);
                     }
                 }
             }
@@ -133,10 +138,10 @@ public class ChatView extends AppCompatActivity {
 
         MenuItem avatar_item = menu.findItem(R.id.avatar);
         CardView card_view = (CardView) avatar_item.getActionView();
-        int h = getSupportActionBar().getHeight() - 15;
-        card_view.setLayoutParams(new ImageSwitcher.LayoutParams( h , h));
-        card_view.setRadius(h);
-        card_view.addView(img_view, 0 ,new ImageSwitcher.LayoutParams( ImageSwitcher.LayoutParams.MATCH_PARENT , ImageSwitcher.LayoutParams.MATCH_PARENT ));
+        int margin = getResources().getDimensionPixelSize(R.dimen._43sdp);
+        card_view.setLayoutParams(new ImageSwitcher.LayoutParams( margin , margin));
+        card_view.setRadius(margin);
+        card_view.addView(img_view, 0 ,new ImageSwitcher.LayoutParams( margin , margin));
         img_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         img_view.setOnClickListener(new ImageView.OnClickListener() {
             @Override
