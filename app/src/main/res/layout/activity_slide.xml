@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/textColor"
                     android:text="Filter By:"
-                    android:layout_marginTop="@dimen/_80sdp"
+                    android:layout_marginTop="@dimen/_50sdp"
                     android:textSize="25sp" />
 
                 <AutoCompleteTextView
