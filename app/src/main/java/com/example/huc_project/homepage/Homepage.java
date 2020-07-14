@@ -64,6 +64,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.OnItemListener{
@@ -124,6 +125,18 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
+        View.OnClickListener back_to_hp = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Homepage.this,Homepage.class);
+                startActivity(i);
+                finish();
+            }
+        };
+
+        findViewById(R.id.yourlogo).setOnClickListener(back_to_hp);
+        findViewById(R.id.appName).setOnClickListener(back_to_hp);
+
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         editor = pref.edit();
         rtl = pref.getInt("rtl", 4);
@@ -165,6 +178,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                                 rowsPostList.add(post_row);
                                 postDoc.add(document.getId());
                             }
+                            Collections.reverse(rowsPostList);
                             populateData();
                             setUp();
 

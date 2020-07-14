@@ -20,8 +20,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +67,22 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         setContentView(R.layout.activity_chat);
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         rtl = pref.getInt("rtl", 4);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        View.OnClickListener back_to_hp = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Chat.this,Homepage.class);
+                startActivity(i);
+                finish();
+            }
+        };
+
+        findViewById(R.id.yourlogo).setOnClickListener(back_to_hp);
+        findViewById(R.id.appName).setOnClickListener(back_to_hp);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         if(rtl==6){
@@ -280,6 +298,9 @@ public class Chat extends AppCompatActivity implements com.example.huc_project.c
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Chat.class);
+                startActivity(i);
+                finish();
             }
         });
 

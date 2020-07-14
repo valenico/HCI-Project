@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Scroller;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.huc_project.OurLogin;
 import com.example.huc_project.R;
+import com.example.huc_project.chat.Chat;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.posts.edit_post;
 import com.facebook.login.Login;
@@ -72,6 +74,18 @@ public class Settings extends AppCompatActivity implements CustomAdapter.OnItemL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        View.OnClickListener back_to_hp = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Settings.this,Homepage.class);
+                startActivity(i);
+                finish();
+            }
+        };
+
+        findViewById(R.id.yourlogo).setOnClickListener(back_to_hp);
+        findViewById(R.id.appName).setOnClickListener(back_to_hp);
 
         listItems.add("Invite Friends");
         listItems.add("General");

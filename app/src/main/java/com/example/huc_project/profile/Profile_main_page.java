@@ -28,6 +28,7 @@ import com.example.huc_project.chat.ChatView;
 import com.example.huc_project.chat.Conversation;
 import com.example.huc_project.chat.NewMessage;
 import com.example.huc_project.homepage.CreateNewPostActivity;
+import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.RecyclerViewAdapter;
 import com.example.huc_project.settings.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -86,6 +87,18 @@ public class Profile_main_page extends AppCompatActivity {
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        View.OnClickListener back_to_hp = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Profile_main_page.this, Homepage.class);
+                startActivity(i);
+                finish();
+            }
+        };
+
+        findViewById(R.id.yourlogo).setOnClickListener(back_to_hp);
+        findViewById(R.id.appName).setOnClickListener(back_to_hp);
 
 
         Intent intent = getIntent();
@@ -433,14 +446,16 @@ public class Profile_main_page extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
                 if (current_user.equals(mAuth.getCurrentUser().getUid())) {
-                    Toast.makeText(Profile_main_page.this, "Stai già sul tuo profilo fattone di merda!", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(Profile_main_page.this, "Stai già sul tuo profilo fattone di merda!", Toast.LENGTH_LONG).show();
+                    intent.putExtra("user" , mAuth.getCurrentUser().getUid());
+
                 }
                 else {
                     final String current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     intent.putExtra("user", current_user);
-                    startActivity(intent);
-                    finish();
                 }
+                startActivity(intent);
+                finish();
             }
         });
 
