@@ -62,6 +62,21 @@ public class InputValidator extends Activity implements TextWatcher {
                     }
                 }
                 break;
+                case R.id.textTitle: {
+                    if (s.length() <= 0 ) {
+                        et.setError("Title cannot be empty.");
+                    }
+                }
+                break;
+                case R.id.textDesc: {
+                    if (s.length() <= 0) {
+                        et.setError("Description cannot be empty");
+                    }
+                }
+                break;
+
+
+
                 default:
                     break;
 
@@ -91,7 +106,7 @@ class EmptyTextListener implements TextView.OnEditorActionListener {
             // Called when user press Next button on the soft keyboard
 
             if (et.getText().toString().equals(""))
-                et.setError("Oops! empty.");
+                et.setError("Cannot be empty");
         }
         return false;
     }

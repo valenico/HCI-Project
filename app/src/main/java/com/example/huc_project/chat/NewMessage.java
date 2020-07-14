@@ -238,7 +238,9 @@ public class NewMessage extends AppCompatActivity {
         profButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Profile_main_page.class);
+                Intent intent = new Intent(NewMessage.this, Profile_main_page.class);
+                Log.e("BELL", usr.toString());
+                intent.putExtra("user", usr.getUid().toString());
                 startActivity(intent);
             }
         });

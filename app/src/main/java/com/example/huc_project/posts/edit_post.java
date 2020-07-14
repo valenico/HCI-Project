@@ -86,6 +86,9 @@ public class edit_post extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+    TextView textDesc;
+    TextView textTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +103,10 @@ public class edit_post extends AppCompatActivity {
         final Button post_button = findViewById(R.id.postBtn);
         post_button.setText("Save");
 
-        ((EditText) findViewById(R.id.textDesc)).addTextChangedListener(new TextWatcher() {
+        textDesc = findViewById(R.id.textDesc);
+        textTitle = findViewById(R.id.textTitle);
+
+        textDesc.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -112,18 +118,18 @@ public class edit_post extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() == 0){
-                    post_button.setEnabled(false);
+                    post_button.setActivated(false);
                     post_button.setBackgroundResource(R.drawable.custom_button_disabled);
                     post_button.setTextColor(getResources().getColor(R.color.colorAccent));
                 } else if( ((EditText) findViewById(R.id.textTitle)).getText().toString().length() > 0) {
-                    post_button.setEnabled(true);
+                    post_button.setActivated(true);
                     post_button.setBackgroundResource(R.drawable.custom_button);
                     post_button.setTextColor(Color.WHITE);
                 }
             }
         });
 
-        ((EditText) findViewById(R.id.textDesc)).addTextChangedListener(new TextWatcher() {
+        textTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -135,11 +141,11 @@ public class edit_post extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() == 0){
-                    post_button.setEnabled(false);
+                    post_button.setActivated(false);
                     post_button.setBackgroundResource(R.drawable.custom_button_disabled);
                     post_button.setTextColor(getResources().getColor(R.color.colorAccent));
                 } else if( ((EditText) findViewById(R.id.textTitle)).getText().toString().length() > 0) {
-                    post_button.setEnabled(true);
+                    post_button.setActivated(true);
                     post_button.setBackgroundResource(R.drawable.custom_button);
                     post_button.setTextColor(Color.WHITE);
                 }
@@ -149,6 +155,13 @@ public class edit_post extends AppCompatActivity {
         post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!post_button.isActivated()){
+                    if(textTitle.getText().toString().trim().length() <= 0) textTitle.setError("Title cannot be empty");
+                    if(textDesc.getText().toString().trim().length() <= 0) textDesc.setError("Description cannot be empty.");
+                    //Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 final Map<String, Object> post = new HashMap<>();
                 EditText text = (EditText) findViewById(R.id.textDesc);

@@ -1,6 +1,5 @@
 package com.example.huc_project.homepage;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -30,7 +29,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.example.huc_project.Signup;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -84,6 +81,8 @@ public class CreateNewPostActivity extends AppCompatActivity {
     CustomCheckbox moviesCheck;
     CustomCheckbox foodCheck;
     CustomCheckbox natureCheck;
+    TextView textDesc;
+    TextView textTitle;
 
 
         @Override
@@ -158,7 +157,10 @@ public class CreateNewPostActivity extends AppCompatActivity {
         final AutoCompleteTextView cityView = (AutoCompleteTextView)
                 findViewById(R.id.cities_list);
 
-        ((EditText) findViewById(R.id.textDesc)).addTextChangedListener(new TextWatcher() {
+        textDesc = findViewById(R.id.textDesc);
+        textTitle = findViewById(R.id.textTitle);
+
+        textDesc.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -181,7 +183,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
             }
         });
 
-            ((EditText) findViewById(R.id.textTitle)).addTextChangedListener(new TextWatcher() {
+            textTitle.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -208,7 +210,9 @@ public class CreateNewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!buttonCreateP.isActivated()){
-                    Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
+                    if(textTitle.getText().toString().trim().length() <= 0) textTitle.setError("Title cannot be empty");
+                    if(textDesc.getText().toString().trim().length() <= 0) textDesc.setError("Description cannot be empty.");
+                    //Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
                     return;
                 }
 
