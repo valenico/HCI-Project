@@ -41,10 +41,14 @@ import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.homepage.Post;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -64,6 +68,8 @@ public class edit_post extends AppCompatActivity {
     TextView title_view;
     TextView desc_view;
     String id;
+    String titleForUpdate;
+    String descForUpdate;
     Dialog popChooseCategories ;
     TextView categories_selected;
     private HashMap<String,Object> interests_selected = new HashMap<>();
@@ -99,7 +105,11 @@ public class edit_post extends AppCompatActivity {
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
                 intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
+                Log.e("POSTEDIT", intent.getStringExtra("title"));
         id = intent.getStringExtra("id");
+        titleForUpdate=intent.getStringExtra("title");
+        descForUpdate=intent.getStringExtra("desc");
+        Log.e("POSTEDIT", id);
         storageref = intent.getStringExtra("storageref");
         final Button post_button = findViewById(R.id.postBtn);
         post_button.setText("Save");
@@ -168,7 +178,7 @@ public class edit_post extends AppCompatActivity {
                 EditText text = (EditText) findViewById(R.id.textDesc);
                 EditText texttitle = (EditText) findViewById(R.id.textTitle);
                 String postDescription = text.getText().toString();
-                String postTitle = texttitle.getText().toString();
+                final String postTitle = texttitle.getText().toString();
                 String country= ((AutoCompleteTextView) findViewById(R.id.countries_list)).getText().toString();
                 String city = ((AutoCompleteTextView) findViewById(R.id.cities_list)).getText().toString();
                 Bitmap bitmap = ((BitmapDrawable)post_image_view.getDrawable()).getBitmap();
@@ -227,12 +237,42 @@ public class edit_post extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Add a new document with a generated ID
-                            db.collection("posts").document(id).set(post);
+                            db.collection("posts").whereEqualTo("title", titleForUpdate).whereEqualTo("postdesc", descForUpdate).whereEqualTo("user", mAuth.getUid())
+                            .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    Log.e("IL VERO ID DEL POST", document.getId() + " => " + document.getData());
+                                                    id=document.getId();
+                                                    db.collection("posts").document(id).set(post);
+                                                }
+                                            } else {
+                                                Log.d("taggy", "Error getting documents: ", task.getException());
+                                            }
+                                        }
+                                    });
                         }
                     });
                 } else {
                     post.put("storageref", storageref);
-                    db.collection("posts").document(id).set(post);
+                    db.collection("posts").whereEqualTo("title", titleForUpdate).whereEqualTo("postdesc", descForUpdate).whereEqualTo("user", mAuth.getUid())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.e("IL VERO ID DEL POST", document.getId() + " => " + document.getData());
+                                            id=document.getId();
+                                            db.collection("posts").document(id).set(post);
+                                        }
+                                    } else {
+                                        Log.d("taggy", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
                 }
                 //Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
                 Toast.makeText(getApplicationContext(), "Post modified successfully.", Toast.LENGTH_LONG).show();
