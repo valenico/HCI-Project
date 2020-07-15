@@ -3,8 +3,6 @@ package com.example.huc_project.homepage;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,7 +19,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -359,20 +356,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
         popChooseCategories.getWindow().getAttributes().gravity = Gravity.TOP;
 
 
-        popChooseCategories.setOnKeyListener(new Dialog.OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    //doNothing
-                }
-                return true;
-            }});
-
         final Button ok_categories = popChooseCategories.findViewById(R.id.ok_categories);
-        final Context c = this.getBaseContext();
-
-
 
 
         CompoundButton.OnCheckedChangeListener checker = new CompoundButton.OnCheckedChangeListener() {

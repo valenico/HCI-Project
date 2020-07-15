@@ -70,6 +70,7 @@ public class edit_post extends AppCompatActivity {
     private String[] Text = {"Sport", "Fashion", "Food", "Movies", "Music", "Science & IT", "Nature" };
 
     LinearLayout categoriesCardLayout;
+    TextView choose;
     final int maxChecked = 3;
     int countChecked = 0;
     boolean isTheImageUp = false;
@@ -295,16 +296,24 @@ public class edit_post extends AppCompatActivity {
             interests_selected.put(categories.get(u),true);
             Log.d("CAT", categories.get(u));
         }
+
+        categoriesCardLayout = (LinearLayout) findViewById(R.id.categories_wrapper);
         iniPopup();
         categories_selected = findViewById(R.id.categories_selected);
-        TextView choose = findViewById(R.id.choose);
-        choose.setOnClickListener(new View.OnClickListener() {
+        choose = findViewById(R.id.choose);
+        categories_selected = findViewById(R.id.categories_selected);
+        categoriesCardLayout = (LinearLayout) findViewById(R.id.categories_wrapper);
+
+        View.OnClickListener openCategories = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkBoxes();
                 popChooseCategories.show();
             }
-        });
-        setCategories();
+        };
+        choose.setOnClickListener(openCategories);
+        findViewById(R.id.add_category1).setOnClickListener(openCategories);
+        findViewById(R.id.add_category2).setOnClickListener(openCategories);;
 
         LinearLayout lay = findViewById(R.id.layout_post);
         final Button cancel = new Button(this);
@@ -398,17 +407,6 @@ public class edit_post extends AppCompatActivity {
         popChooseCategories.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT);
         popChooseCategories.getWindow().getAttributes().gravity = Gravity.TOP;
 
-
-        popChooseCategories.setOnKeyListener(new Dialog.OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    //doNothing
-                }
-                return true;
-            }});
-
         final Button ok_categories = popChooseCategories.findViewById(R.id.ok_categories);
 
         CompoundButton.OnCheckedChangeListener checker = new CompoundButton.OnCheckedChangeListener() {
@@ -499,31 +497,13 @@ public class edit_post extends AppCompatActivity {
     }
 
     private void setCategories(){
-        String cat= new String();
+        categoriesCardLayout.removeAllViews(); // clear cards
+
         for (Map.Entry<String, Object> entry : interests_selected.entrySet()) {
             String k = entry.getKey();
             boolean value = (boolean) entry.getValue();
-            if(value){
-
-                cat+="#"+k;
-                cat+=" ";
-            }
+            if(value) createCategoryCard(k);
         }
-
-        if(cat.length()>0){
-            cat =  cat.substring(0, cat.length() - 1);
-            categories_selected.setText(cat);
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
-            params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
-            categories_selected.setLayoutParams(params);
-        }else {
-            int margin = getResources().getDimensionPixelSize(R.dimen._1sdp);
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) categories_selected.getLayoutParams();
-            params.height = margin;
-            categories_selected.setLayoutParams(params);
-            categories_selected.setText("");
-        }
-        //Toast.makeText(CreateNewPostActivity.this, "Chosen " + cat, Toast.LENGTH_SHORT).show();
     }
 
     private void createCategoryCard(final String category){
