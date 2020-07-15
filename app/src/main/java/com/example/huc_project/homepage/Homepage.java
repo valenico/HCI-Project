@@ -178,7 +178,6 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                                 rowsPostList.add(post_row);
                                 postDoc.add(document.getId());
                             }
-                            Collections.reverse(rowsPostList);
                             populateData();
                             setUp();
 
