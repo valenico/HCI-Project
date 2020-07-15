@@ -353,7 +353,9 @@ public class edit_post extends AppCompatActivity {
         };
         choose.setOnClickListener(openCategories);
         findViewById(R.id.add_category1).setOnClickListener(openCategories);
-        findViewById(R.id.add_category2).setOnClickListener(openCategories);;
+        findViewById(R.id.add_category2).setOnClickListener(openCategories);
+
+        setCategories();
 
         LinearLayout lay = findViewById(R.id.layout_post);
         final Button cancel = new Button(this);
@@ -390,6 +392,7 @@ public class edit_post extends AppCompatActivity {
                                                 Toast.makeText(edit_post.this, "Post deleted succesfully.", Toast.LENGTH_LONG).show();
                                                 Intent i = new Intent(edit_post.this, Homepage.class);
                                                 startActivity(i);
+                                                finish();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -584,6 +587,18 @@ public class edit_post extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(edit_post.this, postView.class);
+        intent.putExtra("title", post.getTitle());
+        intent.putExtra("id",id);
+        intent.putExtra("desc", post.getPostdesc());
+        intent.putExtra("storageref", post.getStorageref());
+        intent.putExtra("user", post.getUser());
+        intent.putExtra("country", post.getCountry());
+        intent.putExtra("city", post.getCity());
+        intent.putExtra("categories", post.getCategories());
+        intent.putExtra("role", post.getRole());
+        intent.putExtra("isPackage", post.getIsPackage());
+        startActivity(intent);
         finish();
     }
 }

@@ -1,8 +1,10 @@
 package com.example.huc_project.homepage;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -33,9 +35,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.huc_project.Signup;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -212,106 +218,118 @@ public class CreateNewPostActivity extends AppCompatActivity {
                     //Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
                     return;
                 }
+                new AlertDialog.Builder(CreateNewPostActivity.this)
+                        .setTitle("Confirm creation")
+                        .setMessage("Do you want to create a new post?")
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
 
-                final Map<String, Object> post = new HashMap<>();
-                EditText text = (EditText) findViewById(R.id.textDesc);
-                EditText texttitle = (EditText) findViewById(R.id.textTitle);
-                String postDescription = text.getText().toString();
-                String postTitle=texttitle.getText().toString();
-                String country=countryView.getText().toString();
-                String city = cityView.getText().toString();
-                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
-                if(postTitle.trim().equals("") || postDescription.trim().equals("")){
-                    Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                Boolean isPackage = true;
-
-                StorageReference storageRef = storage.getReference();
-                StorageReference riversRef;
-                UploadTask uploadTask;
-                String role="";
-                CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
-                if (sponsor.isChecked()) {
-                    role="sponsor";
-                }
-                else if (sponsorship.isChecked()) {
-                    role="sponsorship";
-                }
-                if (checkispackage.isChecked()) {
-                    isPackage = true;
-                }
-                else {
-                    isPackage = false;
-                }
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
 
-                ArrayList<String> categoriesChosen = new ArrayList<String>();
+
+                                final Map<String, Object> post = new HashMap<>();
+                                EditText text = (EditText) findViewById(R.id.textDesc);
+                                EditText texttitle = (EditText) findViewById(R.id.textTitle);
+                                String postDescription = text.getText().toString();
+                                String postTitle=texttitle.getText().toString();
+                                String country=countryView.getText().toString();
+                                String city = cityView.getText().toString();
+                                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+                                if(postTitle.trim().equals("") || postDescription.trim().equals("")){
+                                    Toast.makeText(CreateNewPostActivity.this, "Title and description are mandatory!",Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+
+                                Boolean isPackage = true;
+
+                                StorageReference storageRef = storage.getReference();
+                                StorageReference riversRef;
+                                UploadTask uploadTask;
+                                String role="";
+                                CheckBox checkispackage=(CheckBox) findViewById(R.id.checkpackage);
+                                if (sponsor.isChecked()) {
+                                    role="sponsor";
+                                }
+                                else if (sponsorship.isChecked()) {
+                                    role="sponsorship";
+                                }
+                                if (checkispackage.isChecked()) {
+                                    isPackage = true;
+                                }
+                                else {
+                                    isPackage = false;
+                                }
 
 
-                if (interests_selected.containsKey("Science & IT") && (boolean)interests_selected.get("Science & IT") ) categoriesChosen.add("science");
-                if (interests_selected.containsKey("Nature") && (boolean)interests_selected.get("Nature")) categoriesChosen.add("nature");
-                if (interests_selected.containsKey("Sport") && (boolean)interests_selected.get("Sport")) categoriesChosen.add("sport");
-                if (interests_selected.containsKey("Fashion") && (boolean)interests_selected.get("Fashion")) categoriesChosen.add("fashion");
-                if (interests_selected.containsKey("Food") && (boolean)interests_selected.get("Food")) categoriesChosen.add("food");
-                if (interests_selected.containsKey("Movies") && (boolean)interests_selected.get("Movies")) categoriesChosen.add("movies");
-                if (interests_selected.containsKey("Music") && (boolean)interests_selected.get("Music")) categoriesChosen.add("music");
+                                ArrayList<String> categoriesChosen = new ArrayList<String>();
 
-                post.put("title", postTitle);
-                post.put("postdesc", postDescription);
-                post.put("user", current_user.getUid());
-                post.put("isPackage", isPackage);
-                post.put("categories", categoriesChosen);
-                post.put("role", role);
-                post.put("city", city);
-                post.put("country", country);
 
-                if (isTheImageUp==false) {
-                    String stringRef = imageUri.getLastPathSegment()+"_"+ System.currentTimeMillis();
-                    riversRef = storageRef.child("images/" + stringRef);
-                    Log.e("PROVOLA",  stringRef);
-                    post.put("storageref", stringRef);
-                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.no_imag);
-                    uploadTask = riversRef.putFile(imageUri);
-                }
-                else {
-                    riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
-                    Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
-                    post.put("storageref", imageUri.getLastPathSegment());
-                    uploadTask = riversRef.putFile(imageUri);
-                }
+                                if (interests_selected.containsKey("Science & IT") && (boolean)interests_selected.get("Science & IT") ) categoriesChosen.add("science");
+                                if (interests_selected.containsKey("Nature") && (boolean)interests_selected.get("Nature")) categoriesChosen.add("nature");
+                                if (interests_selected.containsKey("Sport") && (boolean)interests_selected.get("Sport")) categoriesChosen.add("sport");
+                                if (interests_selected.containsKey("Fashion") && (boolean)interests_selected.get("Fashion")) categoriesChosen.add("fashion");
+                                if (interests_selected.containsKey("Food") && (boolean)interests_selected.get("Food")) categoriesChosen.add("food");
+                                if (interests_selected.containsKey("Movies") && (boolean)interests_selected.get("Movies")) categoriesChosen.add("movies");
+                                if (interests_selected.containsKey("Music") && (boolean)interests_selected.get("Music")) categoriesChosen.add("music");
 
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Add a new document with a generated ID
-                        db.collection("posts")
-                                .add(post)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                post.put("title", postTitle);
+                                post.put("postdesc", postDescription);
+                                post.put("user", current_user.getUid());
+                                post.put("isPackage", isPackage);
+                                post.put("categories", categoriesChosen);
+                                post.put("role", role);
+                                post.put("city", city);
+                                post.put("country", country);
+
+                                if (isTheImageUp==false) {
+                                    String stringRef = imageUri.getLastPathSegment()+"_"+ System.currentTimeMillis();
+                                    riversRef = storageRef.child("images/" + stringRef);
+                                    Log.e("PROVOLA",  stringRef);
+                                    post.put("storageref", stringRef);
+                                    Uri imageUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.no_imag);
+                                    uploadTask = riversRef.putFile(imageUri);
+                                }
+                                else {
+                                    riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
+                                    Log.e("PROVOLA", "HAI MESSO LA FOTO, BRAVO");
+                                    post.put("storageref", imageUri.getLastPathSegment());
+                                    uploadTask = riversRef.putFile(imageUri);
+                                }
+
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
                                     @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Handle unsuccessful uploads
                                     }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error adding document", e);
-                                    }
-                                });                    }
-                });
-               // Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
-                Toast.makeText(getApplicationContext(), "Post created successfully.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), Homepage.class);
-                startActivity(intent);
-                finish();
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        // Add a new document with a generated ID
+                                        db.collection("posts")
+                                                .add(post)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error adding document", e);
+                                                    }
+                                                });                    }
+                                });
+                                // Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
+                                Toast.makeText(getApplicationContext(), "Post created successfully.", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), Homepage.class);
+                                startActivity(intent);
+                                finish();
+
+                            }})
+                        .setNegativeButton("Cancel", null).show();
+
 
             }
         });
