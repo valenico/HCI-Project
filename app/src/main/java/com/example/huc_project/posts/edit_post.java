@@ -352,6 +352,7 @@ public class edit_post extends AppCompatActivity {
                                                 Toast.makeText(edit_post.this, "Post deleted succesfully.", Toast.LENGTH_LONG).show();
                                                 Intent i = new Intent(edit_post.this, Homepage.class);
                                                 startActivity(i);
+                                                finish();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
