@@ -313,7 +313,9 @@ public class edit_post extends AppCompatActivity {
         };
         choose.setOnClickListener(openCategories);
         findViewById(R.id.add_category1).setOnClickListener(openCategories);
-        findViewById(R.id.add_category2).setOnClickListener(openCategories);;
+        findViewById(R.id.add_category2).setOnClickListener(openCategories);
+
+        setCategories();
 
         LinearLayout lay = findViewById(R.id.layout_post);
         final Button cancel = new Button(this);
