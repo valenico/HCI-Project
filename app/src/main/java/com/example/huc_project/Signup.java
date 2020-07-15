@@ -1,6 +1,7 @@
 package com.example.huc_project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.TextViewCompat;
 
@@ -8,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -34,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.huc_project.homepage.Homepage;
+import com.example.huc_project.posts.edit_post;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -162,7 +165,7 @@ public class Signup extends AppCompatActivity {
 
         final EditText mail_view = findViewById(R.id.email);
         final EditText username = findViewById(R.id.username_signup);
-        EditText pass = findViewById(R.id.password_signup);
+        final EditText pass = findViewById(R.id.password_signup);
         EditText pass_confirm = findViewById(R.id.confirm_password);
         Drawable error_indicator = this.getResources().getDrawable(R.drawable.error);
         boolean same_pass = pass.getText().toString().matches(pass_confirm.getText().toString());
@@ -219,41 +222,51 @@ public class Signup extends AppCompatActivity {
         editor.putString("mail",mail_view.getText().toString());
         editor.commit();
         if(!stop){
-            sign_up_button.setEnabled(false);
-            SCREEN = 2;
-            mAuth.createUserWithEmailAndPassword(mail_view.getText().toString().trim() , pass.getText().toString().trim())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(Signup.this, "ERROR",Toast.LENGTH_LONG).show();
-                            } else {
-                                mUser = mAuth.getCurrentUser();
-                                HashMap<String, String> upd = new HashMap<>();
-                                upd.put("Name", username.getText().toString());
-                                upd.put("Email", mail_view.getText().toString());
-                                db.collection("UTENTI").document(mUser.getUid()).set(upd);
-                                 setContentView(R.layout.activity_signup1);
 
-                                 AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
-                                 String[] countries_array = getResources().getStringArray(R.array.countries_array);
-                                 ArrayAdapter<String> adapter = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, countries_array);
-                                 countries.setAdapter(adapter);
+            new AlertDialog.Builder(Signup.this)
+                    .setTitle("Confirm registration")
+                    .setMessage("Do you want to create an account with these data?\nEmail: "+mail_view.getText()+"\nUsername: " + username.getText())
+                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
 
-                                if (pref.contains("country")) {
-                                    countries.setText(pref.getString("country", ""));
-                                }
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            sign_up_button.setEnabled(false);
+                            SCREEN = 2;
+                            mAuth.createUserWithEmailAndPassword(mail_view.getText().toString().trim() , pass.getText().toString().trim())
+                                    .addOnCompleteListener(Signup.this, new OnCompleteListener<AuthResult>() {
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (!task.isSuccessful()) {
+                                                Toast.makeText(Signup.this, "ERROR",Toast.LENGTH_LONG).show();
+                                            } else {
+                                                mUser = mAuth.getCurrentUser();
+                                                HashMap<String, String> upd = new HashMap<>();
+                                                upd.put("Name", username.getText().toString());
+                                                upd.put("Email", mail_view.getText().toString());
+                                                db.collection("UTENTI").document(mUser.getUid()).set(upd);
+                                                setContentView(R.layout.activity_signup1);
 
-                                 AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
-                                 String[] cities_array = getResources().getStringArray(R.array.cities_array);
-                                 ArrayAdapter<String> adapter2 = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, cities_array);
-                                 cities.setAdapter(adapter2);
+                                                AutoCompleteTextView countries = findViewById(R.id.autocomplete_country);
+                                                String[] countries_array = getResources().getStringArray(R.array.countries_array);
+                                                ArrayAdapter<String> adapter = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, countries_array);
+                                                countries.setAdapter(adapter);
 
-                                if (pref.contains("city")) {
-                                    cities.setText(pref.getString("city", ""));
-                                }
-                            }
-                        }
-                    });
+                                                if (pref.contains("country")) {
+                                                    countries.setText(pref.getString("country", ""));
+                                                }
+
+                                                AutoCompleteTextView cities = findViewById(R.id.autocomplete_city);
+                                                String[] cities_array = getResources().getStringArray(R.array.cities_array);
+                                                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(Signup.this, android.R.layout.simple_list_item_1, cities_array);
+                                                cities.setAdapter(adapter2);
+
+                                                if (pref.contains("city")) {
+                                                    cities.setText(pref.getString("city", ""));
+                                                }
+                                            }
+                                        }
+                                    });
+                        }})
+                    .setNegativeButton("Cancel", null).show();
+
         }
     }
 

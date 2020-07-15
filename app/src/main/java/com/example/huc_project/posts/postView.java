@@ -160,6 +160,7 @@ public class postView extends AppCompatActivity {
                     intent.putExtra("role", post.getRole());
                     intent.putExtra("isPackage", post.getIsPackage());
                     startActivity(intent);
+                    finish();
                 }
             });
             contact_user.setVisibility(View.INVISIBLE);

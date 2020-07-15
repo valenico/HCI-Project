@@ -547,6 +547,18 @@ public class edit_post extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(edit_post.this, postView.class);
+        intent.putExtra("title", post.getTitle());
+        intent.putExtra("id",id);
+        intent.putExtra("desc", post.getPostdesc());
+        intent.putExtra("storageref", post.getStorageref());
+        intent.putExtra("user", post.getUser());
+        intent.putExtra("country", post.getCountry());
+        intent.putExtra("city", post.getCity());
+        intent.putExtra("categories", post.getCategories());
+        intent.putExtra("role", post.getRole());
+        intent.putExtra("isPackage", post.getIsPackage());
+        startActivity(intent);
         finish();
     }
 }
