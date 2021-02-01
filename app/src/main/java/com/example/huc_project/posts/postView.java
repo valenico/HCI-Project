@@ -48,6 +48,7 @@ import java.util.HashMap;
 public class postView extends AppCompatActivity {
 
     Post post;
+    Post post2;
     ImageView post_image_view;
     TextView title_view;
     TextView desc_view;
