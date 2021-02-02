@@ -5,6 +5,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -74,6 +81,24 @@ public class postView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_view);
+        //TODO FARE GET REQUEST
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
+
+        String url = "http://10.0.2.2:8080/posts";
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //This code is executed if the server responds, whether or not the response contains data.
+                Log.i("VOLLEY", response);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //This code is executed if there is an error.
+            }
+        });
+
+        ExampleRequestQueue.add(ExampleStringRequest);
 
         final Intent intent = getIntent();
         this.guest_mode = intent.getBooleanExtra("guest",false);
@@ -91,6 +116,7 @@ public class postView extends AppCompatActivity {
         is_sponsor_view = findViewById(R.id.viewsponsor);
         is_package_view = findViewById(R.id.viewpackage);
         contact_user = findViewById(R.id.contact_user);
+
 
         if(!guest_mode){
             contact_user.setOnClickListener(new View.OnClickListener() {

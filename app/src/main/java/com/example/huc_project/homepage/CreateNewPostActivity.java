@@ -316,18 +316,19 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                 //TODO DA PROVARE!
                                 try {
                                     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                                    String URL = "http://...";
+                                    String URL = "http://10.0.2.2:8080/posts";
                                     JSONObject jsonBody = new JSONObject();
+                                    jsonBody.put("id", "id_"+System.currentTimeMillis());
                                     jsonBody.put("title", post.get("title"));
                                     jsonBody.put("storageref", post.get("storageref"));
                                     jsonBody.put("postdesc", post.get("postdesc"));
                                     jsonBody.put("user", post.get("user"));
                                     jsonBody.put("isPackage", post.get("isPackage"));
-                                    jsonBody.put("categories", post.get("categories"));
+                                    //jsonBody.put("categories", categoriesChosen.get(0));
                                     jsonBody.put("role", post.get("role"));
                                     jsonBody.put("country", post.get("country"));
                                     jsonBody.put("city", post.get("city"));
-
+                                    Log.i("VOLLEY", jsonBody.toString());
                                     final String requestBody = jsonBody.toString();
 
                                     StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

@@ -36,6 +36,12 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
@@ -62,6 +68,9 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,7 +117,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
     Switch packagefilterswitch;
     AutoCompleteTextView countryView;
     AutoCompleteTextView cityView;
-
+    JSONObject obj;
+    JSONArray objarray;
     DrawerLayout mDrawerLayout;
     NavigationView navView;
 
@@ -117,6 +127,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slide);
         Intent i = getIntent();
+
+
 
         mDrawerLayout = findViewById(R.id.drawer);
         navView = findViewById(R.id.navView);
@@ -161,7 +173,76 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         db = FirebaseFirestore.getInstance();
         CollectionReference collezione = db.collection("posts");
 
-        collezione.get()
+        //TODO AGGIUNGERE QUA LA GET REQUEST PER IL POST
+
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
+
+        String url = "http://10.0.2.2:8080/posts";
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //This code is executed if the server responds, whether or not the response contains data.
+                Log.i("VOLLEY", response);
+
+                Log.i("VOLLEY", "TRASFORMAZIONE JSON");
+                //String tmpresp= "{\"response\":"+response+"}";
+                try {
+                    objarray= new JSONArray((response));
+                    //JSONObject obj = new JSONObject(tmpresp);
+
+
+                    Log.d("VOLLEY", objarray.toString());
+
+                    //obj = objarray.getJSONObject(0);
+                    //Log.d("VOLLEY1", obj.toString());
+                    for (int i = 0; i < objarray.length(); i++) {
+                        JSONObject rec = null;
+                        try {
+                            Log.d("VOLLEY1", objarray.toString());
+                            rec = objarray.getJSONObject(i);
+                            Post post= new Post();
+                            post.setId(rec.getString("id"));
+                            post.setTitle(rec.getString("title"));
+                            post.setStorageref(rec.getString("storageref"));
+                            post.setPostdesc(rec.getString("postdesc"));
+                            post.setUser(rec.getString("user"));
+                            post.setPackage(rec.getBoolean("isPackage"));
+                            post.setCategories(null);
+                            post.setRole(rec.getString("role"));
+                            post.setCountry(rec.getString("country"));
+                            post.setCity(rec.getString("city"));
+                            StorageReference storageRef = storage.getReference();
+                            StorageReference islandRef = null;
+                            if(post.storageref != null){
+                                islandRef = storageRef.child("images/" + post.storageref);
+                            }
+                            PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
+                            rowsPostList.add(post_row);
+                            postDoc.add(post.getId());
+                            populateData();
+                            setUp();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // ...
+                    }
+                } catch (Throwable t) {
+                    Log.e("VOLLEY", "Could not parse malformed JSON:  ");
+                }
+
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //This code is executed if there is an error.
+            }
+        });
+
+        ExampleRequestQueue.add(ExampleStringRequest);
+
+
+        /*collezione.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -186,7 +267,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             Log.w("Tag", "Error getting documents.", task.getException());
                         }
                     }
-                });
+                });*/
+
     }
 
 
@@ -818,7 +900,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         PostRow post_clicked = rowsArrayList.get(position);
         Intent intent = new Intent(Homepage.this, postView.class);
         intent.putExtra("title", post_clicked.getTitle());
-        intent.putExtra("id", postDoc.get(position));
+        //intent.putExtra("id", postDoc.get(position));
+        //intent.putExtra("id", post_clicked.getTitle());
         intent.putExtra("desc", post_clicked.getDesc());
         intent.putExtra("storageref", post_clicked.getPost().getStorageref());
         intent.putExtra("user", post_clicked.getPost().getUser());

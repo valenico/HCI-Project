@@ -18,6 +18,10 @@ public class Post {
     String role; //sponsor or sponsorship
     String country;
     String city;
+    String id;
+
+
+
 
     public Post(String title, String storageref, String postdesc, String user, Boolean isPackage, ArrayList<String> categories, String role, String country, String city) {
         this.title = title;
@@ -32,6 +36,26 @@ public class Post {
 
     }
     public Post() {}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Boolean getPackage() {
+        return isPackage;
+    }
+
+    public void setPackage(Boolean aPackage) {
+        isPackage = aPackage;
+    }
 
     public String getPostdesc() {
         return postdesc;
