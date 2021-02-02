@@ -14,6 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.huc_project.R;
@@ -33,6 +39,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.OnItemListener {
@@ -44,6 +54,8 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
     ArrayList<String> idDocs = new ArrayList<>();
     private FirebaseFirestore db;
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    JSONObject obj;
+    JSONArray objarray;
 
     boolean guest_mode = false;
     boolean isLoading = false;
@@ -58,7 +70,84 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
         final String current_user = Profile_main_page.getCurrent_user();
         //final FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
 
-        db = FirebaseFirestore.getInstance();
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this.getContext());
+
+        String url = "http://10.0.2.2:8080/posts";
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //This code is executed if the server responds, whether or not the response contains data.
+                Log.i("profile", response);
+
+                Log.i("profile", "TRASFORMAZIONE JSON");
+                //String tmpresp= "{\"response\":"+response+"}";
+                try {
+                    objarray= new JSONArray((response));
+                    //JSONObject obj = new JSONObject(tmpresp);
+
+
+                    Log.d("profile", objarray.toString());
+                    //setUpCircularMenu();
+                    //obj = objarray.getJSONObject(0);
+                    //Log.d("VOLLEY1", obj.toString());
+                    for (int i = 0; i < objarray.length(); i++) {
+
+                        JSONObject rec = null;
+                        try {
+                            rec = objarray.getJSONObject(i);
+
+                            if (rec.getString("user").equals(current_user)) {
+                                Log.i("profile", "sono dentro IF!");
+
+                                Post post = new Post();
+                                post.setId(rec.getString("id"));
+                                post.setTitle(rec.getString("title"));
+                                post.setStorageref(rec.getString("storageref"));
+                                post.setPostdesc(rec.getString("postdesc"));
+                                post.setUser(rec.getString("user"));
+                                post.setPackage(rec.getBoolean("isPackage"));
+                                post.setCategories(null);
+                                post.setRole(rec.getString("role"));
+                                post.setCountry(rec.getString("country"));
+                                post.setCity(rec.getString("city"));
+                                StorageReference storageRef = storage.getReference();
+                                StorageReference islandRef = null;
+                                if (post.getStorageref() != null) {
+                                    islandRef = storageRef.child("images/" + post.getStorageref());
+                                }
+                                PostRow post_row = new PostRow(post, islandRef, Glide.with(Profile_post_frag.this));
+                                if(!post_row.getPost().getIsPackage()) rowsPostList.add(post_row);
+                                idDocs.add(post.getId());
+                            }
+
+
+                            //setUp();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // ...
+                    }
+                    if(getView()!=null){
+                        populateData();
+                        setUpRecyclerView();
+                        initScrollListener();
+                    }
+                } catch (Throwable t) {
+                    Log.e("profile", "Could not parse malformed JSON:  ");
+                }
+
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //This code is executed if there is an error.
+            }
+        });
+
+        ExampleRequestQueue.add(ExampleStringRequest);
+
+        /*db = FirebaseFirestore.getInstance();
 
         CollectionReference collezione = db.collection("posts");
 
@@ -90,7 +179,7 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
                             Log.w("Tag", "Error getting documents.", task.getException());
                         }
                     }
-                });
+                });*/
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.frag_post, container, false);
     }

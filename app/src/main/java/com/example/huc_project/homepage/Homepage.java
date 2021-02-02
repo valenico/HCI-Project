@@ -192,7 +192,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
 
                     Log.d("VOLLEY", objarray.toString());
-                    setUpCircularMenu();
+                    //setUpCircularMenu();
                     //obj = objarray.getJSONObject(0);
                     //Log.d("VOLLEY1", obj.toString());
                     for (int i = 0; i < objarray.length(); i++) {
@@ -219,8 +219,9 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
                             rowsPostList.add(post_row);
                             postDoc.add(post.getId());
-                            setUp();
-                            populateData();
+
+
+
 
                             //setUp();
                         } catch (JSONException e) {
@@ -229,6 +230,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
                         // ...
                     }
+                    populateData();
+                    setUp();
                 } catch (Throwable t) {
                     Log.e("VOLLEY", "Could not parse malformed JSON:  ");
                 }

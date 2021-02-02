@@ -379,6 +379,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
 
 
                                 //
+                                /*
                                 uploadTask.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception exception) {
@@ -402,7 +403,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                                         Log.w(TAG, "Error adding document", e);
                                                     }
                                                 });                    }
-                                });
+                                });*/
                                 // Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
                                 Toast.makeText(getApplicationContext(), "Post created successfully.", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getApplicationContext(), Homepage.class);
