@@ -192,7 +192,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
 
 
                     Log.d("VOLLEY", objarray.toString());
-
+                    setUpCircularMenu();
                     //obj = objarray.getJSONObject(0);
                     //Log.d("VOLLEY1", obj.toString());
                     for (int i = 0; i < objarray.length(); i++) {
@@ -219,8 +219,10 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
                             rowsPostList.add(post_row);
                             postDoc.add(post.getId());
-                            populateData();
                             setUp();
+                            populateData();
+
+                            //setUp();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
