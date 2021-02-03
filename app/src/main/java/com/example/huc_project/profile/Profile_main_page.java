@@ -301,8 +301,8 @@ public class Profile_main_page extends AppCompatActivity {
 
                         }
 
-                        if (country!= null && country.length() != 0 ) {
-                            if (city.length() == 0) user_country.setText(country);
+                        if (country!= null && !country.equals("")) {
+                            if (city == null || city.equals("")) user_country.setText(country);
                             else user_country.setText(country + ", " + city);
                         }
 
