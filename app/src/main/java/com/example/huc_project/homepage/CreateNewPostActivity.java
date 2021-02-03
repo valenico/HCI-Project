@@ -316,7 +316,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                 //TODO DA PROVARE!
                                 try {
                                     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                                    String URL = "http://10.0.2.2:8080/posts";
+                                    String URL = "https://shielded-peak-80677.herokuapp.com/posts";
                                     JSONObject jsonBody = new JSONObject();
                                     jsonBody.put("id", "id_"+System.currentTimeMillis());
                                     jsonBody.put("title", post.get("title"));
