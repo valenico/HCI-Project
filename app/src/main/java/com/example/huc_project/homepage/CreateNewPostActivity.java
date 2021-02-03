@@ -88,7 +88,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
     TextView choose;
     TextView categories_selected;
     LinearLayout categoriesCardLayout;
-    final int maxChecked = 3;
+    final int maxChecked = 1;
     int countChecked = 0;
 
     CustomCheckbox sportCheck;
@@ -466,7 +466,7 @@ public class CreateNewPostActivity extends AppCompatActivity {
                 if(countChecked == maxChecked && isChecked){
                     buttonView.setChecked(false);
                     Toast.makeText(getBaseContext(),
-                            "You can't select more than 3 categories!", Toast.LENGTH_SHORT).show();
+                            "You can't select more than " +  maxChecked +  " category!", Toast.LENGTH_SHORT).show();
                 }else if(isChecked){
                     countChecked++;
                 }else if(!isChecked){
