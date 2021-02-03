@@ -72,7 +72,7 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
 
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this.getContext());
 
-        String url = "http://10.0.2.2:8080/posts";
+        String url = "https://shielded-peak-80677.herokuapp.com/posts";
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
