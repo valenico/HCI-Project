@@ -1,14 +1,24 @@
 package com.example.huc_project.profile;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -67,12 +78,19 @@ public class Edit_profile extends AppCompatActivity {
 
     TabLayout tabLayout;
 
+    private boolean flag = false;
+    private LocationManager locationMangaer = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+
+        locationMangaer = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         final Boolean guest_user;
         current_user = Profile_main_page.getCurrent_user();
@@ -82,6 +100,8 @@ public class Edit_profile extends AppCompatActivity {
         else guest_user = true;
 
         final DocumentReference docRef = db.collection("UTENTI").document(current_user);
+
+
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -97,12 +117,59 @@ public class Edit_profile extends AppCompatActivity {
                         final Boolean hidden_mail = (Boolean) document.get("Hidemail");
 
 
-                        final ImageButton getpositionButton = (ImageButton) document.get("getPosition");
+                        final ImageButton getpositionButton = (ImageButton) findViewById(R.id.getPosition);
                         getpositionButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                    if (ActivityCompat.checkSelfPermission(Edit_profile.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                                            ActivityCompat.checkSelfPermission(Edit_profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        /**
+                                        ActivityCompat.requestPermissions(Edit_profile.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                99));
+                                        // here to request the missing permissions, and then overriding
+                                        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
 
-                            }
+                                        }
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                        Location locationGPS = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                        Toast.makeText(getBaseContext(),
+                                                "LOC" + locationGPS, Toast.LENGTH_SHORT).show();**/
+
+                                        ActivityCompat.requestPermissions(Edit_profile.this,
+                                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                                99);
+                                        ActivityCompat.requestPermissions(Edit_profile.this,
+                                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                                99);
+
+                                } else {
+                                        Location locationGPS = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                        Toast.makeText(getBaseContext(),
+                                                "LOC" + locationGPS, Toast.LENGTH_SHORT).show();
+                                        Log.d("TAG", String.valueOf(locationGPS.getLatitude()));
+                                        Log.d("TAG", String.valueOf(locationGPS.getLongitude()));
+
+                                        Double MyLat = locationGPS.getLatitude();
+                                        Double MyLong = locationGPS.getLongitude();
+                                        Geocoder geocoder = new Geocoder(Edit_profile.this, Locale.getDefault());
+                                        List<Address> addresses = null;
+                                        try {
+                                            addresses = geocoder.getFromLocation(MyLat, MyLong, 1);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        String cityName = addresses.get(0).getAddressLine(0);
+                                        String stateName = addresses.get(0).getAddressLine(1);
+                                        String countryName = addresses.get(0).getAddressLine(2);
+
+                                        Log.d("TAG", "city "+cityName);
+                                        Log.d("TAG", "state: "+stateName);
+                                        Log.d("TAG", "country "+countryName);
+
+                            }}
                         });
 
                         final EditText user_name = findViewById(R.id.name);
@@ -191,6 +258,20 @@ public class Edit_profile extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private Boolean displayGpsStatus() {
+        ContentResolver contentResolver = getBaseContext()
+                .getContentResolver();
+        boolean gpsStatus = Settings.Secure
+                .isLocationProviderEnabled(contentResolver,
+                        LocationManager.GPS_PROVIDER);
+        if (gpsStatus) {
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
 
