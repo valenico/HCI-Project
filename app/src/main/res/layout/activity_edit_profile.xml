@@ -18,43 +18,56 @@
             android:layout_marginTop="@dimen/_165sdp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:layout_marginStart="@dimen/_10sdp"
             android:hint="Username"
             android:textColorHint="@color/hint_color"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="@dimen/_10sdp" />
 
         <AutoCompleteTextView
             android:id="@+id/country"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_195sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="Country"
             android:textColorHint="@color/hint_color"
             android:textColor="@color/textColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="@dimen/_10sdp" />
 
         <AutoCompleteTextView
             android:id="@+id/city"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_225sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="City"
             android:textColorHint="@color/hint_color"
             android:textColor="@color/textColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="@dimen/_10sdp" />
+
+        <ImageButton
+            android:id="@+id/getPosition"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_17sdp"
+            android:background="@drawable/white_back"
+            app:layout_constraintStart_toEndOf="@+id/country"
+            app:layout_constraintTop_toBottomOf="@id/name"
+
+            app:srcCompat="@drawable/my_location" />
 
         <TextView
             android:id="@+id/mail"
@@ -120,7 +133,8 @@
                 android:id="@+id/profImage"
                 android:layout_width="@dimen/_160sdp"
                 android:layout_height="@dimen/_160sdp"
-                app:srcCompat="@drawable/add_img" />
+                app:srcCompat="@drawable/add_img"
+                android:backgroundTint="@color/cardview_light_background"/>
 
         </androidx.cardview.widget.CardView>
 

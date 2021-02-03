@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -51,6 +53,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class Edit_profile extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -91,6 +95,15 @@ public class Edit_profile extends AppCompatActivity {
                         final String mail = (String) document.get("Email");
                         String description = (String) document.get("Description");
                         final Boolean hidden_mail = (Boolean) document.get("Hidemail");
+
+
+                        final ImageButton getpositionButton = (ImageButton) document.get("getPosition");
+                        getpositionButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
 
                         final EditText user_name = findViewById(R.id.name);
 
