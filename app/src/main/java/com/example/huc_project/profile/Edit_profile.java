@@ -1,6 +1,7 @@
 package com.example.huc_project.profile;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -80,6 +82,9 @@ public class Edit_profile extends AppCompatActivity {
 
     private boolean flag = false;
     private LocationManager locationMangaer = null;
+    Location GPSlocation = null;
+    Double lo = 0.0;
+    Double la = 0.0;
 
 
     @Override
@@ -121,55 +126,41 @@ public class Edit_profile extends AppCompatActivity {
                         getpositionButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if(displayGpsStatus()) {
                                     if (ActivityCompat.checkSelfPermission(Edit_profile.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                                             ActivityCompat.checkSelfPermission(Edit_profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                         // TODO: Consider calling
                                         //    ActivityCompat#requestPermissions
                                         /**
-                                        ActivityCompat.requestPermissions(Edit_profile.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                                99));
-                                        // here to request the missing permissions, and then overriding
-                                        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+                                         ActivityCompat.requestPermissions(Edit_profile.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                         99));
+                                         // here to request the missing permissions, and then overriding
+                                         public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
 
-                                        }
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                        Location locationGPS = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                        Toast.makeText(getBaseContext(),
-                                                "LOC" + locationGPS, Toast.LENGTH_SHORT).show();**/
+                                         }
+                                         // to handle the case where the user grants the permission. See the documentation
+                                         // for ActivityCompat#requestPermissions for more details.
+                                         Location locationGPS = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                         Toast.makeText(getBaseContext(),
+                                         "LOC" + locationGPS, Toast.LENGTH_SHORT).show();**/
 
                                         ActivityCompat.requestPermissions(Edit_profile.this,
-                                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                                                99);
-                                        ActivityCompat.requestPermissions(Edit_profile.this,
-                                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                                 99);
 
-                                } else {
-                                        Location locationGPS = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                        Toast.makeText(getBaseContext(),
-                                                "LOC" + locationGPS, Toast.LENGTH_SHORT).show();
-                                        Log.d("TAG", String.valueOf(locationGPS.getLatitude()));
-                                        Log.d("TAG", String.valueOf(locationGPS.getLongitude()));
+                                    } else {
+                                        Criteria criteria = new Criteria();
+                                        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                                        locationMangaer = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                                        locationMangaer.requestSingleUpdate(criteria, locationListener, null);
 
-                                        Double MyLat = locationGPS.getLatitude();
-                                        Double MyLong = locationGPS.getLongitude();
-                                        Geocoder geocoder = new Geocoder(Edit_profile.this, Locale.getDefault());
-                                        List<Address> addresses = null;
-                                        try {
-                                            addresses = geocoder.getFromLocation(MyLat, MyLong, 1);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        String cityName = addresses.get(0).getAddressLine(0);
-                                        String stateName = addresses.get(0).getAddressLine(1);
-                                        String countryName = addresses.get(0).getAddressLine(2);
+                                    }
+                                }else{
+                                    Toast.makeText(getBaseContext(),
+                                            "You need to enable gps", Toast.LENGTH_SHORT).show();
+                                    }
 
-                                        Log.d("TAG", "city "+cityName);
-                                        Log.d("TAG", "state: "+stateName);
-                                        Log.d("TAG", "country "+countryName);
-
-                            }}
+                            }
                         });
 
                         final EditText user_name = findViewById(R.id.name);
@@ -274,6 +265,69 @@ public class Edit_profile extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 99: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Criteria criteria = new Criteria();
+                    criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                    locationMangaer = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                    locationMangaer.requestSingleUpdate(criteria, locationListener, null);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
+
+    }
+
+    final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            GPSlocation = location;
+            la = location.getLatitude();
+            lo = location.getLongitude();
+
+            Log.d("TAG", "LAT " + la.toString());
+            Log.d("TAG", "LON "+ lo.toString());
+
+            Geocoder geocoder = new Geocoder(Edit_profile.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(la, lo, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            TextView user_country = (TextView) findViewById(R.id.country);
+            user_country.setText(addresses.get(0).getAddressLine(0));
+            Log.d("Location Changes", addresses.toString());
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.d("Status Changed", String.valueOf(status));
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.d("Provider Enabled", provider);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.d("Provider Disabled", provider);
+        }
+    };
+
 
 
     private  void SelectImage(){
@@ -332,7 +386,6 @@ public class Edit_profile extends AppCompatActivity {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && profile_pic_uri != null){
             CropImage.ActivityResult ar = CropImage.getActivityResult(data);
             Uri filePath = ar.getUri();
-            Log.d("TAG","SIAMO IN PROFILO");
             final ImageView add_pic = findViewById(R.id.profImage);
             try {
                 uploadImage(filePath);
@@ -345,7 +398,6 @@ public class Edit_profile extends AppCompatActivity {
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && profile_pic_uri == null) {
             CropImage.ActivityResult ar = CropImage.getActivityResult(data);
-            Log.d("TAG","SIAMO IN GALLERY");
             final Uri filePath = ar.getUri();
             db.collection("UTENTI").document(mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
