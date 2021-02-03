@@ -106,7 +106,9 @@ public class Profile_post_frag extends Fragment implements RecyclerViewAdapter.O
                                 post.setPostdesc(rec.getString("postdesc"));
                                 post.setUser(rec.getString("user"));
                                 post.setPackage(rec.getBoolean("isPackage"));
-                                post.setCategories(null);
+                                ArrayList<String> carentearray=new ArrayList<>();
+                                carentearray.add(rec.getString("carente"));
+                                post.setCategories(carentearray);
                                 post.setRole(rec.getString("role"));
                                 post.setCountry(rec.getString("country"));
                                 post.setCity(rec.getString("city"));
