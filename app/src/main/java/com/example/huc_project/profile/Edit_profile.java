@@ -3,11 +3,9 @@ package com.example.huc_project.profile;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -39,20 +37,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
-import com.example.huc_project.Signup;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -71,7 +58,6 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -139,20 +125,7 @@ public class Edit_profile extends AppCompatActivity {
                                 if(displayGpsStatus()) {
                                     if (ActivityCompat.checkSelfPermission(Edit_profile.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                                             ActivityCompat.checkSelfPermission(Edit_profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        /**
-                                         ActivityCompat.requestPermissions(Edit_profile.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                         99));
-                                         // here to request the missing permissions, and then overriding
-                                         public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
 
-                                         }
-                                         // to handle the case where the user grants the permission. See the documentation
-                                         // for ActivityCompat#requestPermissions for more details.
-                                         Location locationGPS = locationMangaer.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                         Toast.makeText(getBaseContext(),
-                                         "LOC" + locationGPS, Toast.LENGTH_SHORT).show();**/
 
                                         ActivityCompat.requestPermissions(Edit_profile.this,
                                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -335,31 +308,6 @@ public class Edit_profile extends AppCompatActivity {
         }
     };
 
-    private void getPos(double la, double lo){
-        RequestQueue requestQueue = new RequestQueue(new DiskBasedCache(getCacheDir(), 1024 * 1024), new BasicNetwork(new HurlStack()));
-
-        requestQueue.start();
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+la+","+lo+"&key=AIzaSyA-A3VHYDw_2Ou08ZguF-9XZfmla1cGZMw";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("RESPONSE", response.toString());
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-
-// Access the RequestQueue through your singleton class.
-        requestQueue.add(jsonObjectRequest);
-    }
 
 
 
