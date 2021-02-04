@@ -39,6 +39,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.huc_project.R;
@@ -62,6 +70,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -297,9 +307,6 @@ public class Edit_profile extends AppCompatActivity {
             la = location.getLatitude();
             lo = location.getLongitude();
 
-            Log.d("TAG", "LAT " + la.toString());
-            Log.d("TAG", "LON "+ lo.toString());
-
             Geocoder geocoder = new Geocoder(Edit_profile.this, Locale.getDefault());
             List<Address> addresses = null;
             try {
@@ -327,6 +334,32 @@ public class Edit_profile extends AppCompatActivity {
             Log.d("Provider Disabled", provider);
         }
     };
+
+    private void getPos(double la, double lo){
+        RequestQueue requestQueue = new RequestQueue(new DiskBasedCache(getCacheDir(), 1024 * 1024), new BasicNetwork(new HurlStack()));
+
+        requestQueue.start();
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+la+","+lo+"&key=AIzaSyA-A3VHYDw_2Ou08ZguF-9XZfmla1cGZMw";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("RESPONSE", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                });
+
+// Access the RequestQueue through your singleton class.
+        requestQueue.add(jsonObjectRequest);
+    }
 
 
 
