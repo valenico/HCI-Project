@@ -43,6 +43,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.huc_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -169,8 +170,9 @@ public class Edit_profile extends AppCompatActivity {
                         final CheckBox h_mail = findViewById(R.id.hidemail);
                         final EditText user_description = findViewById(R.id.description);
 
+                        RequestOptions options = new RequestOptions().error(R.drawable.user); //if load gets error bc image does not exist, load default image
                         StorageReference ref = storage.getReference().child("users/" + current_user);
-                        Glide.with(Edit_profile.this).load(ref).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
+                        Glide.with(Edit_profile.this).load(ref).apply(options).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(profile_img);
 
                         user_name.setText(name);
                         user_description.setText(description);
