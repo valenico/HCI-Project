@@ -75,10 +75,7 @@ public class Edit_profile extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Uri profile_pic_uri;
     final int PICK_IMAGE_GALLERY = 100;
-    final int MY_NEW_CODE = 110;
     String current_user;
-
-    TabLayout tabLayout;
 
     private boolean flag = false;
     private LocationManager locationMangaer = null;
@@ -297,9 +294,10 @@ public class Edit_profile extends AppCompatActivity {
                 e.printStackTrace();
             }
             TextView user_country = (TextView) findViewById(R.id.country);
+            TextView city = (TextView) findViewById(R.id.city);
             
-            user_country.setText(addresses.get(0).getAddressLine(0));
-            Log.d("Location Changes", addresses.toString());
+            user_country.setText(addresses.get(0).getAdminArea()+ ", " + addresses.get(0).getCountryCode());
+            city.setText(addresses.get(0).getLocality());
         }
 
         @Override
