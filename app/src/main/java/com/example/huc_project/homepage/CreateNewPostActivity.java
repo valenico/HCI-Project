@@ -3,12 +3,24 @@ package com.example.huc_project.homepage;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,7 +38,12 @@ import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
 import android.content.Intent;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -46,6 +63,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.huc_project.Signup;
+import com.example.huc_project.profile.Edit_profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,9 +85,12 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -100,9 +121,15 @@ public class CreateNewPostActivity extends AppCompatActivity {
     CustomCheckbox natureCheck;
     TextView textDesc;
     TextView textTitle;
+    private LocationManager locationMangaer = null;
+    Location GPSlocation = null;
+    Double lo = 0.0;
+    Double la = 0.0;
 
 
-        @Override
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_post);
@@ -220,6 +247,39 @@ public class CreateNewPostActivity extends AppCompatActivity {
                         buttonCreateP.setBackgroundResource(R.drawable.custom_button);
                         buttonCreateP.setTextColor(Color.WHITE);
                     }
+                }
+            });
+
+            final ImageButton getpositionButton = (ImageButton) findViewById(R.id.getPosition);
+            Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.mylocation);
+
+            final Drawable wrappedDrawable = DrawableCompat.wrap(like);
+            DrawableCompat.setTint(wrappedDrawable, getResources().getColor(R.color.color_button1));
+            getpositionButton.setImageDrawable(wrappedDrawable);
+            getpositionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(displayGpsStatus()) {
+                        if (ActivityCompat.checkSelfPermission(CreateNewPostActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                                ActivityCompat.checkSelfPermission(CreateNewPostActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
+                            ActivityCompat.requestPermissions(CreateNewPostActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    99);
+
+                        } else {
+                            Criteria criteria = new Criteria();
+                            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                            locationMangaer = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                            locationMangaer.requestSingleUpdate(criteria, locationListener, null);
+
+                        }
+                    }else{
+                        Toast.makeText(getBaseContext(),
+                                "You need to enable gps", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             });
 
@@ -418,6 +478,86 @@ public class CreateNewPostActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private Boolean displayGpsStatus() {
+        ContentResolver contentResolver = getBaseContext()
+                .getContentResolver();
+        boolean gpsStatus = Settings.Secure
+                .isLocationProviderEnabled(contentResolver,
+                        LocationManager.GPS_PROVIDER);
+        if (gpsStatus) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 99: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Criteria criteria = new Criteria();
+                    criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                    locationMangaer = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                    locationMangaer.requestSingleUpdate(criteria, locationListener, null);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
+
+    }
+
+    final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            GPSlocation = location;
+            la = location.getLatitude();
+            lo = location.getLongitude();
+
+            Geocoder geocoder = new Geocoder(CreateNewPostActivity.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(la, lo, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            TextView user_country = (TextView) findViewById(R.id.countries_list);
+            TextView city = (TextView) findViewById(R.id.cities_list);
+
+            user_country.setText(addresses.get(0).getAdminArea()+ ", " + addresses.get(0).getCountryCode());
+            city.setText(addresses.get(0).getLocality());
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.d("Status Changed", String.valueOf(status));
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.d("Provider Enabled", provider);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.d("Provider Disabled", provider);
+        }
+    };
+
+
+
 
     private void openGallery() {
         Intent gallery = new Intent();//(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
