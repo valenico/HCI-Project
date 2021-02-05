@@ -23,7 +23,7 @@ public class Post {
 
 
 
-    public Post(String title, String storageref, String postdesc, String user, Boolean isPackage, ArrayList<String> categories, String role, String country, String city) {
+    public Post(String title, String storageref, String postdesc, String user, Boolean isPackage, ArrayList<String> categories, String role, String country, String city, String id) {
         this.title = title;
         this.storageref = storageref;
         this.postdesc = postdesc;
@@ -33,6 +33,7 @@ public class Post {
         this.role = role;
         this.country = country;
         this.city = city;
+        this.id = id;
 
     }
     public Post() {}

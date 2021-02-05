@@ -84,7 +84,7 @@ public class postView extends AppCompatActivity {
         //TODO FARE GET REQUEST
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://10.0.2.2:8080/posts";
+        String url = "https://shielded-peak-80677.herokuapp.com/posts";
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -105,7 +105,7 @@ public class postView extends AppCompatActivity {
         if(!guest_mode) this.current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
-                intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
+                intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"), intent.getStringExtra("id"));
         this.id = intent.getStringExtra("id");
         this.post_image_view = findViewById(R.id.imageViewplaces);
         this.title_view = findViewById(R.id.postTitle);
@@ -180,6 +180,7 @@ public class postView extends AppCompatActivity {
                     intent.putExtra("desc", post.getPostdesc());
                     intent.putExtra("storageref", post.getStorageref());
                     intent.putExtra("user", post.getUser());
+                    intent.putExtra("idpost",post.getId());
                     intent.putExtra("id", id );
                     intent.putExtra("country", post.getCountry());
                     intent.putExtra("city",post.getCity());

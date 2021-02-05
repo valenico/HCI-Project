@@ -917,6 +917,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
         intent.putExtra("categories", post_clicked.getPost().getCategories());
         intent.putExtra("role", post_clicked.getPost().getRole());
         intent.putExtra("isPackage", post_clicked.getPost().getIsPackage());
+        intent.putExtra("id", post_clicked.getPost().getId());
         if(guest_mode) intent.putExtra("guest", true);
         if(!guest_mode) actionMenu.close(true);
         startActivity(intent);

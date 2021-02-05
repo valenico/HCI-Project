@@ -36,6 +36,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.huc_project.CustomCheckbox;
 import com.example.huc_project.R;
@@ -55,6 +65,10 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,9 +116,10 @@ public class edit_post extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_post);
 
         Intent intent = getIntent();
+
         this.post = new Post(intent.getStringExtra("title"), intent.getStringExtra("storageref"),
                 intent.getStringExtra("desc"), intent.getStringExtra("user"), intent.getBooleanExtra("isPackage", false), intent.getStringArrayListExtra("categories"),
-                intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"));
+                intent.getStringExtra("role"), intent.getStringExtra("country"), intent.getStringExtra("city"), intent.getStringExtra("idpost"));
                 Log.e("POSTEDIT", intent.getStringExtra("title"));
         id = intent.getStringExtra("id");
         titleForUpdate=intent.getStringExtra("title");
@@ -204,7 +219,7 @@ public class edit_post extends AppCompatActivity {
                 }
 
 
-                ArrayList<String> categoriesChosen = new ArrayList<String>();
+                final ArrayList<String> categoriesChosen = new ArrayList<String>();
 
 
                 if (interests_selected.containsKey("science") && (boolean)interests_selected.get("science") ) categoriesChosen.add("science");
@@ -215,6 +230,7 @@ public class edit_post extends AppCompatActivity {
                 if (interests_selected.containsKey("movies") && (boolean)interests_selected.get("movies")) categoriesChosen.add("movies");
                 if (interests_selected.containsKey("music") && (boolean)interests_selected.get("music")) categoriesChosen.add("music");
 
+
                 post.put("title", postTitle);
                 post.put("postdesc", postDescription);
                 post.put("user", mAuth.getUid());
@@ -223,7 +239,10 @@ public class edit_post extends AppCompatActivity {
                 post.put("role", role);
                 post.put("city", city);
                 post.put("country", country);
+                Intent intento = getIntent();
 
+                post.put("id", intento.getStringExtra("idpost"));
+                Log.i("UPDATEid",  intento.getStringExtra("idpost"));
                 if (isTheImageUp) {
                     riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
                     post.put("storageref", imageUri.getLastPathSegment());
@@ -237,7 +256,70 @@ public class edit_post extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Add a new document with a generated ID
-                            db.collection("posts").whereEqualTo("title", titleForUpdate).whereEqualTo("postdesc", descForUpdate).whereEqualTo("user", mAuth.getUid())
+                            //TODO CHIAMARE QUI UPDATE POSTS
+
+                            try {
+                                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                                    String URL = "https://shielded-peak-80677.herokuapp.com/posts/"+ post.get("id");
+                                    JSONObject jsonBody = new JSONObject();
+                                    //jsonBody.put("id", "id_"+System.currentTimeMillis());
+                                    jsonBody.put("title", post.get("title"));
+                                    jsonBody.put("storageref", post.get("storageref"));
+                                    jsonBody.put("postdesc", post.get("postdesc"));
+                                    jsonBody.put("user", post.get("user"));
+                                    jsonBody.put("isPackage", post.get("isPackage"));
+                                    //ArrayList<String> carente = post.get("categories");
+                                    jsonBody.put("carente", categoriesChosen.get(0));
+                                    jsonBody.put("role", post.get("role"));
+                                    jsonBody.put("country", post.get("country"));
+                                    jsonBody.put("city", post.get("city"));
+                                    Log.i("VOLLEY", jsonBody.toString());
+                                    final String requestBody = jsonBody.toString();
+
+                                    StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            Log.i("VOLLEY", response);
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Log.e("VOLLEY", error.toString());
+                                        }
+                                    }) {
+                                        @Override
+                                        public String getBodyContentType() {
+                                            return "application/json; charset=utf-8";
+                                        }
+
+                                        @Override
+                                        public byte[] getBody() throws AuthFailureError {
+                                            try {
+                                                return requestBody == null ? null : requestBody.getBytes("utf-8");
+                                            } catch (UnsupportedEncodingException uee) {
+                                                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                                                return null;
+                                            }
+                                        }
+
+                                        @Override
+                                        protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                                            String responseString = "";
+                                            if (response != null) {
+                                                responseString = String.valueOf(response.statusCode);
+                                                // can get more details such as response.headers
+                                            }
+                                            return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                                        }
+                                    };
+
+                                    requestQueue.add(stringRequest);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            /*db.collection("posts").whereEqualTo("title", titleForUpdate).whereEqualTo("postdesc", descForUpdate).whereEqualTo("user", mAuth.getUid())
                             .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -252,12 +334,72 @@ public class edit_post extends AppCompatActivity {
                                                 Log.d("taggy", "Error getting documents: ", task.getException());
                                             }
                                         }
-                                    });
+                                    });*/
                         }
                     });
                 } else {
                     post.put("storageref", storageref);
-                    db.collection("posts").whereEqualTo("title", titleForUpdate).whereEqualTo("postdesc", descForUpdate).whereEqualTo("user", mAuth.getUid())
+                    //TODO CHIAMARE ANCHE QUI UPDATE POSTS
+                    try {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        String URL = "https://shielded-peak-80677.herokuapp.com/posts/"+ post.get("id");
+                        JSONObject jsonBody = new JSONObject();
+                        //jsonBody.put("id", "id_"+System.currentTimeMillis());
+                        jsonBody.put("title", post.get("title"));
+                        jsonBody.put("storageref", post.get("storageref"));
+                        jsonBody.put("postdesc", post.get("postdesc"));
+                        jsonBody.put("user", post.get("user"));
+                        jsonBody.put("isPackage", post.get("isPackage"));
+                        //ArrayList<String> carente = post.get("categories");
+                        jsonBody.put("carente", categoriesChosen.get(0));
+                        jsonBody.put("role", post.get("role"));
+                        jsonBody.put("country", post.get("country"));
+                        jsonBody.put("city", post.get("city"));
+                        Log.i("VOLLEY", jsonBody.toString());
+                        final String requestBody = jsonBody.toString();
+
+                        StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.i("VOLLEY", response);
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("VOLLEY", error.toString());
+                            }
+                        }) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8";
+                            }
+
+                            @Override
+                            public byte[] getBody() throws AuthFailureError {
+                                try {
+                                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                                } catch (UnsupportedEncodingException uee) {
+                                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                                    return null;
+                                }
+                            }
+
+                            @Override
+                            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                                String responseString = "";
+                                if (response != null) {
+                                    responseString = String.valueOf(response.statusCode);
+                                    // can get more details such as response.headers
+                                }
+                                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                            }
+                        };
+
+                        requestQueue.add(stringRequest);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    /*db.collection("posts").whereEqualTo("title", titleForUpdate).whereEqualTo("postdesc", descForUpdate).whereEqualTo("user", mAuth.getUid())
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -272,7 +414,7 @@ public class edit_post extends AppCompatActivity {
                                         Log.d("taggy", "Error getting documents: ", task.getException());
                                     }
                                 }
-                            });
+                            });*/
                 }
                 //Intent intent = new Intent(getApplicationContext(), PostCreatedSuccessfully.class);
                 Toast.makeText(getApplicationContext(), "Post modified successfully.", Toast.LENGTH_LONG).show();
