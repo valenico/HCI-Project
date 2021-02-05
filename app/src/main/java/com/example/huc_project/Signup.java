@@ -3,23 +3,36 @@ package com.example.huc_project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.TextViewCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -33,10 +46,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.huc_project.homepage.Homepage;
 import com.example.huc_project.posts.edit_post;
+import com.example.huc_project.profile.Edit_profile;
 import com.example.huc_project.ui.login.CircularItemAdapter;
 import com.example.huc_project.ui.login.PaintText;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -67,6 +82,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class Signup extends AppCompatActivity {
 
@@ -89,6 +106,12 @@ public class Signup extends AppCompatActivity {
     StorageReference ref = storage.getReference();
     private FirebaseFirestore db;
     Button sign_up_button;
+
+    private LocationManager locationMangaer = null;
+    Location GPSlocation = null;
+    Double lo = 0.0;
+    Double la = 0.0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,6 +284,38 @@ public class Signup extends AppCompatActivity {
                                                 if (pref.contains("city")) {
                                                     cities.setText(pref.getString("city", ""));
                                                 }
+                                                final ImageButton getpositionButton = (ImageButton) findViewById(R.id.getPosition);
+                                                Drawable like = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.mylocation);
+
+                                                final Drawable wrappedDrawable = DrawableCompat.wrap(like);
+                                                DrawableCompat.setTint(wrappedDrawable, getResources().getColor(R.color.color_button1));
+                                                getpositionButton.setImageDrawable(wrappedDrawable);
+                                                getpositionButton.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        if(displayGpsStatus()) {
+                                                            if (ActivityCompat.checkSelfPermission(Signup.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                                                                    ActivityCompat.checkSelfPermission(Signup.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
+                                                                ActivityCompat.requestPermissions(Signup.this,
+                                                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                                        99);
+
+                                                            } else {
+                                                                Criteria criteria = new Criteria();
+                                                                criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                                                                locationMangaer = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                                                                locationMangaer.requestSingleUpdate(criteria, locationListener, null);
+
+                                                            }
+                                                        }else{
+                                                            Toast.makeText(getBaseContext(),
+                                                                    "You need to enable gps", Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    }
+                                                });
                                             }
                                         }
                                     });
@@ -296,6 +351,9 @@ public class Signup extends AppCompatActivity {
             upd.put("Phone", String.valueOf(phone.getText()));
             editor.putString("phone", phone.getText().toString());
         }
+
+
+
         upd.put("Hidemail" , ((CheckBox) findViewById(R.id.hidemail)).isChecked() );
         editor.putBoolean("hidemail", ((CheckBox) findViewById(R.id.hidemail)).isChecked() );
         editor.commit();
@@ -313,6 +371,86 @@ public class Signup extends AppCompatActivity {
 
 
     }
+
+    private Boolean displayGpsStatus() {
+        ContentResolver contentResolver = getBaseContext()
+                .getContentResolver();
+        boolean gpsStatus = Settings.Secure
+                .isLocationProviderEnabled(contentResolver,
+                        LocationManager.GPS_PROVIDER);
+        if (gpsStatus) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 99: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Criteria criteria = new Criteria();
+                    criteria.setAccuracy(Criteria.ACCURACY_FINE);
+                    locationMangaer = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                    locationMangaer.requestSingleUpdate(criteria, locationListener, null);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
+
+    }
+
+    final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            GPSlocation = location;
+            la = location.getLatitude();
+            lo = location.getLongitude();
+            Log.d("TAAG", String.valueOf(la));
+            Log.d("TAAG", String.valueOf(lo));
+
+            Geocoder geocoder = new Geocoder(Signup.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(la, lo, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            TextView user_country = (TextView) findViewById(R.id.autocomplete_country);
+            TextView city = (TextView) findViewById(R.id.autocomplete_city);
+
+            user_country.setText(addresses.get(0).getAdminArea()+ ", " + addresses.get(0).getCountryCode());
+            city.setText(addresses.get(0).getLocality());
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.d("Status Changed", String.valueOf(status));
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.d("Provider Enabled", provider);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.d("Provider Disabled", provider);
+        }
+    };
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     public void complete_profile3(View vi) {
