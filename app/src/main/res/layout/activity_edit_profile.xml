@@ -63,11 +63,10 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_17sdp"
-            android:background="@drawable/white_back"
+            android:background="@color/backgroundColor"
             app:layout_constraintStart_toEndOf="@+id/country"
             app:layout_constraintTop_toBottomOf="@id/name"
-
-            app:srcCompat="@drawable/my_location" />
+            app:srcCompat="@drawable/mylocation" />
 
         <TextView
             android:id="@+id/mail"
