@@ -318,7 +318,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     categories[i]=categories[i].toLowerCase().trim();
                     if (w.equals(onetry)) {
                         for (PostRow s : itemsListFull) {
-                            if (s.post.categories.contains(categories[i])) {
+                            if (s.post.categories!=null && s.post.categories.contains(categories[i])) {
                                 if (!filteredListCategories.contains(s)) {
                                     filteredListCategories.add(s);
                                 }

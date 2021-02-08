@@ -384,7 +384,13 @@ public class CreateNewPostActivity extends AppCompatActivity {
                                     jsonBody.put("postdesc", post.get("postdesc"));
                                     jsonBody.put("user", post.get("user"));
                                     jsonBody.put("isPackage", post.get("isPackage"));
-                                    jsonBody.put("carente", categoriesChosen.get(0));
+                                    if (categoriesChosen.isEmpty()) {
+                                        Log.i("CATEGORIE", "NON È STATA SELEZIONATA ALCUNA CATEGORIA");
+                                        jsonBody.put("carente", "");
+                                    }
+                                    else {
+                                        jsonBody.put("carente", categoriesChosen.get(0));
+                                    }
                                     jsonBody.put("role", post.get("role"));
                                     jsonBody.put("country", post.get("country"));
                                     jsonBody.put("city", post.get("city"));

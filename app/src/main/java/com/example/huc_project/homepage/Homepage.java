@@ -209,7 +209,13 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             post.setPackage(rec.getBoolean("isPackage"));
                             ArrayList<String> carentearray=new ArrayList<>();
                             carentearray.add(rec.getString("carente"));
-                            post.setCategories(carentearray);
+                            if (carentearray.get(0).equals("")) {
+                                post.setCategories(null);
+                            }
+                            else {
+                                post.setCategories(carentearray);
+                            }
+
                             post.setRole(rec.getString("role"));
                             post.setCountry(rec.getString("country"));
                             post.setCity(rec.getString("city"));
@@ -218,6 +224,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewAdapter.O
                             if(post.storageref != null){
                                 islandRef = storageRef.child("images/" + post.storageref);
                             }
+                            Log.d("posthomepage", post.toString());
                             PostRow post_row = new PostRow(post, islandRef, Glide.with(Homepage.this));
                             rowsPostList.add(post_row);
                             postDoc.add(post.getId());
