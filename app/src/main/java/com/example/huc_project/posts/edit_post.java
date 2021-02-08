@@ -76,6 +76,7 @@ import java.util.Map;
 public class edit_post extends AppCompatActivity {
 
     Post post;
+    String idPostEdit;
     ImageView post_image_view;
     final int PICK_IMAGE= 100;
     Uri imageUri;
@@ -128,7 +129,10 @@ public class edit_post extends AppCompatActivity {
         storageref = intent.getStringExtra("storageref");
         final Button post_button = findViewById(R.id.postBtn);
         post_button.setText("Save");
+        Intent intento1 = getIntent();
 
+        //post.put("id", intento.getStringExtra("idpost"));
+        idPostEdit =intento1.getStringExtra("idpost");
         textDesc = findViewById(R.id.textDesc);
         textTitle = findViewById(R.id.textTitle);
 
@@ -242,6 +246,7 @@ public class edit_post extends AppCompatActivity {
                 Intent intento = getIntent();
 
                 post.put("id", intento.getStringExtra("idpost"));
+                //idPostEdit =intento.getStringExtra("idpost");
                 Log.i("UPDATEid",  intento.getStringExtra("idpost"));
                 if (isTheImageUp) {
                     riversRef = storageRef.child("images/" + imageUri.getLastPathSegment());
@@ -474,11 +479,12 @@ public class edit_post extends AppCompatActivity {
         ( (CheckBox) findViewById(R.id.sponsorship)).setOnCheckedChangeListener(sponsorChecker);
 
         ArrayList<String> categories = post.getCategories();
-        for(int u = 0 ; u < categories.size(); u++){
-            interests_selected.put(categories.get(u),true);
-            Log.d("CAT", categories.get(u));
+        if (post.getCategories()!=null) {
+            for (int u = 0; u < categories.size(); u++) {
+                interests_selected.put(categories.get(u), true);
+                Log.d("CAT", categories.get(u));
+            }
         }
-
         categoriesCardLayout = (LinearLayout) findViewById(R.id.categories_wrapper);
         iniPopup();
         categories_selected = findViewById(R.id.categories_selected);
@@ -527,7 +533,36 @@ public class edit_post extends AppCompatActivity {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 cancel.setEnabled(false);
-                                db.collection("posts").document(id).delete()
+                                //TODO qua mettere la delete request al backend
+                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+                                String url = "https://shielded-peak-80677.herokuapp.com/posts/"+ idPostEdit;
+                                StringRequest dr = new StringRequest(Request.Method.DELETE, url,
+                                        new Response.Listener<String>()
+                                        {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                // response
+                                                Toast.makeText(edit_post.this, "Post deleted succesfully.", Toast.LENGTH_LONG).show();
+                                                Intent i = new Intent(edit_post.this, Homepage.class);
+                                                startActivity(i);
+                                                finish();
+                                            }
+                                        },
+                                        new Response.ErrorListener()
+                                        {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                // error.
+                                                Toast.makeText(edit_post.this, "Post couldn't be deleted, try later.", Toast.LENGTH_LONG).show();
+                                                cancel.setEnabled(true);
+
+                                            }
+                                        }
+                                );
+                                requestQueue.add(dr);
+                                //queue.add(dr);
+                                /*db.collection("posts").document(id).delete()
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -542,7 +577,7 @@ public class edit_post extends AppCompatActivity {
                                         Toast.makeText(edit_post.this, "Post couldn't be deleted, try later.", Toast.LENGTH_LONG).show();
                                         cancel.setEnabled(true);
                                     }
-                                });
+                                });*/
                             }})
                         .setNegativeButton("No", null).show();
 
