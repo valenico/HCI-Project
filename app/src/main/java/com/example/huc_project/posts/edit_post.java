@@ -330,7 +330,9 @@ public class edit_post extends AppCompatActivity {
                                     jsonBody.put("user", post.get("user"));
                                     jsonBody.put("isPackage", post.get("isPackage"));
                                     //ArrayList<String> carente = post.get("categories");
-                                    jsonBody.put("carente", categoriesChosen.get(0));
+                                    if (categoriesChosen.isEmpty()) jsonBody.put("carente", "");
+                                    else jsonBody.put("carente", categoriesChosen.get(0));
+
                                     jsonBody.put("role", post.get("role"));
                                     jsonBody.put("country", post.get("country"));
                                     jsonBody.put("city", post.get("city"));
@@ -412,7 +414,8 @@ public class edit_post extends AppCompatActivity {
                         jsonBody.put("user", post.get("user"));
                         jsonBody.put("isPackage", post.get("isPackage"));
                         //ArrayList<String> carente = post.get("categories");
-                        jsonBody.put("carente", categoriesChosen.get(0));
+                        if (categoriesChosen.isEmpty()) jsonBody.put("carente", "");
+                        else jsonBody.put("carente", categoriesChosen.get(0));
                         jsonBody.put("role", post.get("role"));
                         jsonBody.put("country", post.get("country"));
                         jsonBody.put("city", post.get("city"));
